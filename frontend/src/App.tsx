@@ -39,15 +39,15 @@ export default function App() {
     <div className="app-shell">
       <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
         <button className="brand" onClick={() => go("map")}>
-          <span className="brand-mark"><i /><i /><i /></span>
-          <span><b>Software Engineering</b><small>WORKSHOP</small></span>
+          <span className="brand-mark">SE</span>
+          <span><b>Software Engineering</b><small>FIELD MANUAL · 2026</small></span>
         </button>
-        <div className="nav-label">START HERE</div>
+        <div className="nav-label">目錄 / CONTENTS</div>
         <nav>
           <button className={route === "map" ? "active" : ""} onClick={() => go("map")}><span>00</span>課程地圖</button>
           <button className={route === "git" ? "active" : ""} onClick={() => go("git")}><span>01</span>Git 基礎 {gitComplete ? <i>✓</i> : null}</button>
         </nav>
-        <div className="nav-label">PRACTICE</div>
+        <div className="nav-label">實作 / PRACTICE</div>
         <nav><button className={route === "lab" ? "active" : ""} onClick={() => go("lab")}><span>↳</span>Git Lab</button></nav>
         <div className="sidebar-progress">
           <div><span>總進度</span><b>{gitComplete ? "1" : "0"} / 19</b></div>
@@ -60,7 +60,7 @@ export default function App() {
         <header className="topbar">
           <button className="menu-button" aria-label="開啟選單" onClick={() => setMenuOpen((value) => !value)}>☰</button>
           <div className="breadcrumb"><span>WORKSHOP</span><i>/</i><b>{route === "map" ? "MAP" : route === "git" ? "GIT" : "GIT LAB"}</b></div>
-          <div className="top-status"><span className="status-dot" /> MODULE 01 READY</div>
+          <div className="top-status">已開放 <b>1 / 19</b></div>
         </header>
         {route === "map" ? <CurriculumMap curriculum={curriculum} onOpenGit={() => go("git")} /> : null}
         {route === "git" ? <GitLesson completed={gitComplete} onOpenLab={() => go("lab")} /> : null}
