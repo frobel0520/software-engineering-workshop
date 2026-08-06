@@ -1,18 +1,43 @@
 # Software Engineering Workshop
 
-給自己的軟體工程基礎練習場，部署目標是 GitHub Pages。
+一個可以動手操作、也可以逐章擴充的軟體工程教材站。
 
-目前第一版包含：
+目前只完成第一個主題：**Git**。其餘 18 個主題保留在課程路線圖，尚未假裝成已完成內容。
 
-- 五條學習路線與 19 個主題：開發基本功、Web 與 API、資料庫、品質與可觀測性、交付與部署。
-- 瀏覽器本機進度保存與主題搜尋。
-- Git 互動 Lab：branch → commit → merge。
-- 純靜態 HTML/CSS/JavaScript，不需要後端或資料庫。
+## Git 單元
 
-## 本機預覽
+- 三段短教材：版本、暫存區、分支與合併。
+- 指令式 Git Lab：親自輸入 `git status`、`git add`、`git commit`、`git switch` 與 `git merge`。
+- 確定性的瀏覽器模擬引擎，不會動到使用者電腦上的真實 repository。
+- 進度保存在瀏覽器；完成 Lab 後才會標記 Git 主題完成。
 
-直接用瀏覽器開啟 `site/index.html`，或使用任何靜態檔案伺服器提供 `site/` 資料夾。
+## 本機啟動
 
-## GitHub Pages
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-`.github/workflows/deploy-pages.yml` 會在 push 到 `main` 時自動把 `site/` 發布到 GitHub Pages。第一次使用時，GitHub Actions 會自動啟用 Pages deployment。
+開啟 http://localhost:5173。
+
+## 驗證
+
+```bash
+cd frontend
+npm test
+npm run build
+```
+
+CI 會執行測試、TypeScript 型別檢查與正式建置。GitHub Pages workflow 會發布 `frontend/dist`。
+
+## 架構
+
+| 路徑 | 內容 |
+| --- | --- |
+| `shared/curriculum.json` | 19 個主題的唯一課程清單與完成狀態 |
+| `frontend/src/content/` | 已完成教材內容 |
+| `frontend/src/git/` | 可測試的 Git 模擬狀態機 |
+| `frontend/src/components/` | 路線圖、教材與實驗場 UI |
+| `.github/workflows/ci.yml` | 測試與正式建置 |
+| `.github/workflows/deploy-pages.yml` | GitHub Pages 發布 |

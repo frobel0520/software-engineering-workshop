@@ -1,3 +1,7 @@
 work/
 .DS_Store
+node_modules/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
 Thumbs.db
