@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "id": "foundations",
+      "title": "開發基本功",
+      "description": "工具與可重複流程",
+      "topics": [
+        { "id": "git", "title": "Git", "summary": "版本控制與安全協作", "status": "ready" },
+        { "id": "remote", "title": "GitHub / GitLab", "summary": "遠端協作平台", "status": "planned" },
+        { "id": "cli", "title": "命令列", "summary": "可重複的工作流入口", "status": "planned" },
+        { "id": "ide", "title": "IDE／除錯器", "summary": "快速定位問題", "status": "planned" },
+        { "id": "package", "title": "套件管理", "summary": "可重現的依賴", "status": "planned" },
+        { "id": "env", "title": "環境變數", "summary": "設定與秘密", "status": "planned" },
+        { "id": "build", "title": "建置工具", "summary": "從原始碼到產品", "status": "planned" }
+      ]
+    },
+    {
+      "id": "web",
+      "title": "Web 與 API",
+      "description": "請求、契約與權限",
+      "topics": [
+        { "id": "rest", "title": "REST API", "summary": "服務契約", "status": "planned" },
+        { "id": "auth", "title": "身分驗證與授權", "summary": "安全邊界", "status": "planned" }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "資料庫",
+      "description": "資料關係與取捨",
+      "topics": [
+        { "id": "sql", "title": "SQL", "summary": "查詢語言", "status": "planned" },
+        { "id": "schema", "title": "資料庫設計", "summary": "資料模型", "status": "planned" },
+        { "id": "index", "title": "索引與交易", "summary": "效能與一致性", "status": "planned" },
+        { "id": "nosql", "title": "NoSQL 基礎", "summary": "不同資料形狀的取捨", "status": "planned" }
+      ]
+    },
+    {
+      "id": "quality",
+      "title": "品質與可觀測性",
+      "description": "測試、日誌與線索",
+      "topics": [
+        { "id": "unit", "title": "單元測試", "summary": "快速回饋", "status": "planned" },
+        { "id": "integration", "title": "整合測試", "summary": "模組契約", "status": "planned" },
+        { "id": "logs", "title": "日誌", "summary": "留下線索", "status": "planned" }
+      ]
+    },
+    {
+      "id": "delivery",
+      "title": "交付與部署",
+      "description": "從 commit 到上線",
+      "topics": [
+        { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "planned" },
+        { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "planned" },
+        { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "planned" }
+      ]
+    }
+  ]
+}
