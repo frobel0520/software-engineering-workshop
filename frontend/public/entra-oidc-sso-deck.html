@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entra ID × OIDC × SSO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Noto+Sans+TC:wght@400;600;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#f1ecde;--surface:#e6dcc4;--ink:#1a1a18;--muted:#736d5a;--teal:#1b4b5a;--teal-soft:#b9ccca;--line:#c8bea4;--coral:#a04a2a;--terminal:#172729}
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;color:var(--ink)}body{font-family:"Noto Sans TC",sans-serif}
+    button{font:inherit}.stage{position:absolute;width:1920px;height:1080px;transform-origin:center center;background:var(--paper)}
+    .slide{position:absolute;inset:0;display:none;padding:76px 104px 68px;background:var(--paper)}.slide.active{display:flex;flex-direction:column}
+    .folio{display:flex;justify-content:space-between;padding-bottom:15px;border-bottom:1px solid var(--line);color:var(--muted);font:18px "DM Mono";letter-spacing:.1em}
+    .kicker{margin:0;color:var(--teal);font:20px "DM Mono";letter-spacing:.12em}.title{margin:32px 0 0;font:600 78px/1.04 "Newsreader","Noto Serif TC",serif;letter-spacing:-.05em}.title em{color:var(--teal);font-style:normal}
+    .lead{max-width:1150px;margin:27px 0 0;color:var(--muted);font:30px/1.6 "Noto Serif TC",serif}.source{position:absolute;right:104px;bottom:30px;color:var(--muted);font:17px "DM Mono"}.source a{color:inherit;text-decoration:none}
+    .cover{justify-content:center!important;color:var(--paper)!important;background:var(--teal)!important}.cover .kicker{color:var(--teal-soft)}.cover .title{max-width:1500px;margin-top:38px;font-size:128px}.cover .lead{color:#c7d6d3;font-size:36px}.cover-mark{position:absolute;right:104px;bottom:78px;color:#a8c1be;font:20px "DM Mono"}
+    .relation{display:grid;grid-template-columns:1fr 84px 1fr 84px 1fr;align-items:center;margin:auto 0}.relation article{min-height:330px;padding:42px 38px;border-block:2px solid var(--ink)}.relation article:nth-child(3){color:var(--paper);background:var(--teal);border-color:var(--teal)}.relation .kicker{color:inherit;opacity:.66}.relation h2{margin:24px 0 16px;font:600 52px "Newsreader",serif}.relation p{margin:0;font:27px/1.55 "Noto Serif TC",serif}.relation i{font:40px "DM Mono";text-align:center}
+    .definition{display:grid;grid-template-columns:500px 1fr;gap:94px;align-items:center;flex:1}.definition .word{margin:16px 0 0;font:600 74px/1.08 "Newsreader","Noto Serif TC",serif}.definition dl{margin:0;border-top:2px solid var(--ink)}.definition dl div{display:grid;grid-template-columns:230px 1fr;align-items:baseline;padding:24px 0;border-bottom:1px solid var(--line)}.definition dt{color:var(--muted);font:18px "DM Mono"}.definition dd{margin:0;font:28px/1.45 "Noto Serif TC",serif}.definition code{color:var(--teal);font:23px/1.5 "DM Mono";overflow-wrap:anywhere}
+    .formula{display:grid;grid-template-columns:1fr 80px 1fr 80px 1fr;align-items:stretch;margin:auto 0}.formula article{padding:34px;border:1px solid var(--ink)}.formula article.focus{color:var(--paper);background:var(--teal)}.formula small{display:block;color:var(--muted);font:17px "DM Mono"}.formula .focus small{color:var(--teal-soft)}.formula strong{display:block;margin:22px 0;font:600 38px/1.2 "Newsreader",serif}.formula code{font:20px/1.5 "DM Mono";overflow-wrap:anywhere}.formula i{display:grid;place-items:center;font:34px "DM Mono";font-style:normal}
+    .secret-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:86px;align-items:center;flex:1}.secret-table{border-top:2px solid var(--ink)}.secret-table div{display:grid;grid-template-columns:190px 1fr;padding:26px 0;border-bottom:1px solid var(--line)}.secret-table span{color:var(--muted);font:18px "DM Mono"}.secret-table code{font:23px "DM Mono";overflow-wrap:anywhere}.secret-table .value{color:var(--coral)}.rule-list{margin:0;padding:0;list-style:none;border-top:2px solid var(--ink)}.rule-list li{display:grid;grid-template-columns:62px 1fr;gap:18px;padding:24px 0;border-bottom:1px solid var(--line);font:27px/1.45 "Noto Serif TC",serif}.rule-list b{color:var(--teal);font:23px "DM Mono"}
+    .redirect-flow{display:grid;grid-template-columns:1fr 90px 1fr 90px 1fr;align-items:center;margin:auto 0}.redirect-flow article{min-height:250px;padding:34px;border-block:2px solid var(--ink)}.redirect-flow article:nth-child(3){color:var(--paper);background:var(--teal);border-color:var(--teal)}.redirect-flow small{font:18px "DM Mono";opacity:.7}.redirect-flow h2{margin:22px 0 12px;font:600 40px "Newsreader",serif}.redirect-flow code{font:20px/1.6 "DM Mono";overflow-wrap:anywhere}.redirect-flow i{font:38px "DM Mono";text-align:center;font-style:normal}
+    .logout-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;margin:auto 0;border:1px solid var(--ink)}.logout-grid article{min-height:390px;padding:46px}.logout-grid article+article{border-left:1px solid var(--ink);background:var(--surface)}.logout-grid h2{margin:18px 0 26px;font:600 44px "Newsreader",serif}.logout-grid p{font:27px/1.55 "Noto Serif TC",serif}.logout-grid code{display:block;margin-top:25px;color:var(--teal);font:20px/1.55 "DM Mono";overflow-wrap:anywhere}
+    .endpoint{display:grid;grid-template-columns:1fr 1.15fr;gap:84px;align-items:center;flex:1}.endpoint h2{margin:17px 0 22px;font:600 58px/1.12 "Newsreader","Noto Serif TC",serif}.endpoint p{color:var(--muted);font:28px/1.6 "Noto Serif TC",serif}.url{padding:38px;color:#dce9e6;background:var(--terminal);font:25px/1.75 "DM Mono";overflow-wrap:anywhere}.url b{color:#a7cac6}.url .path{color:#d7aa83}
+    .metadata-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:72px;align-items:center;flex:1}.metadata-json{padding:32px;color:#dce9e6;background:var(--terminal);font:19px/1.7 "DM Mono"}.metadata-json b{color:#a7cac6;font-weight:400}.metadata-json em{color:#d7aa83;font-style:normal}.metadata-list{border-top:2px solid var(--ink)}.metadata-list div{display:grid;grid-template-columns:250px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--line)}.metadata-list code{color:var(--teal);font:19px "DM Mono"}.metadata-list span{font:24px "Noto Serif TC",serif}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:auto 0;border:1px solid var(--ink)}.flow article{position:relative;min-height:360px;padding:34px 28px;border-right:1px solid var(--ink)}.flow article:last-child{border:0}.flow article:nth-child(even){background:var(--surface)}.flow b{color:var(--teal);font:20px "DM Mono"}.flow h2{margin:35px 0 20px;font:600 34px/1.2 "Newsreader","Noto Serif TC",serif}.flow p{font:22px/1.55 "Noto Serif TC",serif}.flow code{color:var(--muted);font:18px/1.55 "DM Mono"}.flow i{position:absolute;right:-18px;top:52%;z-index:2;display:grid;place-items:center;width:36px;height:36px;color:var(--paper);background:var(--teal);font-style:normal}
+    .error-table{margin-top:42px;border-top:2px solid var(--ink)}.error-row{display:grid;grid-template-columns:250px 1fr 1.15fr;gap:35px;padding:22px 0;border-bottom:1px solid var(--line);align-items:center}.error-row code{color:var(--coral);font:21px "DM Mono"}.error-row b{font:25px "Noto Serif TC",serif}.error-row span{color:var(--muted);font:23px/1.45 "Noto Serif TC",serif}
+    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px}.checklist ol{margin:0;padding:0;list-style:none;border-top:2px solid var(--ink)}.checklist li{display:grid;grid-template-columns:58px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--line);font:26px "Noto Serif TC",serif}.checklist li b{color:var(--teal);font:20px "DM Mono"}.sources{padding:34px;color:var(--paper);background:var(--teal)}.sources h2{margin:0 0 24px;font:600 38px "Newsreader",serif}.sources a{display:block;padding:17px 0;border-top:1px solid rgba(241,236,222,.25);color:inherit;font:20px/1.4 "DM Mono";text-decoration:none}
+    .controls{position:fixed;left:50%;bottom:18px;display:flex;gap:8px;transform:translateX(-50%);z-index:5;opacity:.18;transition:.2s}.controls:hover,.controls:focus-within{opacity:1}.controls button{width:50px;height:40px;border:1px solid #777;color:#fff;background:#222;cursor:pointer}.controls button:focus-visible{outline:2px solid #fff}.counter{position:fixed;right:24px;bottom:22px;color:#888;font:14px "DM Mono"}
+    .slide.active .reveal{animation:enter .42s ease-out both}@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section class="slide cover active" data-screen-label="01 Title">
+      <p class="kicker reveal">SOFTWARE ENGINEERING / FIELD MANUAL</p>
+      <h1 class="title reveal">Entra ID × OIDC × SSO</h1>
+      <p class="lead reveal">七個設定值，組成一條可信任的登入路徑。</p>
+      <span class="cover-mark">AUTH / MODULE 02</span>
+    </section>
+
+    <section class="slide" data-screen-label="02 Mental Model">
+      <header class="folio"><span>AUTH / MENTAL MODEL</span><span>02</span></header>
+      <h1 class="title reveal">先分清楚：<em>服務、協定、結果</em></h1>
+      <div class="relation reveal">
+        <article><p class="kicker">SERVICE</p><h2>Entra ID</h2><p>管理身分、登入與政策。</p></article><i>→</i>
+        <article><p class="kicker">PROTOCOL</p><h2>OIDC</h2><p>App 與 IdP 的登入契約。</p></article><i>→</i>
+        <article><p class="kicker">OUTCOME</p><h2>SSO</h2><p>重用既有 Entra session。</p></article>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc">Microsoft Learn · OpenID Connect</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="03 Tenant ID">
+      <header class="folio"><span>IDENTIFIER / DIRECTORY</span><span>03</span></header>
+      <div class="definition reveal">
+        <div><p class="kicker">TENANT ID</p><h1 class="word">哪一個<br>身分目錄？</h1></div>
+        <dl>
+          <div><dt>型態</dt><dd>GUID；識別碼，不是機密</dd></div>
+          <div><dt>代表</dt><dd>帳號、政策與 App Registration 的邊界</dd></div>
+          <div><dt>範例值</dt><dd><code>12345678-1234-1234-1234-123456789012</code></dd></div>
+          <div><dt>常見錯誤</dt><dd>使用錯誤 tenant，導致找不到使用者或 App</dd></div>
+        </dl>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/msal-client-application-configuration">Microsoft Learn · Client configuration</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="04 Client ID">
+      <header class="folio"><span>IDENTIFIER / APPLICATION</span><span>04</span></header>
+      <h1 class="title reveal">Client ID：<em>哪一個 App？</em></h1>
+      <div class="formula reveal">
+        <article><small>SAMPLE DIRECTORY</small><strong>Tenant ID</strong><code>12345678-…-9012</code></article><i>+</i>
+        <article class="focus"><small>SAMPLE APPLICATION</small><strong>Client ID</strong><code>87654321-4321-4321-4321-210987654321</code></article><i>→</i>
+        <article><small>LOOKUP</small><strong>App Registration</strong><code>redirect URIs · permissions · credentials</code></article>
+      </div>
+      <p class="lead reveal">Client ID 會出現在登入請求；公開在前端不等於外洩。</p>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app">Microsoft Learn · Register an application</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="05 Client Secret">
+      <header class="folio"><span>CREDENTIAL / CONFIDENTIAL CLIENT</span><span>05</span></header>
+      <h1 class="title reveal">Client secret <em>Value</em>：App 的密碼</h1>
+      <div class="secret-layout reveal">
+        <div class="secret-table">
+          <div><span>Secret ID</span><code>[SAMPLE_SECRET_ID]</code></div>
+          <div><span>Value</span><code class="value">[SAMPLE_SECRET_VALUE_DO_NOT_USE]</code></div>
+          <div><span>取得時機</span><code>建立後只顯示一次</code></div>
+        </div>
+        <ol class="rule-list">
+          <li><b>01</b><span>只有 Value 能送到 token endpoint。</span></li>
+          <li><b>02</b><span>只放後端或安全的 secret store。</span></li>
+          <li><b>03</b><span>SPA／行動 App 不可保存 client secret。</span></li>
+          <li><b>04</b><span>設定到期日、輪替；能用憑證或 Managed Identity 就不用 secret。</span></li>
+        </ol>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration">Microsoft Learn · App registration security</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="06 Redirect URI">
+      <header class="folio"><span>CALLBACK / SIGN-IN</span><span>06</span></header>
+      <h1 class="title reveal">Redirect URI：登入結果的<em>唯一回程</em></h1>
+      <div class="redirect-flow reveal">
+        <article><small>APP</small><h2>送出登入請求</h2><code>redirect_uri=<br>https://app.example.invalid/auth/callback</code></article><i>→</i>
+        <article><small>ENTRA ID</small><h2>比對註冊值</h2><code>字串不符<br>→ AADSTS50011</code></article><i>→</i>
+        <article><small>CALLBACK</small><h2>帶回 code</h2><code>/auth/callback?<br>code=…&amp;state=…</code></article>
+      </div>
+      <p class="lead reveal">協定、網域、port、path 都是比對的一部分；正式環境使用 HTTPS。</p>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/reply-url">Microsoft Learn · Redirect URI restrictions</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="07 Logout URI">
+      <header class="folio"><span>CALLBACK / SIGN-OUT</span><span>07</span></header>
+      <h1 class="title reveal">Logout URI：先確認你指的是<em>哪一種</em></h1>
+      <div class="logout-grid reveal">
+        <article>
+          <p class="kicker">POST-LOGOUT REDIRECT</p><h2>登出完成後，使用者回哪裡？</h2>
+          <p>App 清除自己的 session，再導向 Entra 的 <code>end_session_endpoint</code>。</p>
+          <code>post_logout_redirect_uri=<br>https://app.example.invalid/signed-out</code>
+        </article>
+        <article>
+          <p class="kicker">FRONT-CHANNEL LOGOUT URL</p><h2>Entra 如何通知 App 清 session？</h2>
+          <p>Single Sign-Out 時，Entra 透過瀏覽器呼叫 App 的登出 endpoint。</p>
+          <code>https://app.example.invalid/frontchannel-logout</code>
+        </article>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc#single-sign-out">Microsoft Learn · Single sign-out</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="08 Authority URL">
+      <header class="folio"><span>TRUST / AUTHORITY</span><span>08</span></header>
+      <div class="endpoint reveal">
+        <div><p class="kicker">AUTHORITY URL</p><h2>SDK 的<br>信任起點</h2><p>指定 Microsoft identity host、tenant 與協定版本。</p></div>
+        <div class="url">https://login.microsoftonline.com/<br><b>12345678-1234-1234-1234-123456789012</b>/<span class="path">v2.0</span></div>
+      </div>
+      <p class="lead reveal">企業單租戶優先使用 Tenant ID；不要把 Authority 當成 callback URL。</p>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/msal-client-application-configuration">Microsoft Learn · Authority configuration</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="09 OpenID Metadata URL">
+      <header class="folio"><span>DISCOVERY / OPENID CONFIGURATION</span><span>09</span></header>
+      <h1 class="title reveal">Metadata URL：<em>協定的服務目錄</em></h1>
+      <div class="metadata-grid reveal">
+        <div class="metadata-json">{
+          <br>&nbsp;&nbsp;<b>"issuer"</b>: <em>"…/{tenant}/v2.0"</em>,
+          <br>&nbsp;&nbsp;<b>"authorization_endpoint"</b>: <em>"…/authorize"</em>,
+          <br>&nbsp;&nbsp;<b>"token_endpoint"</b>: <em>"…/token"</em>,
+          <br>&nbsp;&nbsp;<b>"end_session_endpoint"</b>: <em>"…/logout"</em>,
+          <br>&nbsp;&nbsp;<b>"jwks_uri"</b>: <em>"…/discovery/v2.0/keys"</em>
+          <br>}
+        </div>
+        <div class="metadata-list">
+          <div><code>URL</code><span>Authority + <code>/.well-known/openid-configuration</code></span></div>
+          <div><code>用途</code><span>發現 endpoints、issuer 與簽章公開金鑰</span></div>
+          <div><code>實作</code><span>讓 OIDC／MSAL library 讀取，不自行硬編端點</span></div>
+        </div>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens">Microsoft Learn · OpenID metadata and keys</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="10 Authorization Code Flow">
+      <header class="folio"><span>RUNTIME / AUTH CODE + PKCE</span><span>10</span></header>
+      <h1 class="title reveal">七個設定值，在哪裡進入流程？</h1>
+      <div class="flow reveal">
+        <article><b>01</b><h2>發現端點</h2><p>Authority<br>Metadata URL</p><code>authorize · token · keys</code><i>→</i></article>
+        <article><b>02</b><h2>要求登入</h2><p>Tenant ID<br>Client ID<br>Redirect URI</p><code>state · nonce · PKCE</code><i>→</i></article>
+        <article><b>03</b><h2>帶回 code</h2><p>Redirect URI</p><code>code · state</code><i>→</i></article>
+        <article><b>04</b><h2>交換 Token</h2><p>Client ID<br>Secret Value*</p><code>code_verifier</code><i>→</i></article>
+        <article><b>05</b><h2>建立／清除 Session</h2><p>ID token<br>Logout URI</p><code>*僅 confidential client</code></article>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow">Microsoft Learn · Authorization code flow</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="11 Troubleshooting">
+      <header class="folio"><span>OPERATIONS / TROUBLESHOOTING</span><span>11</span></header>
+      <h1 class="title reveal">實際故障，先看<em>哪個值？</em></h1>
+      <div class="error-table reveal">
+        <div class="error-row"><code>AADSTS50011</code><b>Redirect URI 不符</b><span>比對 request 與 App Registration 的完整 URI</span></div>
+        <div class="error-row"><code>AADSTS700016</code><b>找不到 App</b><span>確認 Client ID 與登入使用的 Tenant</span></div>
+        <div class="error-row"><code>invalid_client</code><b>App 驗證失敗</b><span>確認使用 Secret Value、未過期且未放錯環境</span></div>
+        <div class="error-row"><code>issuer / signature</code><b>Token 驗證失敗</b><span>確認 Authority、Metadata 版本與 token 的 aud／iss</span></div>
+        <div class="error-row"><code>仍保持登入</code><b>Session 未全部清除</b><span>分開檢查 App session、token cache、Entra session</span></div>
+      </div>
+      <footer class="source"><a href="https://learn.microsoft.com/en-us/troubleshoot/entra/entra-id/app-integration/error-code-aadsts50011-redirect-uri-mismatch">Microsoft Learn · Redirect URI mismatch</a></footer>
+    </section>
+
+    <section class="slide" data-screen-label="12 Deployment Checklist">
+      <header class="folio"><span>HANDOFF / CHECKLIST</span><span>12</span></header>
+      <h1 class="title reveal">部署前，確認這<em>七件事</em></h1>
+      <div class="checklist reveal">
+        <ol>
+          <li><b>01</b><span>Tenant ID 指向正確目錄</span></li>
+          <li><b>02</b><span>Client ID 屬於正確 App Registration</span></li>
+          <li><b>03</b><span>Secret Value 只在後端，且可輪替</span></li>
+          <li><b>04</b><span>Redirect URI 與環境完整相符</span></li>
+          <li><b>05</b><span>Logout 同時處理 App 與 Entra session</span></li>
+          <li><b>06</b><span>Authority 的 tenant 與帳號範圍一致</span></li>
+          <li><b>07</b><span>Metadata 與 Token 版本一致</span></li>
+        </ol>
+        <aside class="sources">
+          <h2>官方依據</h2>
+          <a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc">OIDC on Microsoft identity platform</a>
+          <a href="https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow">Authorization code flow</a>
+          <a href="https://learn.microsoft.com/en-us/entra/identity-platform/reply-url">Redirect URI restrictions</a>
+          <a href="https://learn.microsoft.com/en-us/entra/identity-platform/security-best-practices-for-app-registration">App registration security</a>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <nav class="controls" aria-label="簡報控制"><button type="button" id="prev" aria-label="上一頁">←</button><button type="button" id="next" aria-label="下一頁">→</button></nav>
+  <div class="counter" aria-live="polite"></div>
+  <script>
+    const stage=document.querySelector('.stage');
+    const slides=[...document.querySelectorAll('.slide')];
+    let current=Math.min(Number(localStorage.getItem('entraDeckSlide')||0),slides.length-1);
+    function scale(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.left=`${(innerWidth-1920*s)/2}px`;stage.style.top=`${(innerHeight-1080*s)/2}px`;stage.style.transform=`scale(${s})`}
+    function show(n){current=Math.max(0,Math.min(n,slides.length-1));slides.forEach((slide,index)=>slide.classList.toggle('active',index===current));document.querySelector('.counter').textContent=`${current+1} / ${slides.length}`;localStorage.setItem('entraDeckSlide',String(current))}
+    addEventListener('resize',scale);
+    addEventListener('keydown',event=>{if(event.key==='ArrowRight'||event.key===' '){event.preventDefault();show(current+1)}if(event.key==='ArrowLeft')show(current-1)});
+    document.querySelector('#prev').onclick=()=>show(current-1);
+    document.querySelector('#next').onclick=()=>show(current+1);
+    scale();show(current);
+  </script>
+</body>
+</html>

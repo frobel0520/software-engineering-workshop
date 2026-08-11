@@ -4,7 +4,7 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop-v2`。
 
-目前只完成第一個主題：**Git**。其餘 18 個主題保留在課程路線圖，尚未假裝成已完成內容。
+目前完成兩個主題：**Git** 與 **身分驗證／授權**。其餘主題保留在課程路線圖。
 
 ## Git 單元
 
@@ -12,6 +12,12 @@
 - 指令式 Git Lab：親自輸入 `git status`、`git add`、`git commit`、`git switch` 與 `git merge`。
 - 確定性的瀏覽器模擬引擎，不會動到使用者電腦上的真實 repository。
 - 進度保存在瀏覽器；完成 Lab 後才會標記 Git 主題完成。
+
+## Auth 單元
+
+- Entra ID、OIDC、SSO 與七個 App Registration 設定值。
+- 假資料驅動的設定判斷與 Authorization Code + PKCE 流程 Demo。
+- 不連線 Microsoft、不處理真實帳號或 Secret。
 
 ## 本機啟動
 
