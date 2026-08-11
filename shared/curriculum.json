@@ -21,7 +21,7 @@
       "description": "請求、契約與權限",
       "topics": [
         { "id": "rest", "title": "REST API", "summary": "服務契約", "status": "planned" },
-        { "id": "auth", "title": "身分驗證與授權", "summary": "安全邊界", "status": "planned" }
+        { "id": "auth", "title": "身分驗證與授權", "summary": "Entra ID、OIDC 與 SSO", "status": "ready" }
       ]
     },
     {

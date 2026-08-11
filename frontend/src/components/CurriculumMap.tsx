@@ -1,6 +1,6 @@
 import type { Curriculum } from "../types";
 
-export function CurriculumMap({ curriculum, onOpenGit }: { curriculum: Curriculum; onOpenGit: () => void }) {
+export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth }: { curriculum: Curriculum; onOpenGit: () => void; onOpenAuth: () => void }) {
   const topicCount = curriculum.tracks.reduce((total, track) => total + track.topics.length, 0);
 
   return (
@@ -46,7 +46,7 @@ export function CurriculumMap({ curriculum, onOpenGit }: { curriculum: Curriculu
                   key={topic.id}
                   className={`topic-item ${topic.status}`}
                   disabled={topic.status !== "ready"}
-                  onClick={topic.id === "git" ? onOpenGit : undefined}
+                  onClick={topic.id === "git" ? onOpenGit : topic.id === "auth" ? onOpenAuth : undefined}
                 >
                   <span className="topic-state">{topic.status === "ready" ? "●" : "○"}</span>
                   <span><b>{topic.title}</b><small>{topic.summary}</small></span>
