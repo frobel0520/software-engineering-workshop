@@ -2,7 +2,7 @@
 
 一個可以動手操作、也可以逐章擴充的軟體工程教材站。
 
-目前部署來源：`frobel0520/software-engineering-workshop-v2`。
+目前部署來源：`frobel0520/software-engineering-workshop`。
 
 目前完成兩個主題：**Git** 與 **身分驗證／授權**。其餘主題保留在課程路線圖。
 
