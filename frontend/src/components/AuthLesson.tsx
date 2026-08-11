@@ -11,7 +11,7 @@ export function AuthLesson({ completed, onOpenLab }: { completed: boolean; onOpe
         </div>
         <div className="auth-hero-actions">
           <div className={`module-status ${completed ? "done" : ""}`}><span>{completed ? "✓" : "02"}</span><div><small>MODULE STATUS</small><b>{completed ? "已完成" : "學習中"}</b></div></div>
-          <a className="button auth-deck-link" href="/entra-oidc-sso-deck.html">開啟簡報 <span>→</span></a>
+          <a className="button auth-deck-link" href={`${import.meta.env.BASE_URL}entra-oidc-sso-deck.html`}>開啟簡報 <span>→</span></a>
         </div>
       </header>
 
