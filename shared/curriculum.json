@@ -54,6 +54,15 @@
         { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "planned" },
         { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "planned" }
       ]
+    },
+    {
+      "id": "ai-engineering",
+      "title": "AI／LLM Engineering",
+      "description": "安全、可靠的模型工作流",
+      "kind": "extension",
+      "topics": [
+        { "id": "guardrail", "title": "Guardrails", "summary": "模型輸入、輸出與工具防線", "status": "ready" }
+      ]
     }
   ]
 }

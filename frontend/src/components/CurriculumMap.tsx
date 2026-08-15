@@ -1,7 +1,7 @@
 import type { Curriculum } from "../types";
 
 export function CurriculumMap({ curriculum, onOpenTrack }: { curriculum: Curriculum; onOpenTrack: (trackId: string) => void }) {
-  const topicCount = curriculum.tracks.reduce((total, track) => total + track.topics.length, 0);
+  const topicCount = curriculum.tracks.filter((track) => (track.kind ?? "core") === "core").reduce((total, track) => total + track.topics.length, 0);
 
   return (
     <div className="page page-map">
@@ -30,7 +30,7 @@ export function CurriculumMap({ curriculum, onOpenTrack }: { curriculum: Curricu
 
       <section className="map-intro">
         <div><p className="kicker">CURRICULUM MAP</p><h2>完整路線圖</h2></div>
-        <p>先選能力分類；分類內會標示已開放與規劃中的 topic。</p>
+        <p>Core 主題與 Guardrail Extension 會分開計算進度；每個開放 topic 都先經過 Lesson、Lab 與 QA。</p>
       </section>
 
       <div className="track-grid">
