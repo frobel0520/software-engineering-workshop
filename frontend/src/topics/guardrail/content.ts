@@ -103,8 +103,10 @@ export const guardrailOutcomePriority: readonly GuardrailFailureAction[] = [
   "pass",
 ];
 
+export type GuardrailScenarioId = "safe-input" | "pii-fix" | "ambiguous-output" | "tool-side-effect";
+
 export interface GuardrailScenarioFixture {
-  id: "safe-input" | "pii-fix" | "ambiguous-output" | "tool-side-effect";
+  id: GuardrailScenarioId;
   title: string;
   stage: GuardrailStage;
   input: string;
@@ -167,7 +169,7 @@ export const guardrailScenarios: readonly GuardrailScenarioFixture[] = [
   },
 ] as const;
 
-export const guardrailRequiredScenarioIds: readonly GuardrailScenarioFixture["id"][] = [
+export const guardrailRequiredScenarioIds: readonly GuardrailScenarioId[] = [
   "safe-input",
   "pii-fix",
   "tool-side-effect",
