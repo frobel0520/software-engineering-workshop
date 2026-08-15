@@ -82,6 +82,7 @@ export type WorkingTree = "clean" | "dirty";
 export type RemoteBranch = "absent" | "published";
 export type PullRequest = "none" | "open" | "merged";
 export type Checks = "not-run" | "pending" | "passed" | "failed";
+export type SyncState = "stale" | "fetched" | "rebased";
 
 export interface RemoteLabState {
   phase: RemoteLabPhase;
@@ -91,6 +92,7 @@ export interface RemoteLabState {
   workingTree: WorkingTree;
   localCommitCount: number;
   localBaseRef: "dev" | "origin/dev";
+  syncState: SyncState;
   remoteBranch: RemoteBranch;
   pullRequest: PullRequest;
   checks: Checks;
@@ -122,6 +124,7 @@ export const remoteLabInitialState: RemoteLabState = {
   workingTree: "clean",
   localCommitCount: 0,
   localBaseRef: "dev",
+  syncState: "stale",
   remoteBranch: "absent",
   pullRequest: "none",
   checks: "not-run",
