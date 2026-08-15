@@ -29,6 +29,7 @@ describe("remote topic content contract", () => {
     expect(remoteLabInitialState).toMatchObject({
       phase: "initial",
       localBranch: "dev",
+      syncState: "stale",
       remoteBranch: "absent",
       pullRequest: "none",
       checks: "not-run",
