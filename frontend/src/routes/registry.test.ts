@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseRoute, ROUTE_REGISTRY, topicPath } from "./registry";
+import { parseRoute, ROUTE_REGISTRY, topicPath, trackPath } from "./registry";
 
 describe("route registry", () => {
   it("preserves existing Git and Auth routes", () => {
@@ -11,6 +11,8 @@ describe("route registry", () => {
   });
 
   it("supports predictable routes for new topics", () => {
+    expect(parseRoute("#/track/foundations")).toEqual({ path: "/track/foundations", kind: "track", trackId: "foundations" });
+    expect(trackPath("foundations")).toBe("/track/foundations");
     expect(parseRoute("#/guardrail")).toEqual({ path: "/guardrail", kind: "lesson", topicId: "guardrail" });
     expect(parseRoute("#/guardrail-lab")).toEqual({ path: "/guardrail-lab", kind: "lab", topicId: "guardrail" });
     expect(topicPath("guardrail", "lesson")).toBe("/guardrail");
@@ -27,7 +29,9 @@ describe("route registry", () => {
 
   it("falls back to the map for unknown or unsafe paths", () => {
     expect(parseRoute("#/unknown path")).toEqual({ path: "/map", kind: "map" });
+    expect(parseRoute("#/track/unknown path")).toEqual({ path: "/map", kind: "map" });
     expect(parseRoute("#//")).toEqual({ path: "/map", kind: "map" });
     expect(() => topicPath("../auth", "lesson")).toThrow("Invalid topic id");
+    expect(() => trackPath("../foundations")).toThrow("Invalid topic id");
   });
 });
