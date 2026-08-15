@@ -7,7 +7,7 @@
 
 ## 1. 設計目標與原則
 
-本文件將專案 SA 轉成可實作的技術契約。第一階段維持靜態前端、瀏覽器本機進度與 deterministic simulator；後續若需要 backend，透過明確的 adapter 邊界擴充，不把 API、token 或資料庫耦合進教材元件。
+本文件將專案 SA 轉成可實作的技術契約。第一階段維持靜態前端、瀏覽器本機進度與 deterministic simulator；後續若需要 backend，透過明確的 adapter 邊界擴充，不把 API、token 或資料庫耦合進教材元件。Core 19 與 Extension tracks 共用同一套 module contract，但維持各自的 progress 邊界。
 
 設計原則：
 
@@ -36,6 +36,10 @@ Browser
         └─ localStorage（Phase 1）
 
 Repository → GitHub Actions → frontend/dist → GitHub Pages
+
+Curriculum tracks:
+  ├─ Core tracks（目前 19 topics）
+  └─ Extension tracks（可選；Guardrail rebuild first）
 
 Phase 2 optional:
 Browser → API adapter → external API／serverless → database
@@ -67,6 +71,19 @@ frontend/src/topics/<topic-id>/
 
 現有 Git／Auth 可先維持原路徑；新主題採上述邊界。後續重構以「不改既有 URL 與 persistence key」為前提逐步移動，不一次大改。
 
+Guardrail rebuild 使用相同的 topic module 目錄邊界：
+
+```text
+frontend/src/topics/guardrail/
+  lesson.tsx
+  lab.tsx
+  content.ts
+  simulator.ts
+  simulator.test.ts
+```
+
+它是 Extension topic，不建立第二套路由、App shell 或 ProgressRepository。原本 `Guardrail-Workshop` repository 只提供需求與教材參考，不是 runtime dependency，也不是 source code import 來源。
+
 ## 4. Topic module 契約
 
 每個 `ready` topic 應能提供下列概念資料與能力。這是設計契約，不要求第一版立刻建立完整 runtime registry：
@@ -74,6 +91,7 @@ frontend/src/topics/<topic-id>/
 ```text
 TopicModule {
   id: string
+  trackKind: core | extension
   lesson: LessonDefinition
   lab: LabDefinition
   simulator: SimulatorDefinition
@@ -149,11 +167,13 @@ Curriculum
   tracks: Track[]
 
 Track
-  id, title, description, topics
+  id, title, description, kind: core | extension, topics
 
 Topic
   id, title, summary, status: planned | ready
 ```
+
+既有 tracks 的 `kind` 預設為 `core`；Guardrail 使用 `id: ai-engineering`、`kind: extension`。Extension topic 的 metadata 必須能被 map 顯示，但不能改變 Core 19 的完成總數或 ready gate。
 
 `status` 表示教材是否已發布，不表示單一學習者是否完成。
 
@@ -173,6 +193,8 @@ se-workshop-<topic-id>-complete = "true"
 ```
 
 Git 的 `se-workshop-git-complete` 與 Auth 的 `se-workshop-auth-complete` 是既有 protected keys，不改名、不遷移、不覆蓋。
+
+Guardrail 使用獨立的 `se-workshop-guardrail-complete`。Progress aggregation 至少要能分別產出 `coreProgress` 與 `extensionProgress`；Extension completion 不計入 Core 19 的分母或分子。
 
 ### Progress aggregation
 
@@ -211,6 +233,18 @@ event = topic-specific action
 - `completed` 只能由明確 completion predicate 判定。
 - UI 只呈現狀態與派送事件，不自行複製規則。
 
+Guardrail simulator 的最小狀態還需表達：
+
+```text
+stage: input | output | tool
+enabledValidators: ValidatorId[]
+results: ValidatorResult[]
+outcome: pass | fixed | reask | blocked
+latencyMs: number
+```
+
+第一階段的 `reask` 只呈現 deterministic fixture 結果，不呼叫真實 LLM；`exception > reask > fix > pass` 是共用的結果優先序。
+
 ## 8. Progress repository 與 Phase 2 adapter
 
 Phase 1 定義最小 repository 邊界：
@@ -230,6 +264,8 @@ ProgressRepository {
 - `shared/curriculum.json`
 - `frontend/public/`
 - bundle、localStorage 或 GitHub Pages 靜態輸出
+
+Guardrail 的 rules fixture 可以放在 `shared/guardrail-rules.json`，但只能包含可版控的教學規則與 latency reference，不得包含 secret、真實 prompt、模型輸出或使用者資料。
 
 ## 9. UI 與可及性設計契約
 
@@ -274,6 +310,8 @@ CI 必須在 PR 進入 `dev` 與 `main` 前執行；Pages 僅部署通過 build 
 4. 用 GitHub／GitLab 遠端協作作為第一個新 topic，驗證 Lesson、Lab、simulator、completion 與 tests 契約。
 5. 依相同 module contract 擴充其餘主題。
 6. 需要跨裝置、帳號或真實 provider 時，再實作 Phase 2 API adapter。
+7. 在 TopicModule contract 穩定後，以 Guardrail rebuild 驗證 Extension track、分離 progress 與 deterministic multi-stage simulator。
+8. 若需要 FastAPI／SQLite／Live API，再另立 Capstone，不把 backend 放進 GitHub Pages Phase 1。
 
 ## 12. 技術風險與處理
 
@@ -284,6 +322,9 @@ CI 必須在 PR 進入 `dev` 與 `main` 前執行；Pages 僅部署通過 build 
 | simulator 與 UI 規則重複 | reducer 是唯一狀態規則來源，UI 只派送事件 |
 | 未來接 backend 需要重做前端 | 先定 ProgressRepository／API adapter 邊界 |
 | GitHub Pages 不能執行 backend | Phase 1 靜態部署，Phase 2 將 API 部署到外部服務 |
+| Extension progress 污染 Core 統計 | track kind、獨立 completion key、雙層 aggregation 測試 |
+| Guardrail rebuild 變成原專案搬移 | 只採用需求與教材概念，重新實作 TopicModule；禁止 source import |
+| 規則資料與 simulator 邏輯漂移 | 規則以 fixture／JSON 版控，reducer 只負責狀態轉換，測試固定情境 |
 
 ## 13. SD 驗收條件
 
@@ -291,4 +332,5 @@ CI 必須在 PR 進入 `dev` 與 `main` 前執行；Pages 僅部署通過 build 
 - 新 topic 有明確 lesson、lab、simulator、progress 與 test 邊界。
 - 既有 route、completion key、課程清單格式與 CI／Pages 流程保持相容。
 - Phase 1 不需要 backend 也能完整執行教材；Phase 2 的 API 擴充點清楚。
+- Guardrail rebuild 可在 GitHub Pages 以 deterministic simulator 完成 Lesson／Lab／progress／test 閉環；其 FastAPI Capstone 不阻塞 Phase 1。
 - 任何超出本 SD 的技術選擇，先更新 SD 或建立決策紀錄，再進入 implementation。
