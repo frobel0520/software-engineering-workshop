@@ -32,6 +32,7 @@ export const ideLesson: LessonDefinition = {
 };
 
 export type IdeLabPhase = "initial" | "active" | "paused" | "failed" | "completed";
+export type IdeStream = "stdout" | "stderr";
 export type IdeStepId = "open" | "breakpoint" | "run" | "inspect" | "step" | "continue";
 export type IdeLabEventType = "open-file" | "set-breakpoint" | "run" | "inspect" | "step-over" | "continue";
 
@@ -49,6 +50,8 @@ export interface IdeLabState {
   callStack: readonly string[];
   variables: Readonly<Record<string, string>>;
   output: readonly string[];
+  lastStream: IdeStream | null;
+  exitCode: number | null;
   completedStepIds: readonly IdeStepId[];
   lastMessage: string;
   canReset: true;
@@ -127,6 +130,8 @@ export const ideInitialState: IdeLabState = {
   callStack: [],
   variables: {},
   output: [],
+  lastStream: null,
+  exitCode: null,
   completedStepIds: [],
   lastMessage: "準備從固定的 order.ts fixture 開始。",
   canReset: true,
