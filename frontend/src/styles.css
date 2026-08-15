@@ -650,6 +650,7 @@ h1 em {
   .remote-action-panel, .remote-context-panel { padding: 22px; }
   .remote-panel-heading { display: block; }
   .remote-lab-meta { display: block; margin-top: 14px; }
+}
 .guardrail-lab-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr); gap: 16px; }
 .guardrail-control-panel, .guardrail-result-panel { border: 1px solid var(--line); background: var(--surface); }
 .guardrail-control-panel { padding: 30px; }
