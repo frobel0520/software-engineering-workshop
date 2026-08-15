@@ -15,6 +15,8 @@ import { CliLesson } from "./topics/cli/lesson";
 import { IdeLesson } from "./topics/ide/lesson";
 import { RemoteLesson } from "./topics/remote/lesson";
 import { RemoteLab } from "./topics/remote/lab";
+import { GuardrailLesson } from "./topics/guardrail/lesson";
+import { GuardrailLab } from "./topics/guardrail/lab";
 import type { Curriculum } from "./types";
 
 const curriculum = curriculumData as Curriculum;
@@ -42,6 +44,7 @@ export default function App() {
   const cliComplete = progressRepository.read("cli");
   const ideComplete = progressRepository.read("ide");
   const remoteComplete = progressRepository.read("remote");
+  const guardrailComplete = progressRepository.read("guardrail");
 
   useEffect(() => {
     const onHashChange = () => {
@@ -91,10 +94,16 @@ export default function App() {
           <button className={route.path === "/ide-lab" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lab")}><span>↳</span>IDE Lab</button>
           <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
         </nav>
+        <div className="nav-label">EXTENSION / AI</div>
+        <nav>
+          <button className={route.path === "/guardrail" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lesson")}><span>EX</span>Guardrails {guardrailComplete ? <i>✓</i> : null}</button>
+          <button className={route.path === "/guardrail-lab" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lab")}><span>↳</span>Guardrail Lab</button>
+        </nav>
         <div className="sidebar-progress">
           <div><span>總進度</span><b>{progress.coreProgress.completed} / {progress.coreProgress.total}</b></div>
           <div className="progress-track"><i style={{ width: `${progress.coreProgress.percent}%` }} /></div>
           <p>已開放 {progress.coreProgress.ready} / {progress.coreProgress.total} 個 Core topic。</p>
+          <p>Extension {progress.extensionProgress.completed} / {progress.extensionProgress.total} 完成。</p>
         </div>
       </aside>
 
@@ -117,6 +126,8 @@ export default function App() {
         {route.kind === "lab" && route.topicId === "ide" ? <IdeLab onComplete={() => completeTopic("ide")} /> : null}
         {route.kind === "lesson" && route.topicId === "remote" ? <RemoteLesson completed={remoteComplete} onOpenLab={() => goTopic("remote", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "remote" ? <RemoteLab onComplete={() => completeTopic("remote")} /> : null}
+        {route.kind === "lesson" && route.topicId === "guardrail" ? <GuardrailLesson completed={guardrailComplete} onOpenLab={() => goTopic("guardrail", "lab")} /> : null}
+        {route.kind === "lab" && route.topicId === "guardrail" ? <GuardrailLab onComplete={() => completeTopic("guardrail")} /> : null}
       </main>
       {menuOpen ? <button className="menu-scrim" type="button" aria-label="關閉選單" onClick={() => setMenuOpen(false)} /> : null}
     </div>
