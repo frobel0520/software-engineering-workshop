@@ -15,6 +15,10 @@ describe("route registry", () => {
     expect(parseRoute("#/guardrail-lab")).toEqual({ path: "/guardrail-lab", kind: "lab", topicId: "guardrail" });
     expect(topicPath("guardrail", "lesson")).toBe("/guardrail");
     expect(topicPath("guardrail", "lab")).toBe("/guardrail-lab");
+    expect(parseRoute("#/cli")).toEqual({ path: "/cli", kind: "lesson", topicId: "cli" });
+    expect(parseRoute("#/cli-lab")).toEqual({ path: "/cli-lab", kind: "lab", topicId: "cli" });
+    expect(topicPath("cli", "lesson")).toBe("/cli");
+    expect(topicPath("cli", "lab")).toBe("/cli-lab");
   });
 
   it("falls back to the map for unknown or unsafe paths", () => {
