@@ -65,6 +65,8 @@ interface IdeLabState {
   callStack: readonly string[];
   variables: Readonly<Record<string, string>>;
   output: readonly string[];
+  lastStream: "stdout" | "stderr" | null;
+  exitCode: number | null;
   completedStepIds: readonly IdeStepId[];
   lastMessage: string;
   canReset: true;
