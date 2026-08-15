@@ -13,6 +13,8 @@ import { CliLab } from "./components/CliLab";
 import { IdeLab } from "./components/IdeLab";
 import { CliLesson } from "./topics/cli/lesson";
 import { IdeLesson } from "./topics/ide/lesson";
+import { RemoteLesson } from "./topics/remote/lesson";
+import { RemoteLab } from "./topics/remote/lab";
 import type { Curriculum } from "./types";
 
 const curriculum = curriculumData as Curriculum;
@@ -23,6 +25,7 @@ function routeLabel(route: RouteDefinition): string {
   const topic = route.topicId?.toUpperCase() ?? "TOPIC";
   return route.kind === "lab" ? `${topic} LAB` : topic;
 }
+
 export default function App() {
   const [route, setRoute] = useState<RouteDefinition>(() => parseRoute(window.location.hash));
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,6 +41,7 @@ export default function App() {
   const authComplete = progressRepository.read("auth");
   const cliComplete = progressRepository.read("cli");
   const ideComplete = progressRepository.read("ide");
+  const remoteComplete = progressRepository.read("remote");
 
   useEffect(() => {
     const onHashChange = () => {
@@ -85,6 +89,7 @@ export default function App() {
           <button className={route.path === "/auth-lab" ? "active" : ""} type="button" onClick={() => goTopic("auth", "lab")}><span>↳</span>Auth Lab</button>
           <button className={route.path === "/cli-lab" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lab")}><span>↳</span>CLI Lab</button>
           <button className={route.path === "/ide-lab" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lab")}><span>↳</span>IDE Lab</button>
+          <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
         </nav>
         <div className="sidebar-progress">
           <div><span>總進度</span><b>{progress.coreProgress.completed} / {progress.coreProgress.total}</b></div>
@@ -110,6 +115,8 @@ export default function App() {
         {route.kind === "lab" && route.topicId === "cli" ? <CliLab onComplete={() => completeTopic("cli")} /> : null}
         {route.kind === "lesson" && route.topicId === "ide" ? <IdeLesson completed={ideComplete} onOpenLab={() => goTopic("ide", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "ide" ? <IdeLab onComplete={() => completeTopic("ide")} /> : null}
+        {route.kind === "lesson" && route.topicId === "remote" ? <RemoteLesson completed={remoteComplete} onOpenLab={() => goTopic("remote", "lab")} /> : null}
+        {route.kind === "lab" && route.topicId === "remote" ? <RemoteLab onComplete={() => completeTopic("remote")} /> : null}
       </main>
       {menuOpen ? <button className="menu-scrim" type="button" aria-label="關閉選單" onClick={() => setMenuOpen(false)} /> : null}
     </div>
