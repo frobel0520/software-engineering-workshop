@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import curriculumData from "@shared/curriculum.json";
 import { aggregateProgress } from "./progress/aggregation";
 import { createLocalStorageProgressRepository } from "./progress/repository";
-import { parseRoute, topicPath, type RouteDefinition } from "./routes/registry";
+import { parseRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
 import { CurriculumMap } from "./components/CurriculumMap";
+import { TrackPage } from "./components/TrackPage";
 import { GitLab } from "./components/GitLab";
 import { GitLesson } from "./components/GitLesson";
 import { AuthLesson } from "./components/AuthLesson";
@@ -18,15 +19,21 @@ const curriculum = curriculumData as Curriculum;
 
 function routeLabel(route: RouteDefinition): string {
   if (route.kind === "map") return "MAP";
+  if (route.kind === "track") return `TRACK / ${route.trackId?.toUpperCase() ?? "CURRICULUM"}`;
   const topic = route.topicId?.toUpperCase() ?? "TOPIC";
   return route.kind === "lab" ? `${topic} LAB` : topic;
 }
 export default function App() {
   const [route, setRoute] = useState<RouteDefinition>(() => parseRoute(window.location.hash));
   const [menuOpen, setMenuOpen] = useState(false);
-  const [, setProgressRevision] = useState(0);
+  const [progressRevision, setProgressRevision] = useState(0);
   const progressRepository = useMemo(() => createLocalStorageProgressRepository(window.localStorage), []);
   const progress = aggregateProgress(curriculum, progressRepository);
+  const completedTopicIds = useMemo(
+    () => curriculum.tracks.flatMap((track) => track.topics).filter((topic) => progressRepository.read(topic.id)).map((topic) => topic.id),
+    [progressRepository, progressRevision],
+  );
+  const activeTrack = route.kind === "track" ? curriculum.tracks.find((track) => track.id === route.trackId) : undefined;
   const gitComplete = progressRepository.read("git");
   const authComplete = progressRepository.read("auth");
   const cliComplete = progressRepository.read("cli");
@@ -65,10 +72,12 @@ export default function App() {
         <div className="nav-label">目錄 / CONTENTS</div>
         <nav>
           <button className={route.path === "/map" ? "active" : ""} type="button" onClick={() => goPath("/map")}><span>00</span>課程地圖</button>
-          <button className={route.path === "/git" ? "active" : ""} type="button" onClick={() => goTopic("git", "lesson")}><span>01</span>Git 基礎 {gitComplete ? <i>✓</i> : null}</button>
-          <button className={route.path === "/auth" ? "active" : ""} type="button" onClick={() => goTopic("auth", "lesson")}><span>02</span>Auth／OIDC {authComplete ? <i>✓</i> : null}</button>
-          <button className={route.path === "/cli" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lesson")}><span>03</span>命令列 {cliComplete ? <i>✓</i> : null}</button>
-          <button className={route.path === "/ide" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lesson")}><span>04</span>IDE／除錯器 {ideComplete ? <i>✓</i> : null}</button>
+          <div className="nav-label nav-label-nested">路線 / TRACKS</div>
+          {curriculum.tracks.map((track, index) => (
+            <button className={route.path === trackPath(track.id) ? "active" : ""} type="button" key={track.id} onClick={() => goPath(trackPath(track.id))}>
+              <span>{String(index + 1).padStart(2, "0")}</span>{track.title}
+            </button>
+          ))}
         </nav>
         <div className="nav-label">實作 / PRACTICE</div>
         <nav>
@@ -90,7 +99,9 @@ export default function App() {
           <div className="breadcrumb"><span>WORKSHOP</span><i>/</i><b>{routeLabel(route)}</b></div>
           <div className="top-status">已開放 <b>{progress.coreProgress.ready} / {progress.coreProgress.total}</b></div>
         </header>
-        {route.kind === "map" ? <CurriculumMap curriculum={curriculum} onOpenGit={() => goTopic("git", "lesson")} onOpenAuth={() => goTopic("auth", "lesson")} onOpenCli={() => goTopic("cli", "lesson")} onOpenIde={() => goTopic("ide", "lesson")} /> : null}
+        {route.kind === "map" ? <CurriculumMap curriculum={curriculum} onOpenTrack={(trackId) => goPath(trackPath(trackId))} /> : null}
+        {route.kind === "track" && activeTrack ? <TrackPage track={activeTrack} completedTopicIds={completedTopicIds} onBackToMap={() => goPath("/map")} onOpenTopic={(topicId) => goTopic(topicId, "lesson")} /> : null}
+        {route.kind === "track" && !activeTrack ? <CurriculumMap curriculum={curriculum} onOpenTrack={(trackId) => goPath(trackPath(trackId))} /> : null}
         {route.kind === "lesson" && route.topicId === "git" ? <GitLesson completed={gitComplete} onOpenLab={() => goTopic("git", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "git" ? <GitLab onComplete={() => completeTopic("git")} /> : null}
         {route.kind === "lesson" && route.topicId === "auth" ? <AuthLesson completed={authComplete} onOpenLab={() => goTopic("auth", "lab")} /> : null}

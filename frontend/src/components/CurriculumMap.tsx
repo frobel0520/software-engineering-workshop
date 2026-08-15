@@ -1,6 +1,6 @@
 import type { Curriculum } from "../types";
 
-export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli, onOpenIde }: { curriculum: Curriculum; onOpenGit: () => void; onOpenAuth: () => void; onOpenCli: () => void; onOpenIde: () => void }) {
+export function CurriculumMap({ curriculum, onOpenTrack }: { curriculum: Curriculum; onOpenTrack: (trackId: string) => void }) {
   const topicCount = curriculum.tracks.reduce((total, track) => total + track.topics.length, 0);
 
   return (
@@ -10,11 +10,11 @@ export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli, on
           <p className="kicker">SOFTWARE ENGINEERING / FIELD WORK</p>
           <h1>一次練好<br /><em>一個工程能力。</em></h1>
           <p className="hero-lead">
-            19 個主題是一張地圖，不是一份今天要清空的待辦清單。先從 Git、Auth、CLI 與 IDE 建立工程基本功。
+            19 個主題是一張地圖，不是一份今天要清空的待辦清單。先選一個能力分類，再沿著分類內的 topic 前進。
           </p>
           <div className="hero-actions">
-            <button className="button primary" onClick={onOpenGit}>開始 Git 單元 <span>→</span></button>
-            <span className="duration">約 20 分鐘 · 含互動 Lab</span>
+            <button className="button primary" onClick={() => onOpenTrack("foundations")}>查看開發基本功 <span>→</span></button>
+            <span className="duration">先選分類 · 再進入 topic Lab</span>
           </div>
         </div>
         <div className="hero-visual" aria-label="Git 工作流程示意圖">
@@ -30,7 +30,7 @@ export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli, on
 
       <section className="map-intro">
         <div><p className="kicker">CURRICULUM MAP</p><h2>完整路線圖</h2></div>
-        <p>Git、Auth、CLI 與 IDE 已開放；其餘主題會逐項製作、測試、上線。</p>
+        <p>先選能力分類；分類內會標示已開放與規劃中的 topic。</p>
       </section>
 
       <div className="track-grid">
@@ -38,20 +38,22 @@ export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli, on
           <section className="track-card" key={track.id}>
             <header>
               <span>{String(trackIndex + 1).padStart(2, "0")}</span>
-              <div><h3>{track.title}</h3><p>{track.description}</p></div>
+              <div>
+                <h3>{track.title}</h3>
+                <p>{track.description}</p>
+                <button className="track-card-link" type="button" onClick={() => onOpenTrack(track.id)}>進入分類 <span>→</span></button>
+              </div>
             </header>
             <div className="topic-stack">
               {track.topics.map((topic) => (
-                <button
+                <div
                   key={topic.id}
                   className={`topic-item ${topic.status}`}
-                  disabled={topic.status !== "ready"}
-                  onClick={topic.id === "git" ? onOpenGit : topic.id === "auth" ? onOpenAuth : topic.id === "cli" ? onOpenCli : topic.id === "ide" ? onOpenIde : undefined}
                 >
                   <span className="topic-state">{topic.status === "ready" ? "●" : "○"}</span>
                   <span><b>{topic.title}</b><small>{topic.summary}</small></span>
-                  <em>{topic.status === "ready" ? "開始 →" : "規劃中"}</em>
-                </button>
+                  <em>{topic.status === "ready" ? "查看分類" : "規劃中"}</em>
+                </div>
               ))}
             </div>
           </section>

@@ -83,18 +83,20 @@ Curriculum
 
 ```text
 課程地圖
-  → 選擇 ready topic
+  → 選擇 Core／Extension track
+  → 選擇 track 中的 ready topic
   → Lesson
   → Lab 初始狀態
   → 學習者操作
   → 驗證完成條件
   → Topic marked complete
-  → 回到課程地圖
+  → 回到原 track
 ```
 
 ### Topic 可見性規則
 
 - `planned` topic：可在地圖看見標題與摘要，但不可進入未完成的教材流程。
+- Track：可在課程地圖進入分類頁；分類頁列出該分類所有 topic 與 ready／planned 狀態。
 - `ready` topic：可進入 Lesson 與 Lab。
 - `complete` 不取代 curriculum 的 `ready` 狀態；它是學習者在本機的個人進度。
 
