@@ -1,8 +1,9 @@
-export type RouteKind = "map" | "lesson" | "lab";
+export type RouteKind = "map" | "track" | "lesson" | "lab";
 
 export interface RouteDefinition {
   path: string;
   kind: RouteKind;
+  trackId?: string;
   topicId?: string;
 }
 
@@ -33,10 +34,19 @@ function assertTopicId(topicId: string): string {
   return normalizedTopicId;
 }
 
+export function trackPath(trackId: string): string {
+  return `/track/${assertTopicId(trackId)}`;
+}
+
 export function parseRoute(hashOrPath: string): RouteDefinition {
   const path = normalizePath(hashOrPath);
   const registeredRoute = ROUTE_REGISTRY.find((route) => route.path === path);
   if (registeredRoute) return registeredRoute;
+
+  const trackMatch = path.match(/^\/track\/(.+)$/);
+  if (trackMatch && TOPIC_ID_PATTERN.test(trackMatch[1])) {
+    return { path, kind: "track", trackId: trackMatch[1] };
+  }
 
   const labMatch = path.match(/^\/(.+)-lab$/);
   if (labMatch && TOPIC_ID_PATTERN.test(labMatch[1])) {
@@ -51,7 +61,7 @@ export function parseRoute(hashOrPath: string): RouteDefinition {
   return MAP_ROUTE;
 }
 
-export function topicPath(topicId: string, kind: Exclude<RouteKind, "map">): string {
+export function topicPath(topicId: string, kind: Exclude<RouteKind, "map" | "track">): string {
   const normalizedTopicId = assertTopicId(topicId);
 
   if (normalizedTopicId === "git") return kind === "lab" ? "/lab" : "/git";

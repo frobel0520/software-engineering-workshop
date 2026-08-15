@@ -613,3 +613,106 @@ h1 em {
   .auth-field-list p, .auth-field-list b { grid-column: 2; }
   .auth-lab-grid { grid-template-columns: 1fr; }
 }
+
+/* Track-first curriculum flow */
+.nav-label-nested { margin-top: 26px; }
+.track-card-link {
+  margin-top: 17px;
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 1px solid var(--teal-dark);
+  color: var(--teal-dark);
+  background: transparent;
+  font: 10px "DM Mono", monospace;
+  letter-spacing: .05em;
+  transition: padding .16s ease;
+}
+.track-card-link span { margin-left: 16px; }
+.track-card-link:hover { padding-right: 7px; }
+
+.track-page { max-width: 1120px; }
+.track-back {
+  padding: 0 0 6px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font: 10px "DM Mono", monospace;
+  transition: color .16s ease, border-color .16s ease;
+}
+.track-back:hover { color: var(--teal-dark); border-color: var(--teal-dark); }
+.track-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 60px;
+  align-items: end;
+  padding: 60px 0 56px;
+  border-bottom: 2px solid var(--ink);
+}
+.track-hero h1 {
+  margin: 18px 0 20px;
+  color: var(--ink);
+  font: 500 clamp(52px, 6vw, 84px)/.98 "Newsreader", "Noto Serif TC", serif;
+  letter-spacing: -.055em;
+  text-wrap: pretty;
+}
+.track-hero > div:first-child > p:last-child {
+  max-width: 590px;
+  margin: 0;
+  color: var(--muted);
+  font: 16px/1.9 "Noto Serif TC", serif;
+  text-wrap: pretty;
+}
+.track-progress-block { padding-left: 19px; border-left: 1px solid var(--teal-dark); }
+.track-progress-block > span { display: block; color: var(--teal-dark); font: 500 32px "Newsreader", serif; }
+.track-progress-line { height: 3px; margin: 14px 0 10px; background: var(--line); }
+.track-progress-line i { display: block; height: 100%; background: var(--teal-dark); transition: width .3s ease; }
+.track-progress-block small { color: var(--muted); font: 10px "Noto Serif TC", serif; }
+.track-topic-section { margin-top: 5px; }
+.track-topic-heading { margin-top: 64px; }
+.track-topic-list { border-top: 2px solid var(--ink); }
+.track-topic-row {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) 170px;
+  gap: 28px;
+  align-items: center;
+  min-height: 130px;
+  padding: 25px 0;
+  border-bottom: 1px solid var(--line);
+}
+.track-topic-row.ready { background: linear-gradient(90deg, transparent, rgba(230, 220, 196, .5)); }
+.track-topic-row.planned { opacity: .58; }
+.track-topic-row.complete { background: linear-gradient(90deg, rgba(230, 220, 196, .7), transparent); }
+.track-topic-number { color: var(--teal-dark); font: 500 29px "Newsreader", serif; }
+.track-topic-status { margin: 0 0 8px; color: var(--muted); font: 9px "DM Mono", monospace; letter-spacing: .1em; }
+.track-topic-row.complete .track-topic-status { color: var(--teal-dark); }
+.track-topic-copy h3 { margin: 0 0 7px; font: 600 25px "Newsreader", "Noto Serif TC", serif; letter-spacing: -.035em; }
+.track-topic-copy > p:last-child { margin: 0; color: var(--muted); font: 13px/1.7 "Noto Serif TC", serif; }
+.track-topic-action { justify-self: end; text-align: right; }
+.track-topic-button {
+  padding: 0 0 6px;
+  border: 0;
+  border-bottom: 1px solid var(--teal-dark);
+  color: var(--teal-dark);
+  background: transparent;
+  font: 10px "DM Mono", monospace;
+  transition: padding .16s ease;
+}
+.track-topic-button:hover { padding-right: 8px; }
+.track-topic-disabled { color: var(--muted); font: 10px "DM Mono", monospace; }
+
+@media (max-width: 950px) {
+  .track-hero { grid-template-columns: 1fr; gap: 32px; }
+  .track-progress-block { max-width: 280px; }
+  .track-topic-row { grid-template-columns: 62px minmax(0, 1fr); }
+  .track-topic-action { grid-column: 2; justify-self: start; text-align: left; }
+}
+
+@media (max-width: 720px) {
+  .nav-label-nested { margin-top: 20px; }
+  .track-hero { padding: 42px 0 40px; }
+  .track-topic-heading { margin-top: 48px; }
+  .track-topic-row { grid-template-columns: 1fr; gap: 12px; padding: 25px 0; }
+  .track-topic-number { font-size: 24px; }
+  .track-topic-action { grid-column: auto; }
+}
