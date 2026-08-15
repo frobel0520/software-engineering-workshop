@@ -141,17 +141,18 @@ ProgressDefinition {
 
 新主題採可預測命名：
 
+- `#/track/<track-id>`：能力分類頁
 - `#/<topic-id>`：教材
 - `#/<topic-id>-lab`：Lab
 
-例如遠端協作使用 `#/remote` 與 `#/remote-lab`。若既有命名與規則不一致，優先保留舊 route，透過 alias 或 registry 兼容，不直接改 URL。
+例如 Foundations 使用 `#/track/foundations`，遠端協作使用 `#/remote` 與 `#/remote-lab`。若既有命名與規則不一致，優先保留舊 route，透過 alias 或 registry 兼容，不直接改 URL。
 
 ### Route registry
 
 目標是集中管理：
 
 ```text
-route → page kind → topic id → completion key
+route → page kind → track／topic id → completion key
 ```
 
 `App` 只負責讀取 route、選擇 page 與共用 shell；topic-specific lesson、Lab 與 simulator 不應回寫 App 的全域條件分支。
