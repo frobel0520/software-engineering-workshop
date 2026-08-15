@@ -56,6 +56,7 @@ type WorkingTree = "clean" | "dirty";
 type RemoteBranch = "absent" | "published";
 type PullRequest = "none" | "open" | "merged";
 type Checks = "not-run" | "pending" | "passed" | "failed";
+type SyncState = "stale" | "fetched" | "rebased";
 
 interface RemoteLabState {
   phase: RemoteLabPhase;
@@ -65,6 +66,7 @@ interface RemoteLabState {
   workingTree: WorkingTree;
   localCommitCount: number;
   localBaseRef: "dev" | "origin/dev";
+  syncState: SyncState;
   remoteBranch: RemoteBranch;
   pullRequest: PullRequest;
   checks: Checks;
@@ -84,6 +86,7 @@ interface RemoteLabState {
   workingTree: "clean",
   localCommitCount: 0,
   localBaseRef: "dev",
+  syncState: "stale",
   remoteBranch: "absent",
   pullRequest: "none",
   checks: "not-run",
@@ -111,6 +114,7 @@ interface RemoteLabState {
 
 - `localCommitCount > 0`。
 - 已依序完成 `branch → commit → fetch → rebase → push → open-pr → checks-pass → merge`。
+- `syncState = "rebased"`，表示本地已先取得並套用最新的 `origin/dev`。
 - `remoteBranch = "published"`、`pullRequest = "merged"`、`checks = "passed"`。
 - simulator 的 completion predicate 回傳 `true`，並寫入 `se-workshop-remote-complete`。
 
