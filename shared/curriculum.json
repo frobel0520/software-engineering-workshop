@@ -9,7 +9,7 @@
         { "id": "git", "title": "Git", "summary": "版本控制與安全協作", "status": "ready" },
         { "id": "remote", "title": "GitHub / GitLab", "summary": "遠端協作平台", "status": "planned" },
         { "id": "cli", "title": "命令列", "summary": "可重複的工作流入口", "status": "ready" },
-        { "id": "ide", "title": "IDE／除錯器", "summary": "快速定位問題", "status": "planned" },
+        { "id": "ide", "title": "IDE／除錯器", "summary": "快速定位問題", "status": "ready" },
         { "id": "package", "title": "套件管理", "summary": "可重現的依賴", "status": "planned" },
         { "id": "env", "title": "環境變數", "summary": "設定與秘密", "status": "planned" },
         { "id": "build", "title": "建置工具", "summary": "從原始碼到產品", "status": "planned" }
