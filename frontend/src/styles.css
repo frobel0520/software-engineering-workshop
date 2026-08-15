@@ -618,6 +618,29 @@ h1 em {
 .remote-context-list dd { margin: 0; color: var(--teal-dark); font: 11px "DM Mono"; }
 .remote-context-hint { margin: 25px 0 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
 
+.remote-lab-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr); gap: 16px; }
+.remote-action-panel, .remote-context-panel { border: 1px solid var(--line); background: var(--surface); }
+.remote-action-panel { padding: 30px; }
+.remote-panel-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.remote-panel-heading h2, .remote-context-panel h2 { margin: 7px 0 0; font: 600 26px/1.2 "Newsreader", "Noto Serif TC", serif; }
+.remote-lab-meta { color: var(--muted); font: 10px "DM Mono"; }
+.remote-action-list { display: grid; gap: 8px; margin-top: 20px; }
+.remote-action { display: grid; grid-template-columns: 42px minmax(0, 1fr) 20px; gap: 12px; align-items: center; width: 100%; padding: 15px 13px; border: 1px solid transparent; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+.remote-action:hover, .remote-action:focus-visible { border-color: var(--teal); background: #f2f7f5; outline: none; }
+.remote-action.done { color: var(--teal-dark); }
+.remote-action-index { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--line); color: var(--muted); font: 10px "DM Mono"; }
+.remote-action.done .remote-action-index { border-color: var(--teal-dark); background: var(--teal-dark); color: var(--paper); }
+.remote-action-copy { min-width: 0; }
+.remote-action-copy b { display: block; font-size: 13px; }
+.remote-action-copy code { display: block; overflow: hidden; margin-top: 5px; color: var(--muted); font: 10px "DM Mono"; text-overflow: ellipsis; white-space: nowrap; }
+.remote-action-arrow { color: var(--muted); font-size: 18px; }
+.remote-context-panel { align-self: start; padding: 30px; }
+.remote-context-list { margin: 25px 0 0; border-top: 1px solid var(--line); }
+.remote-context-list div { display: flex; justify-content: space-between; gap: 20px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.remote-context-list dt { color: var(--muted); font: 9px "DM Mono"; letter-spacing: .12em; }
+.remote-context-list dd { margin: 0; color: var(--teal-dark); font: 11px "DM Mono"; }
+.remote-context-hint { margin: 25px 0 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+
 @media (max-width: 720px) {
   .ide-editor { min-height: 205px; }.ide-control-panel { padding: 24px 20px; }.ide-state-grid { grid-template-columns: 1fr; }.ide-state-grid > div, .ide-state-grid .ide-state-wide { grid-column: auto; border-right: 0; }.ide-state-grid > div:nth-child(2n) { border-right: 0; }
 }
