@@ -9,7 +9,9 @@ import { GitLesson } from "./components/GitLesson";
 import { AuthLesson } from "./components/AuthLesson";
 import { AuthLab } from "./components/AuthLab";
 import { CliLab } from "./components/CliLab";
+import { IdeLab } from "./components/IdeLab";
 import { CliLesson } from "./topics/cli/lesson";
+import { IdeLesson } from "./topics/ide/lesson";
 import type { Curriculum } from "./types";
 
 const curriculum = curriculumData as Curriculum;
@@ -28,6 +30,7 @@ export default function App() {
   const gitComplete = progressRepository.read("git");
   const authComplete = progressRepository.read("auth");
   const cliComplete = progressRepository.read("cli");
+  const ideComplete = progressRepository.read("ide");
 
   useEffect(() => {
     const onHashChange = () => {
@@ -65,12 +68,14 @@ export default function App() {
           <button className={route.path === "/git" ? "active" : ""} type="button" onClick={() => goTopic("git", "lesson")}><span>01</span>Git 基礎 {gitComplete ? <i>✓</i> : null}</button>
           <button className={route.path === "/auth" ? "active" : ""} type="button" onClick={() => goTopic("auth", "lesson")}><span>02</span>Auth／OIDC {authComplete ? <i>✓</i> : null}</button>
           <button className={route.path === "/cli" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lesson")}><span>03</span>命令列 {cliComplete ? <i>✓</i> : null}</button>
+          <button className={route.path === "/ide" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lesson")}><span>04</span>IDE／除錯器 {ideComplete ? <i>✓</i> : null}</button>
         </nav>
         <div className="nav-label">實作 / PRACTICE</div>
         <nav>
           <button className={route.path === "/lab" ? "active" : ""} type="button" onClick={() => goTopic("git", "lab")}><span>↳</span>Git Lab</button>
           <button className={route.path === "/auth-lab" ? "active" : ""} type="button" onClick={() => goTopic("auth", "lab")}><span>↳</span>Auth Lab</button>
           <button className={route.path === "/cli-lab" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lab")}><span>↳</span>CLI Lab</button>
+          <button className={route.path === "/ide-lab" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lab")}><span>↳</span>IDE Lab</button>
         </nav>
         <div className="sidebar-progress">
           <div><span>總進度</span><b>{progress.coreProgress.completed} / {progress.coreProgress.total}</b></div>
@@ -85,13 +90,15 @@ export default function App() {
           <div className="breadcrumb"><span>WORKSHOP</span><i>/</i><b>{routeLabel(route)}</b></div>
           <div className="top-status">已開放 <b>{progress.coreProgress.ready} / {progress.coreProgress.total}</b></div>
         </header>
-        {route.kind === "map" ? <CurriculumMap curriculum={curriculum} onOpenGit={() => goTopic("git", "lesson")} onOpenAuth={() => goTopic("auth", "lesson")} onOpenCli={() => goTopic("cli", "lesson")} /> : null}
+        {route.kind === "map" ? <CurriculumMap curriculum={curriculum} onOpenGit={() => goTopic("git", "lesson")} onOpenAuth={() => goTopic("auth", "lesson")} onOpenCli={() => goTopic("cli", "lesson")} onOpenIde={() => goTopic("ide", "lesson")} /> : null}
         {route.kind === "lesson" && route.topicId === "git" ? <GitLesson completed={gitComplete} onOpenLab={() => goTopic("git", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "git" ? <GitLab onComplete={() => completeTopic("git")} /> : null}
         {route.kind === "lesson" && route.topicId === "auth" ? <AuthLesson completed={authComplete} onOpenLab={() => goTopic("auth", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "auth" ? <AuthLab onComplete={() => completeTopic("auth")} /> : null}
         {route.kind === "lesson" && route.topicId === "cli" ? <CliLesson completed={cliComplete} onOpenLab={() => goTopic("cli", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "cli" ? <CliLab onComplete={() => completeTopic("cli")} /> : null}
+        {route.kind === "lesson" && route.topicId === "ide" ? <IdeLesson completed={ideComplete} onOpenLab={() => goTopic("ide", "lab")} /> : null}
+        {route.kind === "lab" && route.topicId === "ide" ? <IdeLab onComplete={() => completeTopic("ide")} /> : null}
       </main>
       {menuOpen ? <button className="menu-scrim" type="button" aria-label="關閉選單" onClick={() => setMenuOpen(false)} /> : null}
     </div>
