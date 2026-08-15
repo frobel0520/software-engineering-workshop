@@ -35,7 +35,7 @@ describe("progress aggregation", () => {
     const repository = new MemoryProgressRepository(new Set(["git", "auth", "remote"]));
     const result = aggregateProgress(curriculum, repository);
 
-    expect(result.coreProgress).toEqual({ kind: "core", total: 19, ready: coreReadyTopicIds.length, completed: 2, percent: 11 });
+    expect(result.coreProgress).toEqual({ kind: "core", total: 19, ready: coreReadyTopicIds.length, completed: 3, percent: 16 });
     expect(result.extensionProgress).toEqual({ kind: "extension", total: 0, ready: 0, completed: 0, percent: 0 });
     expect(repository.reads).toEqual(coreReadyTopicIds);
   });
