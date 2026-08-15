@@ -24,23 +24,28 @@ class MemoryProgressRepository implements ProgressRepository {
 }
 
 const curriculum = curriculumData as Curriculum;
+const coreReadyTopicIds = curriculum.tracks
+  .filter((track) => (track.kind ?? "core") === "core")
+  .flatMap((track) => track.topics)
+  .filter((topic) => topic.status === "ready")
+  .map((topic) => topic.id);
 
 describe("progress aggregation", () => {
   it("keeps Core progress separate and preserves the 19-topic denominator", () => {
     const repository = new MemoryProgressRepository(new Set(["git", "auth", "remote"]));
     const result = aggregateProgress(curriculum, repository);
 
-    expect(result.coreProgress).toEqual({ kind: "core", total: 19, ready: 2, completed: 2, percent: 11 });
+    expect(result.coreProgress).toEqual({ kind: "core", total: 19, ready: coreReadyTopicIds.length, completed: 2, percent: 11 });
     expect(result.extensionProgress).toEqual({ kind: "extension", total: 0, ready: 0, completed: 0, percent: 0 });
-    expect(repository.reads).toEqual(["git", "auth"]);
+    expect(repository.reads).toEqual(coreReadyTopicIds);
   });
 
   it("does not count planned topics even when the repository contains a value", () => {
     const repository = new MemoryProgressRepository(new Set(curriculum.tracks.flatMap((track) => track.topics.map((topic) => topic.id))));
     const result = aggregateProgress(curriculum, repository);
 
-    expect(result.coreProgress.completed).toBe(2);
-    expect(repository.reads).toEqual(["git", "auth"]);
+    expect(result.coreProgress.completed).toBe(coreReadyTopicIds.length);
+    expect(repository.reads).toEqual(coreReadyTopicIds);
   });
 
   it("calculates extension progress independently from Core", () => {
