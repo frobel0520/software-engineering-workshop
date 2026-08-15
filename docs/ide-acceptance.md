@@ -1,7 +1,7 @@
 # IDE-01：IDE／除錯器 acceptance
 
 > 類型：Topic acceptance／fixture contract
-> 狀態：可供 IDE-02、IDE-03 開發
+> 狀態：IDE-02～IDE-05 已實作；本地整合驗證通過
 > 依賴：M1 module foundation
 > 範圍：瀏覽器內 deterministic editor／debugger sandbox；不執行真實 process、不讀取使用者檔案
 

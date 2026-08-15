@@ -1,6 +1,6 @@
 import type { Curriculum } from "../types";
 
-export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli }: { curriculum: Curriculum; onOpenGit: () => void; onOpenAuth: () => void; onOpenCli: () => void }) {
+export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli, onOpenIde }: { curriculum: Curriculum; onOpenGit: () => void; onOpenAuth: () => void; onOpenCli: () => void; onOpenIde: () => void }) {
   const topicCount = curriculum.tracks.reduce((total, track) => total + track.topics.length, 0);
 
   return (
@@ -10,7 +10,7 @@ export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli }: 
           <p className="kicker">SOFTWARE ENGINEERING / FIELD WORK</p>
           <h1>一次練好<br /><em>一個工程能力。</em></h1>
           <p className="hero-lead">
-            19 個主題是一張地圖，不是一份今天要清空的待辦清單。先從 Git、Auth 與 CLI 建立工程基本功。
+            19 個主題是一張地圖，不是一份今天要清空的待辦清單。先從 Git、Auth、CLI 與 IDE 建立工程基本功。
           </p>
           <div className="hero-actions">
             <button className="button primary" onClick={onOpenGit}>開始 Git 單元 <span>→</span></button>
@@ -30,7 +30,7 @@ export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli }: 
 
       <section className="map-intro">
         <div><p className="kicker">CURRICULUM MAP</p><h2>完整路線圖</h2></div>
-        <p>Git、Auth 與 CLI 已開放；其餘主題會逐項製作、測試、上線。</p>
+        <p>Git、Auth、CLI 與 IDE 已開放；其餘主題會逐項製作、測試、上線。</p>
       </section>
 
       <div className="track-grid">
@@ -46,7 +46,7 @@ export function CurriculumMap({ curriculum, onOpenGit, onOpenAuth, onOpenCli }: 
                   key={topic.id}
                   className={`topic-item ${topic.status}`}
                   disabled={topic.status !== "ready"}
-                  onClick={topic.id === "git" ? onOpenGit : topic.id === "auth" ? onOpenAuth : topic.id === "cli" ? onOpenCli : undefined}
+                  onClick={topic.id === "git" ? onOpenGit : topic.id === "auth" ? onOpenAuth : topic.id === "cli" ? onOpenCli : topic.id === "ide" ? onOpenIde : undefined}
                 >
                   <span className="topic-state">{topic.status === "ready" ? "●" : "○"}</span>
                   <span><b>{topic.title}</b><small>{topic.summary}</small></span>
