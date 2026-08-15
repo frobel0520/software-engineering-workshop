@@ -2,7 +2,6 @@ import { type FormEvent, useMemo, useState } from "react";
 import { ideFileFixture, type IdeLabState, type IdeStepId } from "../topics/ide/content";
 import {
   createIdeLabState,
-  ideCommand,
   ideLabIsComplete,
   runIdeCommand,
 } from "../topics/ide/simulator";
