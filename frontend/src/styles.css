@@ -561,6 +561,24 @@ h1 em {
 .demo-detail { display: block; min-height: 74px; margin: 0 0 24px; padding: 16px; color: var(--ink); background: var(--paper); font: 11px/1.7 "DM Mono"; }
 .demo-summary { color: var(--muted); font: 14px/1.8 "Noto Serif TC", serif; }
 
+/* Topic shell contract v1 */
+.topic-lesson-content,
+.topic-lab-content { margin-top: 42px; }
+.topic-lab-actions { display: flex; justify-content: flex-end; margin-top: 18px; }
+.topic-status-feedback { min-height: 22px; margin: 18px 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.topic-status-feedback.error { color: var(--coral); }
+.topic-status-feedback.success { color: var(--teal-dark); }
+.topic-completion { max-width: 520px; margin: 48px auto; padding: 42px 32px; border: 1px solid var(--line); background: var(--surface); text-align: center; }
+.topic-completion > span { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 20px; color: var(--paper); background: var(--teal-dark); font-size: 24px; }
+.topic-completion h2 { margin: 0 0 12px; font: 600 30px/1.2 "Newsreader", "Noto Serif TC", serif; }
+.topic-completion p { margin: 0 auto 20px; max-width: 390px; color: var(--muted); font: 14px/1.8 "Noto Serif TC", serif; }
+
+@media (max-width: 720px) {
+  .topic-lab-actions { justify-content: stretch; }
+  .topic-lab-actions .button { width: 100%; }
+  .topic-completion { margin: 34px auto; padding: 32px 22px; }
+}
+
 @media (max-width: 950px) {
   .auth-model { grid-template-columns: 1fr; }
   .auth-model > i { height: 36px; transform: rotate(90deg); }
