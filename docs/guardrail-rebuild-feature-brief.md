@@ -103,6 +103,9 @@ GuardrailState {
   outcome: pass | fixed | reask | blocked
   latencyMs: number
   phase: initial | active | failed | completed
+  completedScenarioIds: GuardrailScenarioId[]
+  lastMessage: string
+  canReset: true
 }
 ```
 
@@ -116,6 +119,8 @@ events:
 ```
 
 同一個初始狀態與事件序列必須得到相同結果。Lab 不執行真實 LLM；`reask` 以固定的示範結果呈現，不進行第二次網路呼叫。
+
+`completedScenarioIds` 用來保存本次 Lab 已完成的 required scenario；它只代表 simulator session 內的驗收狀態，不取代 progress repository 的 topic completion key。
 
 ## 7. 完成條件
 
