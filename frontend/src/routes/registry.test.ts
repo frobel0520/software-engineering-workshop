@@ -60,4 +60,8 @@ describe("route registry", () => {
     expect(resolveRoute("#/unknown", routeCurriculum)).toEqual({ path: "/map", kind: "map" });
     expect(resolveRoute("#/git-lab", routeCurriculum)).toEqual({ path: "/git-lab", kind: "lab", topicId: "git" });
   });
+
+  it("does not resolve a ready topic without a registered view", () => {
+    expect(resolveRoute("#/git", routeCurriculum, new Set(["auth"]))).toEqual({ path: "/map", kind: "map" });
+  });
 });
