@@ -63,7 +63,11 @@ export function parseRoute(hashOrPath: string): RouteDefinition {
   return MAP_ROUTE;
 }
 
-export function resolveRoute(hashOrPath: string, curriculum: Curriculum): RouteDefinition {
+export function resolveRoute(
+  hashOrPath: string,
+  curriculum: Curriculum,
+  availableTopicIds?: ReadonlySet<string>,
+): RouteDefinition {
   const route = parseRoute(hashOrPath);
 
   if (route.kind === "track") {
@@ -74,7 +78,8 @@ export function resolveRoute(hashOrPath: string, curriculum: Curriculum): RouteD
     const topic = curriculum.tracks
       .flatMap((track) => track.topics)
       .find((candidate) => candidate.id === route.topicId);
-    return topic?.status === "ready" ? route : MAP_ROUTE;
+    const hasView = !availableTopicIds || (topic && availableTopicIds.has(topic.id));
+    return topic?.status === "ready" && hasView ? route : MAP_ROUTE;
   }
 
   return route;
