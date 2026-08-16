@@ -1,3 +1,5 @@
+import type { Curriculum } from "../types";
+
 export type RouteKind = "map" | "track" | "lesson" | "lab";
 
 export interface RouteDefinition {
@@ -59,6 +61,23 @@ export function parseRoute(hashOrPath: string): RouteDefinition {
   }
 
   return MAP_ROUTE;
+}
+
+export function resolveRoute(hashOrPath: string, curriculum: Curriculum): RouteDefinition {
+  const route = parseRoute(hashOrPath);
+
+  if (route.kind === "track") {
+    return curriculum.tracks.some((track) => track.id === route.trackId) ? route : MAP_ROUTE;
+  }
+
+  if (route.kind === "lesson" || route.kind === "lab") {
+    const topic = curriculum.tracks
+      .flatMap((track) => track.topics)
+      .find((candidate) => candidate.id === route.topicId);
+    return topic?.status === "ready" ? route : MAP_ROUTE;
+  }
+
+  return route;
 }
 
 export function topicPath(topicId: string, kind: Exclude<RouteKind, "map" | "track">): string {

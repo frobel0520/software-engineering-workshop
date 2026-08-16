@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import curriculumData from "../../../shared/curriculum.json";
 import type { Curriculum } from "../types";
-import { aggregateProgress } from "./aggregation";
+import { aggregateProgress, completedReadyTopicIds } from "./aggregation";
 import type { ProgressRepository } from "./repository";
 
 class MemoryProgressRepository implements ProgressRepository {
@@ -78,5 +78,11 @@ describe("progress aggregation", () => {
 
     expect(result.coreProgress).toMatchObject({ total: 2, ready: 1, completed: 1, percent: 50 });
     expect(result.extensionProgress).toMatchObject({ total: 2, ready: 1, completed: 1, percent: 50 });
+  });
+
+  it("ignores completion keys for planned topics", () => {
+    const repository = new MemoryProgressRepository(new Set(["git", "env"]));
+
+    expect(completedReadyTopicIds(curriculum, repository)).toEqual(["git"]);
   });
 });
