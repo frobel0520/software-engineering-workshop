@@ -10,7 +10,7 @@
 完成本主題後，學習者應能：
 
 1. 從 React `fetch` 追蹤一個 HTTP request 如何進入 FastAPI。
-2. 說明 CORS、routing、Pydantic validation 與 dependency injection 的執行順序。
+2. 說明 CORS／preflight、routing、dependency injection 與 Pydantic validation 的執行順序。
 3. 分辨 FastAPI、SQLModel Session、database engine 與 SQLite 的責任。
 4. 說明 request model、table model 與 response model 為何要分離。
 5. 從實際程式碼判斷 `201`、`404` 與 `422` 在哪一層產生。
@@ -23,7 +23,7 @@ REST Lesson
   → REST Lab
   → 選擇 request scenario
   → 送出 deterministic request
-  → 逐站追蹤 React／FastAPI／Pydantic／Session／SQLite／response
+  → 逐站追蹤 React／CORS-preflight／FastAPI／Depends／Pydantic／Session／SQLite／response
   → 點選每一行閱讀執行時機、連接關係與錯誤後果
   → 完成四個 required scenarios
   → 標記 REST topic complete
@@ -36,11 +36,13 @@ REST Lesson
 | `create-success` | `POST /items` → `201` | request body、validation、Session、INSERT、response model |
 | `read-success` | `GET /items/1` → `200` | path parameter、SELECT、serialization |
 | `not-found` | `GET /items/99` → `404` | 查詢成功執行，但 resource 不存在 |
-| `validation-error` | invalid `POST /items` → `422` | validation 在 route 與 database 前拒絕 request |
+| `validation-error` | invalid `POST /items` → `422` | dependency 可能已啟動；validation 會在 path operation 前拒絕 request，且不執行 SQL |
 
 ## 4. 程式碼教學契約
 
 - 顯示 `frontend/src/api.ts`、`backend/database.py`、`backend/models.py`、`backend/main.py`。
+- SQLite engine 範例必須保留 `check_same_thread=False`，並說明它不等於跨 request 共用 Session。
+- SQL panel 顯示參數化的示意 SQL，不冒充實際 database log。
 - 每個非空白程式碼行都有對應說明。
 - 每行說明至少包含：做什麼、何時執行、如何連到相鄰層、刪除或寫錯的後果。
 - 「學習模式」顯示逐行摘要；「原始碼模式」保留可直接複製的乾淨程式碼。
@@ -78,7 +80,7 @@ events:
 
 - 四個 required scenarios 全部執行到各自的 terminal stage。
 - 學習者至少跨情境走過七個 lifecycle stages。
-- `validation-error` 不得產生 SQL 或改變 database fixture。
+- `validation-error` 不得產生 SQL 或改變 database fixture；它可以先建立並在 request 結束時清理 dependency。
 - `create-success` 只能產生 deterministic item `id=3`；重跑不重複新增。
 - 完成後使用 `se-workshop-rest-complete` 保存進度。
 

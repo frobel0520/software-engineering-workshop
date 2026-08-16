@@ -15,6 +15,10 @@ import { GuardrailLab } from "./guardrail/lab";
 import { GuardrailLesson } from "./guardrail/lesson";
 import { RestLab } from "./rest/lab";
 import { RestLesson } from "./rest/lesson";
+import { EnvLab } from "./env/lab";
+import { EnvLesson } from "./env/lesson";
+import { BuildLab } from "./build/lab";
+import { BuildLesson } from "./build/lesson";
 
 export interface TopicLessonViewProps {
   completed: boolean;
@@ -40,6 +44,8 @@ export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = 
   package: { id: "package", lesson: PackageLesson, lab: PackageLab },
   guardrail: { id: "guardrail", lesson: GuardrailLesson, lab: GuardrailLab },
   rest: { id: "rest", lesson: RestLesson, lab: RestLab },
+  env: { id: "env", lesson: EnvLesson, lab: EnvLab },
+  build: { id: "build", lesson: BuildLesson, lab: BuildLab },
 };
 
 export const TOPIC_MODULE_IDS: ReadonlySet<string> = new Set(Object.keys(TOPIC_MODULE_REGISTRY));
