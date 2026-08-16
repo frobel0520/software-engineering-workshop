@@ -38,8 +38,8 @@ export function TrackPage({ track, completedTopicIds, onBackToMap, onOpenTopic }
 
         <div className="track-topic-list">
           {track.topics.map((topic, index) => {
-            const isComplete = completed.has(topic.id);
             const isReady = topic.status === "ready";
+            const isComplete = isReady && completed.has(topic.id);
             return (
               <article className={`track-topic-row ${isReady ? "ready" : "planned"} ${isComplete ? "complete" : ""}`} key={topic.id}>
                 <div className="track-topic-number">{String(index + 1).padStart(2, "0")}</div>

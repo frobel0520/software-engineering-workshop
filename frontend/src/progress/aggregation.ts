@@ -15,6 +15,13 @@ export interface ProgressAggregation {
   extensionProgress: TrackProgress;
 }
 
+export function completedReadyTopicIds(curriculum: Curriculum, repository: ProgressRepository): readonly string[] {
+  return curriculum.tracks
+    .flatMap((track) => track.topics)
+    .filter((topic) => topic.status === "ready" && repository.read(topic.id))
+    .map((topic) => topic.id);
+}
+
 function summarize(curriculum: Curriculum, repository: ProgressRepository, kind: TrackKind): TrackProgress {
   const tracks = curriculum.tracks.filter((track) => (track.kind ?? "core") === kind);
   const topics = tracks.flatMap((track) => track.topics);

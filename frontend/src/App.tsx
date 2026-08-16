@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import curriculumData from "@shared/curriculum.json";
-import { aggregateProgress } from "./progress/aggregation";
+import { aggregateProgress, completedReadyTopicIds } from "./progress/aggregation";
 import { createLocalStorageProgressRepository } from "./progress/repository";
-import { parseRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
+import { parseRoute, resolveRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
 import { CurriculumMap } from "./components/CurriculumMap";
 import { TrackPage } from "./components/TrackPage";
 import { GitLab } from "./components/GitLab";
@@ -31,13 +31,13 @@ function routeLabel(route: RouteDefinition): string {
 }
 
 export default function App() {
-  const [route, setRoute] = useState<RouteDefinition>(() => parseRoute(window.location.hash));
+  const [route, setRoute] = useState<RouteDefinition>(() => resolveRoute(window.location.hash, curriculum));
   const [menuOpen, setMenuOpen] = useState(false);
   const [progressRevision, setProgressRevision] = useState(0);
   const progressRepository = useMemo(() => createLocalStorageProgressRepository(window.localStorage), []);
   const progress = aggregateProgress(curriculum, progressRepository);
   const completedTopicIds = useMemo(
-    () => curriculum.tracks.flatMap((track) => track.topics).filter((topic) => progressRepository.read(topic.id)).map((topic) => topic.id),
+    () => completedReadyTopicIds(curriculum, progressRepository),
     [progressRepository, progressRevision],
   );
   const activeTrack = route.kind === "track" ? curriculum.tracks.find((track) => track.id === route.trackId) : undefined;
@@ -50,13 +50,20 @@ export default function App() {
   const packageComplete = progressRepository.read("package");
 
   useEffect(() => {
-    const onHashChange = () => {
-      setRoute(parseRoute(window.location.hash));
+    const syncRoute = () => {
+      const parsedRoute = parseRoute(window.location.hash);
+      const nextRoute = resolveRoute(window.location.hash, curriculum);
+      if (parsedRoute.path !== nextRoute.path) {
+        window.location.hash = nextRoute.path;
+        return;
+      }
+      setRoute(nextRoute);
       setMenuOpen(false);
       window.scrollTo({ top: 0 });
     };
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    window.addEventListener("hashchange", syncRoute);
+    syncRoute();
+    return () => window.removeEventListener("hashchange", syncRoute);
   }, []);
 
   function goPath(path: string) {
