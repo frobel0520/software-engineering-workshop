@@ -93,7 +93,9 @@ body {
 }
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 2px solid var(--teal-dark);
   outline-offset: 3px;
 }
