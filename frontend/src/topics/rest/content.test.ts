@@ -33,5 +33,18 @@ describe("REST teaching content", () => {
       "422 Unprocessable Entity",
     ]);
     expect(restScenarios.find((scenario) => scenario.id === "validation-error")?.terminalStageId).toBe("validation");
+    expect(restScenarios.find((scenario) => scenario.id === "validation-error")?.responseBody).toContain('"type": "greater_than"');
+  });
+
+  it("models dependency resolution before request validation", () => {
+    expect(restTraceStages.map((stage) => stage.id)).toEqual([
+      "browser",
+      "cors",
+      "routing",
+      "dependency",
+      "validation",
+      "database",
+      "response",
+    ]);
   });
 });

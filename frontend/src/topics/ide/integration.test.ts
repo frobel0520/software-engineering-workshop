@@ -21,13 +21,13 @@ describe("IDE topic integration contract", () => {
     const progress = aggregateProgress(curriculum, memoryRepository([]));
 
     expect(ide?.status).toBe("ready");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 7, completed: 0 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 0 });
   });
 
   it("persists IDE completion as Core progress without changing the denominator", () => {
     const progress = aggregateProgress(curriculum, memoryRepository(["ide"]));
 
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 7, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });

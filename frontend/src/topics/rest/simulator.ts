@@ -53,7 +53,7 @@ function terminalMessage(scenarioId: RestScenarioId): string {
   if (scenarioId === "create-success") return "201：資料通過 validation，ORM 完成 INSERT，response model 輸出公開欄位。";
   if (scenarioId === "read-success") return "200：path parameter 進入 SELECT，找到的 ORM object 已序列化為 JSON。";
   if (scenarioId === "not-found") return "404：SQL 正常執行，但查無 resource；route 將空結果轉成 HTTPException。";
-  return "422：Pydantic 在 path operation 與 database 之前拒絕了不合法 body。";
+  return "422：dependency 已準備但沒有執行 SQL；Pydantic body validation 失敗，因此 path operation 不會執行。";
 }
 
 function withStage(current: RestLabState, stageId: RestTraceStageId): RestLabState {
