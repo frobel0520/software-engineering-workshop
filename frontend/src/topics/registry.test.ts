@@ -18,6 +18,6 @@ describe("topic view registry", () => {
   });
 
   it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("env")).toBeUndefined();
+    expect(getTopicViewModule("sql")).toBeUndefined();
   });
 });
