@@ -139,4 +139,4 @@ Git topic 只有在下列條件全部成立時，才能標記 ready／complete�
 - GitHub PR 與 GitLab Merge Request 的共同概念與名稱差異有明確說明。
 - reset、determinism、completion、keyboard、mobile 與錯誤回饋均有測試或手動驗收紀錄。
 
-Git v1 已把 12 項操作、cowork pipeline、pipeline jobs、stash／cherry-pick、conflict／retry 與 GitHub／GitLab provider terminology 接入 Lesson／Lab；仍需完成完整 keyboard、mobile、reduced-motion 與 release review，才能將本文件狀態改為 approved。
+Git v1 已把 12 項操作、cowork pipeline、pipeline jobs、stash／cherry-pick、conflict／retry 與 GitHub／GitLab provider terminology 接入 Lesson／Lab；2026-08-16 已完成 keyboard、mobile、200% zoom、reduced-motion 與 release review，文件狀態為 approved。
