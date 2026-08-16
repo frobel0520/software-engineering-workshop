@@ -1,7 +1,7 @@
 # Guardrail Workshop Rebuild：Feature Brief
 
-> 狀態：Draft
-> 日期：2026-08-15
+> 狀態：Implemented v1
+> 日期：2026-08-16
 > 參考來源：`C:\Users\ytwei\Projects\Guardrail-Workshop`
 > 依附架構：`docs/project-sa.md`、`docs/project-sd.md`
 
