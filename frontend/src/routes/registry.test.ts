@@ -1,5 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { parseRoute, ROUTE_REGISTRY, topicPath, trackPath } from "./registry";
+import type { Curriculum } from "../types";
+import { parseRoute, resolveRoute, ROUTE_REGISTRY, topicPath, trackPath } from "./registry";
+
+const routeCurriculum: Curriculum = {
+  version: 1,
+  tracks: [
+    {
+      id: "foundations",
+      title: "Foundations",
+      description: "Core topics",
+      topics: [
+        { id: "git", title: "Git", summary: "Version control", status: "ready" },
+        { id: "env", title: "Environment", summary: "Configuration", status: "planned" },
+      ],
+    },
+  ],
+};
 
 describe("route registry", () => {
   it("preserves existing Git and Auth routes", () => {
@@ -37,5 +53,11 @@ describe("route registry", () => {
     expect(parseRoute("#//")).toEqual({ path: "/map", kind: "map" });
     expect(() => topicPath("../auth", "lesson")).toThrow("Invalid topic id");
     expect(() => trackPath("../foundations")).toThrow("Invalid topic id");
+  });
+
+  it("does not resolve planned or unknown topics as enterable routes", () => {
+    expect(resolveRoute("#/env", routeCurriculum)).toEqual({ path: "/map", kind: "map" });
+    expect(resolveRoute("#/unknown", routeCurriculum)).toEqual({ path: "/map", kind: "map" });
+    expect(resolveRoute("#/git-lab", routeCurriculum)).toEqual({ path: "/git-lab", kind: "lab", topicId: "git" });
   });
 });
