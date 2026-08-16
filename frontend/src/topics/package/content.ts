@@ -131,7 +131,7 @@ export interface PackageLabState {
 
 export interface PackageLabEvent {
   type: PackageEventType;
-  packageSpec?: "@workshop/format@^1.2.0";
+  packageSpec?: string;
 }
 
 export const packageManifestFixture: PackageManifestFixture = {
