@@ -8,8 +8,9 @@
 
 ## Git 單元
 
-- 三段短教材：版本、暫存區、分支與合併。
-- 指令式 Git Lab：親自輸入 `git status`、`git add`、`git commit`、`git switch` 與 `git merge`。
+- Git Lesson：涵蓋 `clone`、`add`、`commit`、`push`、`pull`、`fetch`、`checkout`、`rebase`、`stash`、`cherry-pick`、`merge` 與 GitHub／GitLab `fork`。
+- 指令式 cowork Lab：親自走過 local history → remote branch → PR／MR → pipeline → merge。
+- Pipeline fixture：顯示 `checkout`、`npm ci`、`test`、`lint`、`build` jobs 與 conflict／retry 情境。
 - 確定性的瀏覽器模擬引擎，不會動到使用者電腦上的真實 repository。
 - 進度保存在瀏覽器；每個已開放主題完成 Lab 後，才會標記該主題完成。
 
