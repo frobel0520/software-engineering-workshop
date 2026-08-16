@@ -134,7 +134,7 @@ Git 與 Auth 都已有可執行 implementation；Auth 維持已完成，Git 則�
 
 | Task ID | Task | 輸出 | 依賴 | 狀態 |
 | --- | --- | --- | --- | --- |
-| GIT-REVIEW | Git 基礎、cowork 與 pipeline release gate | `docs/git-acceptance.md`、12 項操作與 pipeline 驗收 | M1 | in progress |
+| GIT-REVIEW | Git 基礎、cowork 與 pipeline release gate | `docs/git-acceptance.md`、12 項操作與 pipeline 驗收 | M1 | in progress（實作完成；accessibility／release review pending） |
 
 ## 8. Extension track backlog
 
