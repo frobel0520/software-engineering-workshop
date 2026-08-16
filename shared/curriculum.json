@@ -20,7 +20,7 @@
       "title": "Web 與 API",
       "description": "請求、契約與權限",
       "topics": [
-        { "id": "rest", "title": "REST API", "summary": "服務契約", "status": "planned" },
+        { "id": "rest", "title": "REST API", "summary": "FastAPI request lifecycle 與服務契約", "status": "ready" },
         { "id": "auth", "title": "身分驗證與授權", "summary": "Entra ID、OIDC 與 SSO", "status": "ready" }
       ]
     },

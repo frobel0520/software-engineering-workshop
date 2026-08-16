@@ -124,7 +124,7 @@ CORE-007（獨立）
 | package | 套件管理 | PACKAGE | ready |
 | env | 環境變數 | ENV | planned |
 | build | 建置工具 | BUILD | planned |
-| rest | REST API | REST | planned |
+| rest | REST API／FastAPI | REST | ready |
 
 例如第一個主題會產生：`REMOTE-01` acceptance、`REMOTE-02` lesson、`REMOTE-03` simulator、`REMOTE-04` Lab、`REMOTE-05` integration／QA。
 
@@ -230,4 +230,4 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 ## 15. 目前下一個可開工 task
 
-下一個可開工的是尚未 ready 的 `ENV-01`、`BUILD-01` 或 `REST-01`，三者只依賴 M1，可平行進行。若先處理架構債務，則開 `CORE-008`；它不阻塞上述教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
+下一個可開工的是尚未 ready 的 `ENV-01` 或 `BUILD-01`，兩者只依賴 M1，可平行進行。`REST-01` 到 `REST-05` 已依 `docs/rest-acceptance.md` 完成。若先處理架構債務，則開 `CORE-008`；它不阻塞上述教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
