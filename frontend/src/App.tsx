@@ -91,6 +91,8 @@ export default function App() {
           <button className={route.path === "/cli-lab" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lab")}><span>↳</span>CLI Lab</button>
           <button className={route.path === "/ide-lab" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lab")}><span>↳</span>IDE Lab</button>
           <button className={route.path === "/package-lab" ? "active" : ""} type="button" onClick={() => goTopic("package", "lab")}><span>↳</span>Package Lab</button>
+          <button className={route.path === "/env-lab" ? "active" : ""} type="button" onClick={() => goTopic("env", "lab")}><span>↳</span>ENV Lab</button>
+          <button className={route.path === "/build-lab" ? "active" : ""} type="button" onClick={() => goTopic("build", "lab")}><span>↳</span>BUILD Lab</button>
           <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
           <button className={route.path === "/rest-lab" ? "active" : ""} type="button" onClick={() => goTopic("rest", "lab")}><span>↳</span>FastAPI Lab</button>
         </nav>

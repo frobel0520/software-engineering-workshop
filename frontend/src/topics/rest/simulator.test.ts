@@ -28,12 +28,13 @@ describe("REST simulator", () => {
     expect(state.databaseItems.filter((item) => item.id === 3)).toHaveLength(1);
   });
 
-  it("stops invalid input at validation without changing the database", () => {
+  it("stops invalid input at validation without SQL or database changes", () => {
     const state = runRestEvents(completeScenarioEvents("validation-error"));
 
     expect(state.activeStageId).toBe("validation");
     expect(state.phase).toBe("error");
     expect(state.databaseItems).toEqual(restDatabaseFixture);
+    expect(state.learnedStageIds).toContain("dependency");
     expect(state.learnedStageIds).not.toContain("database");
   });
 
