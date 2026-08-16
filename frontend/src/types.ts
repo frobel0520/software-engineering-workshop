@@ -1,3 +1,5 @@
+import type { TrackKind } from "./topics/types";
+
 export type TopicStatus = "ready" | "planned";
 
 export interface Topic {
@@ -11,6 +13,8 @@ export interface Track {
   id: string;
   title: string;
   description: string;
+  /** Existing curriculum data defaults to core until extension metadata is added. */
+  kind?: TrackKind;
   topics: Topic[];
 }
 

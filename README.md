@@ -4,20 +4,30 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop`。
 
-目前完成兩個主題：**Git** 與 **身分驗證／授權**。其餘主題保留在課程路線圖。
+目前可操作的 Core 主題有 7 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**REST API／FastAPI**、**身分驗證／授權**；另有 1 個不計入 Core 進度的 Extension：**Guardrails**。其餘 Core 主題保留在課程路線圖。
 
 ## Git 單元
 
-- 三段短教材：版本、暫存區、分支與合併。
-- 指令式 Git Lab：親自輸入 `git status`、`git add`、`git commit`、`git switch` 與 `git merge`。
+- Git Lesson：涵蓋 `clone`、`add`、`commit`、`push`、`pull`、`fetch`、`checkout`、`rebase`、`stash`、`cherry-pick`、`merge` 與 GitHub／GitLab `fork`。
+- 指令式 cowork Lab：親自走過 local history → remote branch → PR／MR → pipeline → merge。
+- Pipeline fixture：顯示 `checkout`、`npm ci`、`test`、`lint`、`build` jobs 與 conflict／retry 情境。
 - 確定性的瀏覽器模擬引擎，不會動到使用者電腦上的真實 repository。
-- 進度保存在瀏覽器；完成 Lab 後才會標記 Git 主題完成。
+- 進度保存在瀏覽器；每個已開放主題完成 Lab 後，才會標記該主題完成。
 
 ## Auth 單元
 
 - Entra ID、OIDC、SSO 與七個 App Registration 設定值。
 - 假資料驅動的設定判斷與 Authorization Code + PKCE 流程 Demo。
 - 不連線 Microsoft、不處理真實帳號或 Secret。
+
+## 其他已開放主題
+
+- 遠端協作：模擬 `branch → commit → fetch → rebase → push → PR → CI → merge` 閉環。
+- 命令列：在固定 fixture 中練習工作目錄、檔案讀取、搜尋與檢查流程。
+- IDE／除錯器：模擬 breakpoint、paused frame、variables、step over 與 continue。
+- 套件管理：練習 manifest、lockfile、registry 與 deterministic install 狀態。
+- REST API／FastAPI：逐行追蹤 React fetch、routing、validation、dependency、SQLModel／SQLite 與 JSON response。
+- Guardrails Extension：模擬輸入、輸出與工具呼叫的安全防線，不連線真實模型。
 
 ## 本機啟動
 
