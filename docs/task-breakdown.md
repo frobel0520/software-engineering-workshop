@@ -130,7 +130,11 @@ CORE-007（獨立）
 
 M2 的 hard dependency 只有 M1。Remote、CLI、IDE、Package、Env、Build、REST 之間的先後是學習順序，不是工程阻塞；若某 topic 需要共用 fixture，應把 fixture contract 放進該 topic 的 `-01`，不要直接依賴另一個 topic 的完成。
 
-Git 與 Auth 已完成，不重新建立同一組 topic tasks；它們只在 M6 建立 regression／migration 檢查。
+Git 與 Auth 都已有可執行 implementation；Auth 維持已完成，Git 則因完整 cowork／pipeline 上線門檻重新開啟 `GIT-REVIEW`。兩者仍需在 M6 建立 regression／migration 檢查。
+
+| Task ID | Task | 輸出 | 依賴 | 狀態 |
+| --- | --- | --- | --- | --- |
+| GIT-REVIEW | Git 基礎、cowork 與 pipeline release gate | `docs/git-acceptance.md`、12 項操作與 pipeline 驗收 | M1 | in progress |
 
 ## 8. Extension track backlog
 
