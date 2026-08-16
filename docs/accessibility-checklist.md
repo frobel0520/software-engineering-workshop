@@ -2,9 +2,20 @@
 
 > 適用範圍：App shell、課程地圖、所有 Lesson、所有 Lab 與 Extension topics
 > 對應 task：`CORE-007`
-> 狀態：Draft
+> 狀態：Contract ready；完整 accessibility audit pending
 
 本清單是每個 ready topic 在 integration／release 前的共用驗收契約。它不取代瀏覽器與輔助技術的實測；每個 topic PR 應指出已驗證的 route、操作流程與例外。
+
+## 最近驗證紀錄
+
+### 2026-08-16：頁面流通 smoke test
+
+- 6 個 Track 頁面均可返回課程地圖。
+- 7 個已開放 Lesson 均可進入對應 Lab，再返回課程地圖。
+- 7 個已開放 Lab 均可返回課程地圖。
+- planned 與未知 topic route 會回到課程地圖；瀏覽器 Console 無錯誤。
+
+這次只確認 route reachability 與離開路徑，不宣稱已完成鍵盤、200% zoom、窄 viewport、讀屏工具或 reduced-motion 的完整驗收。
 
 ## 1. Keyboard 與焦點
 
