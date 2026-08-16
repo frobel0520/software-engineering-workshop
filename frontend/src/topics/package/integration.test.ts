@@ -15,17 +15,17 @@ function memoryRepository(completedTopicIds: readonly string[]): ProgressReposit
   };
 }
 
-describe("IDE topic integration contract", () => {
+describe("Package topic integration contract", () => {
   it("is ready in the Core curriculum and contributes to the ready denominator", () => {
-    const ide = curriculum.tracks.flatMap((track) => track.topics).find((topic) => topic.id === "ide");
+    const packageTopic = curriculum.tracks.flatMap((track) => track.topics).find((topic) => topic.id === "package");
     const progress = aggregateProgress(curriculum, memoryRepository([]));
 
-    expect(ide?.status).toBe("ready");
+    expect(packageTopic?.status).toBe("ready");
     expect(progress.coreProgress).toMatchObject({ total: 19, ready: 6, completed: 0 });
   });
 
-  it("persists IDE completion as Core progress without changing the denominator", () => {
-    const progress = aggregateProgress(curriculum, memoryRepository(["ide"]));
+  it("persists Package completion as Core progress without changing the denominator", () => {
+    const progress = aggregateProgress(curriculum, memoryRepository(["package"]));
 
     expect(progress.coreProgress).toMatchObject({ total: 19, ready: 6, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
