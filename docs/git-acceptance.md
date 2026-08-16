@@ -1,7 +1,7 @@
 # GIT-REVIEW：Git 基礎與團隊協作 acceptance
 
 > 類型：Git topic release gate／acceptance contract
-> 狀態：Draft；目前阻擋 Git topic 的完整上線判定
+> 狀態：Implemented v1；accessibility／release review pending
 > 依賴：M1 module foundation
 > 範圍：瀏覽器內 deterministic Git／協作 simulator；不連線真實 GitHub、GitLab 或使用者 repository
 
@@ -128,4 +128,4 @@ Git topic 只有在下列條件全部成立時，才能標記 ready／complete�
 - GitHub PR 與 GitLab Merge Request 的共同概念與名稱差異有明確說明。
 - reset、determinism、completion、keyboard、mobile 與錯誤回饋均有測試或手動驗收紀錄。
 
-目前既有 Git Lab 的 `status → add → commit → switch → add → commit → switch → merge` 只算 local happy path，不足以單獨滿足本文件的完整完成條件。
+Git v1 已把 12 項操作、cowork pipeline、pipeline jobs、stash／cherry-pick、conflict／retry 與 GitHub／GitLab provider terminology 接入 Lesson／Lab；仍需完成完整 keyboard、mobile、reduced-motion 與 release review，才能將本文件狀態改為 approved。
