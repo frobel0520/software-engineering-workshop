@@ -15,18 +15,17 @@ function memoryRepository(completedTopicIds: readonly string[]): ProgressReposit
   };
 }
 
-describe("CLI topic integration contract", () => {
+describe("Build topic integration contract", () => {
   it("is ready in the Core curriculum and contributes to the ready denominator", () => {
-    const cli = curriculum.tracks.flatMap((track) => track.topics).find((topic) => topic.id === "cli");
+    const buildTopic = curriculum.tracks.flatMap((track) => track.topics).find((topic) => topic.id === "build");
     const progress = aggregateProgress(curriculum, memoryRepository([]));
 
-    expect(cli?.status).toBe("ready");
-    expect(progress.coreProgress.ready).toBe(9);
-    expect(progress.coreProgress.completed).toBe(0);
+    expect(buildTopic?.status).toBe("ready");
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 0 });
   });
 
-  it("persists CLI completion as Core progress without changing the denominator", () => {
-    const progress = aggregateProgress(curriculum, memoryRepository(["cli"]));
+  it("persists Build completion as Core progress without changing the denominator", () => {
+    const progress = aggregateProgress(curriculum, memoryRepository(["build"]));
 
     expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
