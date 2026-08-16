@@ -617,6 +617,22 @@ h1 em {
 .remote-context-list dt { color: var(--muted); font: 9px "DM Mono"; letter-spacing: .12em; }
 .remote-context-list dd { margin: 0; color: var(--teal-dark); font: 11px "DM Mono"; }
 .remote-context-hint { margin: 25px 0 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.git-release-actions { margin-top: 24px; }
+.git-release-pipeline { margin-top: 24px; }
+.git-provider-picker { display: grid; gap: 8px; margin-top: 16px; color: var(--muted); font: 9px "DM Mono"; letter-spacing: .08em; text-transform: uppercase; }
+.git-provider-picker select { width: 100%; padding: 10px; border: 1px solid var(--line); color: var(--ink); background: var(--paper); font: 10px "DM Mono"; text-transform: none; }
+.git-job-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 24px; border-block: 1px solid var(--line); }
+.git-job-grid > div { min-width: 0; padding: 18px 12px; border-right: 1px solid var(--line); text-align: center; }
+.git-job-grid > div:last-child { border-right: 0; }
+.git-job-grid span { display: block; color: var(--muted); font-size: 18px; }
+.git-job-grid b { display: block; margin-top: 8px; color: var(--muted); font: 10px "DM Mono"; overflow-wrap: anywhere; }
+.git-job-grid .passed span, .git-job-grid .passed b { color: var(--teal-dark); }
+
+@media (max-width: 720px) {
+  .git-job-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .git-job-grid > div:nth-child(2n) { border-right: 0; }
+  .git-job-grid > div { border-bottom: 1px solid var(--line); }
+}
 
 /* PACKAGE lab extension */
 .package-lab-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(310px, .85fr); gap: 16px; }
