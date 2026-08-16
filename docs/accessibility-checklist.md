@@ -17,13 +17,13 @@
 
 這次只確認 route reachability 與離開路徑，不宣稱已完成鍵盤、200% zoom、窄 viewport、讀屏工具或 reduced-motion 的完整驗收。
 
-### 2026-08-16：Git topic release review checkpoint
+### 2026-08-16：Git topic release review completed
 
 - Git Lesson → Git Lab、Lab error feedback、Lab reset、Lab → 課程地圖已完成瀏覽器 smoke check。
 - Desktop 1280px 無水平溢出；Git Lab 的 native controls、`aria-live`／`role="alert"` 狀態回饋與 `progressbar` 語意已確認。
 - 375px 下 Git Lesson／Git Lab 無水平溢出，mobile menu 可開關，Git Lab 的 reset、terminal input 與 17 個 workflow controls 可見；640px 等效 200% zoom viewport 也無水平溢出。
 - `styles.css` 已確認含 `max-width: 720px` responsive rules 與 `prefers-reduced-motion` rules。
-- 尚未宣告 keyboard、reduced-motion runtime pass：目前驗收環境的 `Tab`／`Enter`／`Space` 事件未觸發，且無法切換 reduced-motion preference。`GIT-REVIEW` 維持 pending。
+- 手動驗收已通過：使用實體鍵盤確認 `Tab`／`Enter`／`Space` 可操作 Lesson／Lab controls，terminal submit、reset、錯誤回饋與返回課程地圖流程可完成；reduced-motion 偏好下內容與操作仍完整。`GIT-REVIEW` 已通過。
 
 ## 1. Keyboard 與焦點
 

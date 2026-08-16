@@ -1,7 +1,7 @@
 # GIT-REVIEW：Git 基礎與團隊協作 acceptance
 
 > 類型：Git topic release gate／acceptance contract
-> 狀態：Implemented v1；accessibility／release review pending
+> 狀態：Approved v1（2026-08-16）
 > 依賴：M1 module foundation
 > 範圍：瀏覽器內 deterministic Git／協作 simulator；不連線真實 GitHub、GitLab 或使用者 repository
 
@@ -14,7 +14,7 @@
 - Desktop 1280px、375px mobile 與 640px（200% zoom 的等效 CSS viewport）下均無水平溢出；375px 下 menu 可開關，Git Lab 的 reset、terminal input 與 17 個 workflow controls 均存在。
 - Git Lab 使用原生 `button`、`form`、`select`，狀態與錯誤訊息已有 `aria-live`／`role="alert"`，進度有 `progressbar` 語意；CSS 已包含 `max-width: 720px` 的窄版規則與 `prefers-reduced-motion` 規則。
 
-本輪尚未核准 release gate：目前驗收環境的鍵盤事件未能實際觸發 `Tab`／`Enter`／`Space`，也無法切換 reduced-motion preference 做 runtime 測試。因此 keyboard 與 reduced-motion 仍需在可用的實體鍵盤／偏好設定環境完成驗收；在此之前狀態維持 pending。
+手動驗收已完成：使用實體鍵盤確認 `Tab`／`Enter`／`Space` 可操作 Git Lesson／Lab controls，並確認 terminal submit、reset、錯誤回饋與返回課程地圖流程；在 reduced-motion 偏好下，內容與操作仍完整。Git release gate 已核准。
 
 本文件把 Git topic 的上線標準寫成可驗收條件。Git topic 不只教本地 commit；完成後，學習者應能在一般軟體專案中理解變更如何從工作目錄進入協作平台、CI pipeline 與合併流程。
 
