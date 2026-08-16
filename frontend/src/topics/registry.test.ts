@@ -1,0 +1,23 @@
+import { describe, expect, it } from "vitest";
+import curriculumData from "../../../shared/curriculum.json";
+import type { Curriculum } from "../types";
+import { getTopicViewModule, TOPIC_MODULE_IDS } from "./registry";
+
+const curriculum = curriculumData as Curriculum;
+
+describe("topic view registry", () => {
+  it("registers exactly every ready curriculum topic", () => {
+    const readyTopicIds = curriculum.tracks
+      .flatMap((track) => track.topics)
+      .filter((topic) => topic.status === "ready")
+      .map((topic) => topic.id)
+      .sort();
+
+    expect([...TOPIC_MODULE_IDS].sort()).toEqual(readyTopicIds);
+    readyTopicIds.forEach((topicId) => expect(getTopicViewModule(topicId)).toBeDefined());
+  });
+
+  it("does not expose a module for planned topics", () => {
+    expect(getTopicViewModule("env")).toBeUndefined();
+  });
+});

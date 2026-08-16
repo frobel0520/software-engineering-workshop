@@ -3,22 +3,10 @@ import curriculumData from "@shared/curriculum.json";
 import { aggregateProgress, completedReadyTopicIds } from "./progress/aggregation";
 import { createLocalStorageProgressRepository } from "./progress/repository";
 import { parseRoute, resolveRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
+import { TOPIC_MODULE_IDS } from "./topics/registry";
 import { CurriculumMap } from "./components/CurriculumMap";
 import { TrackPage } from "./components/TrackPage";
-import { GitLab } from "./components/GitLab";
-import { GitLesson } from "./components/GitLesson";
-import { AuthLesson } from "./components/AuthLesson";
-import { AuthLab } from "./components/AuthLab";
-import { CliLab } from "./components/CliLab";
-import { IdeLab } from "./components/IdeLab";
-import { CliLesson } from "./topics/cli/lesson";
-import { IdeLesson } from "./topics/ide/lesson";
-import { RemoteLesson } from "./topics/remote/lesson";
-import { RemoteLab } from "./topics/remote/lab";
-import { GuardrailLesson } from "./topics/guardrail/lesson";
-import { GuardrailLab } from "./topics/guardrail/lab";
-import { PackageLesson } from "./topics/package/lesson";
-import { PackageLab } from "./topics/package/lab";
+import { TopicRouteView } from "./components/TopicRouteView";
 import type { Curriculum } from "./types";
 
 const curriculum = curriculumData as Curriculum;
@@ -31,7 +19,7 @@ function routeLabel(route: RouteDefinition): string {
 }
 
 export default function App() {
-  const [route, setRoute] = useState<RouteDefinition>(() => resolveRoute(window.location.hash, curriculum));
+  const [route, setRoute] = useState<RouteDefinition>(() => resolveRoute(window.location.hash, curriculum, TOPIC_MODULE_IDS));
   const [menuOpen, setMenuOpen] = useState(false);
   const [progressRevision, setProgressRevision] = useState(0);
   const progressRepository = useMemo(() => createLocalStorageProgressRepository(window.localStorage), []);
@@ -41,18 +29,10 @@ export default function App() {
     [progressRepository, progressRevision],
   );
   const activeTrack = route.kind === "track" ? curriculum.tracks.find((track) => track.id === route.trackId) : undefined;
-  const gitComplete = progressRepository.read("git");
-  const authComplete = progressRepository.read("auth");
-  const cliComplete = progressRepository.read("cli");
-  const ideComplete = progressRepository.read("ide");
-  const remoteComplete = progressRepository.read("remote");
-  const guardrailComplete = progressRepository.read("guardrail");
-  const packageComplete = progressRepository.read("package");
-
   useEffect(() => {
     const syncRoute = () => {
       const parsedRoute = parseRoute(window.location.hash);
-      const nextRoute = resolveRoute(window.location.hash, curriculum);
+      const nextRoute = resolveRoute(window.location.hash, curriculum, TOPIC_MODULE_IDS);
       if (parsedRoute.path !== nextRoute.path) {
         window.location.hash = nextRoute.path;
         return;
@@ -77,6 +57,14 @@ export default function App() {
   function completeTopic(topicId: string) {
     progressRepository.markComplete(topicId);
     setProgressRevision((value) => value + 1);
+  }
+
+  function openCurrentTopicLab() {
+    if (route.topicId) goTopic(route.topicId, "lab");
+  }
+
+  function completeCurrentTopic() {
+    if (route.topicId) completeTopic(route.topicId);
   }
 
   return (
@@ -107,7 +95,7 @@ export default function App() {
         </nav>
         <div className="nav-label">EXTENSION / AI</div>
         <nav>
-          <button className={route.path === "/guardrail" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lesson")}><span>EX</span>Guardrails {guardrailComplete ? <i>✓</i> : null}</button>
+          <button className={route.path === "/guardrail" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lesson")}><span>EX</span>Guardrails {progressRepository.read("guardrail") ? <i>✓</i> : null}</button>
           <button className={route.path === "/guardrail-lab" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lab")}><span>↳</span>Guardrail Lab</button>
         </nav>
         <div className="sidebar-progress">
@@ -127,20 +115,12 @@ export default function App() {
         {route.kind === "map" ? <CurriculumMap curriculum={curriculum} onOpenTrack={(trackId) => goPath(trackPath(trackId))} /> : null}
         {route.kind === "track" && activeTrack ? <TrackPage track={activeTrack} completedTopicIds={completedTopicIds} onBackToMap={() => goPath("/map")} onOpenTopic={(topicId) => goTopic(topicId, "lesson")} /> : null}
         {route.kind === "track" && !activeTrack ? <CurriculumMap curriculum={curriculum} onOpenTrack={(trackId) => goPath(trackPath(trackId))} /> : null}
-        {route.kind === "lesson" && route.topicId === "git" ? <GitLesson completed={gitComplete} onOpenLab={() => goTopic("git", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "git" ? <GitLab onComplete={() => completeTopic("git")} /> : null}
-        {route.kind === "lesson" && route.topicId === "auth" ? <AuthLesson completed={authComplete} onOpenLab={() => goTopic("auth", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "auth" ? <AuthLab onComplete={() => completeTopic("auth")} /> : null}
-        {route.kind === "lesson" && route.topicId === "cli" ? <CliLesson completed={cliComplete} onOpenLab={() => goTopic("cli", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "cli" ? <CliLab onComplete={() => completeTopic("cli")} /> : null}
-        {route.kind === "lesson" && route.topicId === "ide" ? <IdeLesson completed={ideComplete} onOpenLab={() => goTopic("ide", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "ide" ? <IdeLab onComplete={() => completeTopic("ide")} /> : null}
-        {route.kind === "lesson" && route.topicId === "remote" ? <RemoteLesson completed={remoteComplete} onOpenLab={() => goTopic("remote", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "remote" ? <RemoteLab onComplete={() => completeTopic("remote")} /> : null}
-        {route.kind === "lesson" && route.topicId === "guardrail" ? <GuardrailLesson completed={guardrailComplete} onOpenLab={() => goTopic("guardrail", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "guardrail" ? <GuardrailLab onComplete={() => completeTopic("guardrail")} /> : null}
-        {route.kind === "lesson" && route.topicId === "package" ? <PackageLesson completed={packageComplete} onOpenLab={() => goTopic("package", "lab")} /> : null}
-        {route.kind === "lab" && route.topicId === "package" ? <PackageLab onComplete={() => completeTopic("package")} /> : null}
+        <TopicRouteView
+          route={route}
+          completed={route.topicId ? progressRepository.read(route.topicId) : false}
+          onOpenLab={openCurrentTopicLab}
+          onComplete={completeCurrentTopic}
+        />
       </main>
       {menuOpen ? <button className="menu-scrim" type="button" aria-label="關閉選單" onClick={() => setMenuOpen(false)} /> : null}
     </div>
