@@ -4,7 +4,7 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop`。
 
-目前可操作的 Core 主題有 6 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**身分驗證／授權**；另有 1 個不計入 Core 進度的 Extension：**Guardrails**。其餘 Core 主題保留在課程路線圖。
+目前可操作的 Core 主題有 7 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**REST API／FastAPI**、**身分驗證／授權**；另有 1 個不計入 Core 進度的 Extension：**Guardrails**。其餘 Core 主題保留在課程路線圖。
 
 ## Git 單元
 
@@ -26,6 +26,7 @@
 - 命令列：在固定 fixture 中練習工作目錄、檔案讀取、搜尋與檢查流程。
 - IDE／除錯器：模擬 breakpoint、paused frame、variables、step over 與 continue。
 - 套件管理：練習 manifest、lockfile、registry 與 deterministic install 狀態。
+- REST API／FastAPI：逐行追蹤 React fetch、routing、validation、dependency、SQLModel／SQLite 與 JSON response。
 - Guardrails Extension：模擬輸入、輸出與工具呼叫的安全防線，不連線真實模型。
 
 ## 本機啟動
