@@ -7,10 +7,10 @@
       "description": "工具與可重複流程",
       "topics": [
         { "id": "git", "title": "Git", "summary": "版本控制與安全協作", "status": "ready" },
-        { "id": "remote", "title": "GitHub / GitLab", "summary": "遠端協作平台", "status": "planned" },
-        { "id": "cli", "title": "命令列", "summary": "可重複的工作流入口", "status": "planned" },
-        { "id": "ide", "title": "IDE／除錯器", "summary": "快速定位問題", "status": "planned" },
-        { "id": "package", "title": "套件管理", "summary": "可重現的依賴", "status": "planned" },
+        { "id": "remote", "title": "GitHub / GitLab", "summary": "遠端協作平台", "status": "ready" },
+        { "id": "cli", "title": "命令列", "summary": "可重複的工作流入口", "status": "ready" },
+        { "id": "ide", "title": "IDE／除錯器", "summary": "快速定位問題", "status": "ready" },
+        { "id": "package", "title": "套件管理", "summary": "可重現的依賴", "status": "ready" },
         { "id": "env", "title": "環境變數", "summary": "設定與秘密", "status": "planned" },
         { "id": "build", "title": "建置工具", "summary": "從原始碼到產品", "status": "planned" }
       ]
@@ -20,7 +20,7 @@
       "title": "Web 與 API",
       "description": "請求、契約與權限",
       "topics": [
-        { "id": "rest", "title": "REST API", "summary": "服務契約", "status": "planned" },
+        { "id": "rest", "title": "REST API", "summary": "FastAPI request lifecycle 與服務契約", "status": "ready" },
         { "id": "auth", "title": "身分驗證與授權", "summary": "Entra ID、OIDC 與 SSO", "status": "ready" }
       ]
     },
@@ -53,6 +53,15 @@
         { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "planned" },
         { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "planned" },
         { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "planned" }
+      ]
+    },
+    {
+      "id": "ai-engineering",
+      "title": "AI／LLM Engineering",
+      "description": "安全、可靠的模型工作流",
+      "kind": "extension",
+      "topics": [
+        { "id": "guardrail", "title": "Guardrails", "summary": "模型輸入、輸出與工具防線", "status": "ready" }
       ]
     }
   ]
