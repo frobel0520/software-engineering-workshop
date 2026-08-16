@@ -1,9 +1,9 @@
 # Software Engineering Workshop：專案級 SA
 
-> 狀態：Draft
-> 日期：2026-08-15
+> 狀態：Approved
+> 日期：2026-08-16
 > 上位文件：[project-plan.md](./project-plan.md)
-> 基線：`dev` @ `76caf3f`
+> 基線：`dev`（目前 ready topics 與 route guard 已合併）
 
 ## 1. 分析目的
 

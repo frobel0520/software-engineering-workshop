@@ -1,8 +1,8 @@
 # Software Engineering Workshop：專案計畫
 
-> 狀態：Draft
-> 日期：2026-08-15
-> 基線：`dev` @ `76caf3f`
+> 狀態：Active
+> 日期：2026-08-16
+> 基線：`dev`（route guard 與目前 ready topics 已合併）
 
 ## 1. 專案目標
 
@@ -18,8 +18,9 @@
 ## 2. 現況基線
 
 - 課程清單：`shared/curriculum.json`，共 19 個主題
-- 已開放：Git、身分驗證與授權（Entra ID／OIDC／SSO）
-- 目前進度：2 / 19
+- Core 已開放：Git、GitHub／GitLab 遠端協作、命令列、IDE／除錯器、套件管理、身分驗證與授權，共 6 / 19
+- Extension 已開放：Guardrails，共 1 個；不計入 Core 19 的完成分母
+- 學習者完成數：依瀏覽器 `localStorage` 個別計算，不在專案文件中固定寫死
 - 前端：Vite + React + TypeScript，靜態站點
 - 持久化：瀏覽器 `localStorage`
 - 交付：GitHub Actions CI、GitHub Pages
@@ -80,14 +81,18 @@
 ### Phase 1：開發基本功與 Web
 
 - Git（已完成）
-- GitHub／GitLab 遠端協作
-- 命令列
-- IDE／除錯器
-- 套件管理
+- GitHub／GitLab 遠端協作（已完成）
+- 命令列（已完成）
+- IDE／除錯器（已完成）
+- 套件管理（已完成）
 - 環境變數
 - 建置工具
 - REST API
 - 身分驗證與授權（已完成）
+
+### Extension track
+
+- Guardrails／AI／LLM Engineering（已完成；不改變 Core 19 的學習順序與完成統計）
 
 ### Phase 2：資料庫
 

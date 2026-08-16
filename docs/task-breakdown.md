@@ -1,7 +1,7 @@
 # Software Engineering Workshop：Milestone／Task Breakdown
 
-> 狀態：Draft
-> 日期：2026-08-15
+> 狀態：Active backlog
+> 日期：2026-08-16
 > 依據：[project-plan.md](./project-plan.md)、[project-sa.md](./project-sa.md)、[project-sd.md](./project-sd.md)
 
 ## 1. 為什麼需要 Milestone
@@ -32,9 +32,9 @@ Task 不等於檔案。若一個 task 同時需要修改多個檔案，但輸出
 
 | ID | Milestone | 結果 | 依賴 | 狀態 |
 | --- | --- | --- | --- | --- |
-| M0 | Project Contract | Project Plan、SA、SD、task breakdown 可供開發對齊 | 無 | review |
-| M1 | Module Foundation | 新 topic 可依共同契約接入 route、progress、Lab、tests | M0 | planned |
-| M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | planned |
+| M0 | Project Contract | Project Plan、SA、SD、task breakdown 可供開發對齊 | 無 | done |
+| M1 | Module Foundation | 新 topic 可依共同契約接入 route、progress、Lab、tests | M0 | done（P2 架構 follow-up） |
+| M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | in progress |
 | M3 | Data | SQL、schema、index／transaction、NoSQL 開放 | M1 | planned |
 | M4 | Quality | unit、integration、logs 開放 | M1 | planned |
 | M5 | Delivery | Docker、CI/CD、deploy 開放 | M1、既有 CI／Pages baseline | planned |
@@ -47,10 +47,10 @@ M2、M3、M4 可在 M1 完成後平行進行；M5 的教材可平行製作，但
 | Task ID | Task | 輸出 | 依賴 | 狀態 |
 | --- | --- | --- | --- | --- |
 | PLAN-001 | 撰寫專案計畫 | `docs/project-plan.md` | 無 | done |
-| PAGEFLOW-001 | 固化專案級 pageflow | Plan／SA 中的 pageflow 決策可獨立 review | PLAN-001 | review |
+| PAGEFLOW-001 | 固化專案級 pageflow | Plan／SA 中的 pageflow 決策可獨立 review | PLAN-001 | done |
 | PLAN-002 | 撰寫專案級 SA | `docs/project-sa.md` | PLAN-001 | done |
-| PLAN-003 | 撰寫專案級 SD | `docs/project-sd.md` | PLAN-002、PAGEFLOW-001 | review |
-| PLAN-004 | 審核 task／Milestone 分解 | 本文件的 backlog 決策 | PLAN-003 | pending |
+| PLAN-003 | 撰寫專案級 SD | `docs/project-sd.md` | PLAN-002、PAGEFLOW-001 | done |
+| PLAN-004 | 審核 task／Milestone 分解 | 本文件的 backlog 決策 | PLAN-003 | done |
 
 M0 完成條件：專案層級目標、需求、技術邊界、Milestone、task 規則都被確認；未確認的內容不得默默變成 implementation 假設。
 
@@ -58,17 +58,18 @@ M0 完成條件：專案層級目標、需求、技術邊界、Milestone、task 
 
 這些 task 只處理共用能力，不實作特定教材內容。
 
-| Task ID | Task | 主要輸出 | 依賴 |
-| --- | --- | --- | --- |
-| CORE-001 | 固化 TopicModule contract | module 欄位、責任邊界、最小 fixture 介面 | M0 |
-| CORE-002 | 建立 ProgressRepository | localStorage adapter，保護 Git／Auth keys | M0 |
-| CORE-003 | 建立 route registry | topic route、lab route、既有 route alias | M0 |
-| CORE-004 | 重作 progress aggregation | 從 curriculum + repository 計算總進度 | CORE-002、`curriculum.json` |
-| CORE-005 | 建立共用 Lesson／Lab shell | topic header、status feedback、reset、completion treatment | CORE-001 |
-| CORE-006 | 建立 simulator test harness | 共用測試 fixture、reset、completion assertion pattern | CORE-001 |
-| CORE-007 | 建立共用可及性檢查清單 | keyboard、live region、mobile、reduced motion 驗收點 | M0 |
+| Task ID | Task | 主要輸出 | 依賴 | 狀態 |
+| --- | --- | --- | --- | --- |
+| CORE-001 | 固化 TopicModule contract | module 欄位、責任邊界、最小 fixture 介面 | M0 | done |
+| CORE-002 | 建立 ProgressRepository | localStorage adapter，保護 Git／Auth keys | M0 | done |
+| CORE-003 | 建立 route registry | topic route、lab route、既有 route alias | M0 | done |
+| CORE-004 | 重作 progress aggregation | 從 curriculum + repository 計算總進度 | CORE-002、`curriculum.json` | done |
+| CORE-005 | 建立共用 Lesson／Lab shell | topic header、status feedback、reset、completion treatment | CORE-001 | done |
+| CORE-006 | 建立 simulator test harness | 共用測試 fixture、reset、completion assertion pattern | CORE-001 | done |
+| CORE-007 | 建立共用可及性檢查清單 | keyboard、live region、mobile、reduced motion 驗收點 | M0 | done（完整 audit pending） |
+| CORE-008 | App registry-driven dispatcher | 移除 App 中 topic-specific render 分支，讓 route registry／module contract 成為唯一 dispatch 入口 | CORE-001、CORE-003、CORE-005 | backlog |
 
-M1 完成條件：新增一個 topic 時，不需修改 Git／Auth simulator 核心，也不需在 `App.tsx` 新增一串 topic-specific 條件分支。
+M1 的 foundation contract、progress、route resolver、test harness 與 checklist 已完成。原始的「App 不新增 topic-specific 分支」目標仍是 P2 架構 follow-up，追蹤於 `CORE-008`；目前不阻塞既有 ready topics 的 pageflow。
 
 M1 的可平行工作線：
 
@@ -115,15 +116,15 @@ CORE-007（獨立）
 
 每個 topic 都展開為 `-01` 到 `-05` 五個 task：
 
-| Topic ID | 主題 | 第一個 task prefix |
-| --- | --- | --- |
-| remote | GitHub／GitLab 遠端協作 | REMOTE |
-| cli | 命令列 | CLI |
-| ide | IDE／除錯器 | IDE |
-| package | 套件管理 | PACKAGE |
-| env | 環境變數 | ENV |
-| build | 建置工具 | BUILD |
-| rest | REST API | REST |
+| Topic ID | 主題 | 第一個 task prefix | 狀態 |
+| --- | --- | --- | --- |
+| remote | GitHub／GitLab 遠端協作 | REMOTE | ready |
+| cli | 命令列 | CLI | ready |
+| ide | IDE／除錯器 | IDE | ready |
+| package | 套件管理 | PACKAGE | ready |
+| env | 環境變數 | ENV | planned |
+| build | 建置工具 | BUILD | planned |
+| rest | REST API | REST | planned |
 
 例如第一個主題會產生：`REMOTE-01` acceptance、`REMOTE-02` lesson、`REMOTE-03` simulator、`REMOTE-04` Lab、`REMOTE-05` integration／QA。
 
@@ -131,7 +132,21 @@ M2 的 hard dependency 只有 M1。Remote、CLI、IDE、Package、Env、Build、
 
 Git 與 Auth 已完成，不重新建立同一組 topic tasks；它們只在 M6 建立 regression／migration 檢查。
 
-## 8. M3：Data Backlog
+## 8. Extension track backlog
+
+Guardrails 是第一個 Extension topic，使用既有 TopicModule、route、progress 與 simulator 契約，但不計入 Core 19。
+
+| Task ID | Task | 依賴 | 狀態 |
+| --- | --- | --- | --- |
+| GUARDRAIL-01 | topic acceptance、lesson outline、fixture contract | M0 | done |
+| GUARDRAIL-02 | Lesson 與教學 fixture | GUARDRAIL-01 | done |
+| GUARDRAIL-03 | deterministic guardrail simulator | GUARDRAIL-01、CORE-001、CORE-006 | done |
+| GUARDRAIL-04 | Guardrail Lab UI | GUARDRAIL-03、CORE-005 | done |
+| GUARDRAIL-05 | route、progress、integration、QA | GUARDRAIL-02、GUARDRAIL-04、CORE-002、CORE-004 | done |
+
+Guardrail 的完成狀態與 Core progress 分離；未來其他 Extension topic 可沿用同一組五 task packet。
+
+## 9. M3：Data Backlog
 
 | Topic ID | 主題 | Task prefix |
 | --- | --- | --- |
@@ -144,7 +159,7 @@ Git 與 Auth 已完成，不重新建立同一組 topic tasks；它們只在 M6 
 
 建議學習順序是 `SQL → Schema → Index／Transaction`，`NoSQL` 可與 `Schema` 平行開發。這是 soft dependency；只有實際共用的 fixture 或 module contract 才建立 hard dependency。
 
-## 9. M4：Quality Backlog
+## 10. M4：Quality Backlog
 
 | Topic ID | 主題 | Task prefix |
 | --- | --- | --- |
@@ -156,7 +171,7 @@ Git 與 Auth 已完成，不重新建立同一組 topic tasks；它們只在 M6 
 
 Unit、Integration、Logs 都只依賴 M1 的共用 contract；Integration 可在 Unit 教材完成前開發，避免把「測試概念順序」誤當成程式依賴。
 
-## 10. M5：Delivery Backlog
+## 11. M5：Delivery Backlog
 
 | Topic ID | 主題 | Task prefix |
 | --- | --- | --- |
@@ -168,7 +183,7 @@ Unit、Integration、Logs 都只依賴 M1 的共用 contract；Integration 可�
 
 M5 的 topic tasks 可平行開發。對教材內容而言，Docker、CI/CD、Deploy 不互相阻塞；只有 M6 的實際 release audit 需要等待相關教材與 workflow 都完成。
 
-## 11. M6：Hardening／Release
+## 12. M6：Hardening／Release
 
 | Task ID | Task | 驗收 |
 | --- | --- | --- |
@@ -182,7 +197,7 @@ M5 的 topic tasks 可平行開發。對教材內容而言，Docker、CI/CD、De
 
 M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`、`RELEASE-004` 可在各 Milestone 完成後分批執行；`RELEASE-005` 依賴所有 topic integration，`RELEASE-006` 依賴 `RELEASE-005`，`RELEASE-007` 最後執行。
 
-## 12. Definition of Ready / Done
+## 13. Definition of Ready / Done
 
 ### Task Ready
 
@@ -197,7 +212,7 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 - `npm test`、`npm run lint`、`npm run build` 通過（若 task 只改文件，至少通過 diff／文件檢查）。
 - PR 描述列出 task ID、測試結果與已知風險。
 
-## 13. GitHub 對應方式
+## 14. GitHub 對應方式
 
 本文件先是 repository 內的 canonical backlog；經 review 後再轉成 GitHub 管理物件：
 
@@ -209,6 +224,6 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 本輪不直接建立 GitHub Milestones／Issues；先讓 task 顆粒度與 Milestone 邊界被確認，避免把錯誤拆分同步到遠端。
 
-## 14. 目前下一個可開工 task
+## 15. 目前下一個可開工 task
 
-M0 完成後，`CORE-001` 與第一個 topic 的 `REMOTE-01` 可平行開工。若採單線開發，優先做 `CORE-001`；若拆成多條工作線，`REMOTE-01` 可先固化遠端協作的 acceptance／fixture contract。接著 `REMOTE-02` 可在 `REMOTE-01` 完成後進行，`REMOTE-03` 等待 `REMOTE-01`、`CORE-001`、`CORE-006`，`REMOTE-04` 等待 `REMOTE-03` 與 `CORE-005`，最後由 `REMOTE-05` 收斂。
+下一個可開工的是尚未 ready 的 `ENV-01`、`BUILD-01` 或 `REST-01`，三者只依賴 M1，可平行進行。若先處理架構債務，則開 `CORE-008`；它不阻塞上述教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
