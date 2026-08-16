@@ -17,6 +17,8 @@ import { RemoteLesson } from "./topics/remote/lesson";
 import { RemoteLab } from "./topics/remote/lab";
 import { GuardrailLesson } from "./topics/guardrail/lesson";
 import { GuardrailLab } from "./topics/guardrail/lab";
+import { PackageLesson } from "./topics/package/lesson";
+import { PackageLab } from "./topics/package/lab";
 import type { Curriculum } from "./types";
 
 const curriculum = curriculumData as Curriculum;
@@ -45,6 +47,7 @@ export default function App() {
   const ideComplete = progressRepository.read("ide");
   const remoteComplete = progressRepository.read("remote");
   const guardrailComplete = progressRepository.read("guardrail");
+  const packageComplete = progressRepository.read("package");
 
   useEffect(() => {
     const onHashChange = () => {
@@ -92,6 +95,7 @@ export default function App() {
           <button className={route.path === "/auth-lab" ? "active" : ""} type="button" onClick={() => goTopic("auth", "lab")}><span>↳</span>Auth Lab</button>
           <button className={route.path === "/cli-lab" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lab")}><span>↳</span>CLI Lab</button>
           <button className={route.path === "/ide-lab" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lab")}><span>↳</span>IDE Lab</button>
+          <button className={route.path === "/package-lab" ? "active" : ""} type="button" onClick={() => goTopic("package", "lab")}><span>↳</span>Package Lab</button>
           <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
         </nav>
         <div className="nav-label">EXTENSION / AI</div>
@@ -128,6 +132,8 @@ export default function App() {
         {route.kind === "lab" && route.topicId === "remote" ? <RemoteLab onComplete={() => completeTopic("remote")} /> : null}
         {route.kind === "lesson" && route.topicId === "guardrail" ? <GuardrailLesson completed={guardrailComplete} onOpenLab={() => goTopic("guardrail", "lab")} /> : null}
         {route.kind === "lab" && route.topicId === "guardrail" ? <GuardrailLab onComplete={() => completeTopic("guardrail")} /> : null}
+        {route.kind === "lesson" && route.topicId === "package" ? <PackageLesson completed={packageComplete} onOpenLab={() => goTopic("package", "lab")} /> : null}
+        {route.kind === "lab" && route.topicId === "package" ? <PackageLab onComplete={() => completeTopic("package")} /> : null}
       </main>
       {menuOpen ? <button className="menu-scrim" type="button" aria-label="關閉選單" onClick={() => setMenuOpen(false)} /> : null}
     </div>
