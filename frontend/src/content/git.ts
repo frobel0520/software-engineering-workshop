@@ -1,3 +1,12 @@
+import type { LessonOrientation } from "../topics/types";
+
+export const gitOrientation: LessonOrientation = {
+  what: "Git 是分散式版本控制系統：它把檔案變更保存成可命名、可比較、可回復的本地歷史。",
+  why: "使用 Git 可以追蹤誰在什麼時候為什麼修改，安全地試驗與回復，並讓團隊用 branch、review 和 merge 協作。",
+  when: "需要多人共同修改程式、保留變更脈絡、平行開發功能、處理衝突，或在發布前檢查歷史時使用 Git。",
+  how: "從工作目錄整理修改，用 add 放進 staging、commit 留下快照，再以 branch 隔離工作、push 發布，透過 PR／MR review 後 merge。",
+};
+
 export const gitLessons = [
   {
     number: "01",

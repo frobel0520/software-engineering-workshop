@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const packageLesson: LessonDefinition = {
   title: "讓依賴可重現，而不是碰運氣",
+  orientation: {
+    what: "套件管理負責描述、解析、安裝與重建程式依賴；manifest、lockfile 與 installed modules 是三種不同狀態。",
+    why: "正確管理依賴能讓團隊與 CI 使用一致版本，減少『在我電腦可以』以及未知更新造成的風險。",
+    when: "新增或升級套件、檢查版本衝突、準備乾淨安裝，或需要讓另一台機器重現相同 dependency graph 時使用。",
+    how: "先讀 package.json，再用 npm install 更新解析結果與 lockfile；交付或 CI 使用 npm ci，並確認 manifest 與 lockfile 一致。",
+  },
   objectives: [
     "分辨 package.json、package-lock.json 與 installed modules 各自負責的狀態。",
     "用版本範圍新增依賴，理解 manifest spec 與 lockfile exact version 的差異。",
