@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const remoteLesson: LessonDefinition = {
   title: "把本地分支送上遠端協作",
+  orientation: {
+    what: "遠端協作是把本地 repository、hosted repository、review、CI 與 merge 規則接成一條可追蹤的工作流。",
+    why: "它讓其他人能看見、檢查與討論你的變更，也讓團隊在合併前用自動檢查降低整合風險。",
+    when: "需要發布功能分支、與 coworker 同步、開 PR／MR、等待 CI，或把已 review 的變更整合進 dev／main 時使用。",
+    how: "先 fetch 取得遠端狀態，再 rebase 或 merge 整理本地歷史，push 分支開 PR／MR，通過 review 與 checks 後 merge。",
+  },
   objectives: [
     "分辨 local branch、remote-tracking branch 與 origin。",
     "用 fetch 與 rebase 對齊遠端 dev，再發布功能分支。",

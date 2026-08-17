@@ -1,13 +1,15 @@
 import { TopicLessonShell } from "../../components/TopicShell";
 import { restLesson } from "./content";
+import type { LessonOrientation } from "../types";
 
-export function RestLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function RestLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 08 / WEB & API"
       moduleNumber="08"
       title={<>一個 request<br /><em>穿過哪些程式碼？</em></>}
       description="從 React fetch、FastAPI routing 與 Pydantic validation，一路追到 ORM、SQLite 與 JSON response。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="FastAPI request lifecycle 教材">
