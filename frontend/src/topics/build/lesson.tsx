@@ -1,13 +1,15 @@
 import { TopicLessonShell } from "../../components/TopicShell";
 import { buildLesson, buildLessonSteps } from "./content";
+import type { LessonOrientation } from "../types";
 
-export function BuildLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function BuildLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 07 / FOUNDATIONS"
       moduleNumber="07"
       title={<>把 source 變成<br /><em>可以交付的產品</em></>}
       description="從 TypeScript gate、Vite production bundle 到 dist preview，理解 source、artifact、base path 與靜態部署的關係。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="建置工具教材">

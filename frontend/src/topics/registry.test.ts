@@ -20,4 +20,19 @@ describe("topic view registry", () => {
   it("does not expose a module for planned topics", () => {
     expect(getTopicViewModule("sql")).toBeUndefined();
   });
+
+  it("requires every ready topic to answer the four orientation questions", () => {
+    const fields = ["what", "why", "when", "how"] as const;
+
+    curriculum.tracks
+      .flatMap((track) => track.topics)
+      .filter((topic) => topic.status === "ready")
+      .forEach((topic) => {
+        const orientation = getTopicViewModule(topic.id)?.orientation;
+        expect(orientation).toBeDefined();
+        fields.forEach((field) => {
+          expect(orientation?.[field].trim().length).toBeGreaterThan(20);
+        });
+      });
+  });
 });

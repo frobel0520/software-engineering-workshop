@@ -1,6 +1,8 @@
 import { authFields, demoConfig } from "../content/auth";
+import { TopicOrientation } from "./TopicShell";
+import type { LessonOrientation } from "../topics/types";
 
-export function AuthLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function AuthLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <div className="page auth-page">
       <header className="lesson-hero auth-hero">
@@ -14,6 +16,8 @@ export function AuthLesson({ completed, onOpenLab }: { completed: boolean; onOpe
           <a className="button auth-deck-link" href={`${import.meta.env.BASE_URL}entra-oidc-sso-deck.html`}>開啟簡報 <span>→</span></a>
         </div>
       </header>
+
+      <TopicOrientation orientation={orientation} />
 
       <section className="auth-model" aria-label="OIDC 設定關係">
         <div className="auth-node"><small>DIRECTORY</small><strong>Tenant ID</strong><code>{demoConfig.tenantId}</code></div>

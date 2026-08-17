@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { gitCommandGuide, gitPipeline } from "./git";
+import { gitCommandGuide, gitOrientation, gitPipeline } from "./git";
 
 describe("Git lesson release contract", () => {
+  it("starts with the four orientation questions", () => {
+    expect(Object.values(gitOrientation).every((answer) => answer.length > 20)).toBe(true);
+  });
+
   it("explains all required Git and platform operations", () => {
     expect(gitCommandGuide).toHaveLength(12);
     expect(gitCommandGuide.map((guide) => guide.id)).toEqual([

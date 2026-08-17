@@ -1,9 +1,37 @@
 import type { ReactNode } from "react";
+import type { LessonOrientation } from "../topics/types";
+
+export function TopicOrientation({ orientation }: { orientation: LessonOrientation }) {
+  const cards = [
+    ["What", orientation.what],
+    ["Why", orientation.why],
+    ["When", orientation.when],
+    ["How", orientation.how],
+  ] as const;
+
+  return (
+    <section className="lesson-orientation" aria-labelledby="lesson-orientation-title">
+      <div className="section-heading">
+        <div><p className="kicker">START HERE</p><h2 id="lesson-orientation-title">先回答四個問題</h2></div>
+        <p>先知道它解決什麼問題，再進入操作與細節。</p>
+      </div>
+      <div className="orientation-grid">
+        {cards.map(([label, answer]) => (
+          <article className="orientation-card" key={label}>
+            <div><strong>{label}</strong></div>
+            <p>{answer}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export interface TopicLessonShellProps {
   eyebrow: string;
   title: ReactNode;
   description: ReactNode;
+  orientation: LessonOrientation;
   moduleNumber?: string;
   completed: boolean;
   children: ReactNode;
@@ -13,6 +41,7 @@ export function TopicLessonShell({
   eyebrow,
   title,
   description,
+  orientation,
   moduleNumber = "01",
   completed,
   children,
@@ -30,7 +59,10 @@ export function TopicLessonShell({
           <div><small>MODULE STATUS</small><b>{completed ? "已完成" : "學習中"}</b></div>
         </div>
       </header>
-      <section className="topic-lesson-content">{children}</section>
+      <section className="topic-lesson-content">
+        <TopicOrientation orientation={orientation} />
+        {children}
+      </section>
     </div>
   );
 }
