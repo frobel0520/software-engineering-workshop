@@ -13,6 +13,12 @@ const fixtureModule: TopicModule<FixtureState, FixtureEvent> = {
   trackKind: "extension",
   lesson: {
     title: "Fixture topic",
+    orientation: {
+      what: "Fixture definition",
+      why: "Fixture reason",
+      when: "Fixture scenario",
+      how: "Fixture workflow",
+    },
     objectives: ["驗證 TopicModule 的最小欄位"],
     sections: [{ id: "intro", title: "Intro", body: "Fixture content" }],
   },
