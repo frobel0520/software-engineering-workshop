@@ -18,7 +18,7 @@ describe("topic view registry", () => {
   });
 
   it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("sql")).toBeUndefined();
+    expect(getTopicViewModule("schema")).toBeUndefined();
   });
 
   it("requires every ready topic to answer the four orientation questions", () => {
