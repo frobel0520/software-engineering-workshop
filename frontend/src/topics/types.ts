@@ -2,6 +2,13 @@ export type TrackKind = "core" | "extension";
 
 export type TopicStatus = "ready" | "planned";
 
+export interface LessonOrientation {
+  what: string;
+  why: string;
+  when: string;
+  how: string;
+}
+
 export interface LessonSection {
   id: string;
   title: string;
@@ -10,6 +17,7 @@ export interface LessonSection {
 
 export interface LessonDefinition {
   title: string;
+  orientation: LessonOrientation;
   objectives: readonly string[];
   sections: readonly LessonSection[];
 }

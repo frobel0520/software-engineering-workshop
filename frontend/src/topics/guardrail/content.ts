@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const guardrailLesson: LessonDefinition = {
   title: "在模型邊界放一道可解釋的防線",
+  orientation: {
+    what: "Guardrail 是包在模型輸入、輸出或工具操作周圍的驗證與處置機制，用規則判斷風險並決定下一步。",
+    why: "它讓 AI 系統能阻擋敏感資料、錯誤格式與危險副作用，並留下使用者與工程師都能理解的失敗原因。",
+    when: "模型可能接觸個資、產生不合規內容、偏離任務、回傳錯誤格式，或準備執行寫入／刪除等 tool side effect 時使用。",
+    how: "選擇 input、output、tool 掛載點，配置 validator 與失敗策略，再用 deterministic scenarios 驗證 pass、fix、reask 或 block。",
+  },
   objectives: [
     "分辨 Validator、Guard、Hub 與 OnFailAction 的責任。",
     "理解 input、output、tool 三個 guardrail 掛載點。",

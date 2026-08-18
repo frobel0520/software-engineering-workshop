@@ -14,7 +14,7 @@ export function TopicRouteView({ route, completed, onOpenLab, onComplete }: Topi
 
   if (route.kind === "lesson") {
     const Lesson = topicModule.lesson;
-    return <Lesson completed={completed} onOpenLab={onOpenLab} />;
+    return <Lesson completed={completed} onOpenLab={onOpenLab} orientation={topicModule.orientation} />;
   }
 
   if (route.kind === "lab") {

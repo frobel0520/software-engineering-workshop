@@ -1,13 +1,15 @@
 import { cliLesson, cliLessonSteps } from "./content";
 import { TopicLessonShell } from "../../components/TopicShell";
+import type { LessonOrientation } from "../types";
 
-export function CliLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function CliLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 03 / FOUNDATIONS"
       moduleNumber="03"
       title={<>在固定工作目錄中<br /><em>讀懂命令列</em></>}
       description="先確認 cwd，再用固定 fixture 讀取檔案、搜尋線索與執行檢查；錯誤不會碰到真實檔案，reset 後可以重複練習。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="命令列教材">
