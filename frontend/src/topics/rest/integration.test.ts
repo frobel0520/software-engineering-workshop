@@ -31,7 +31,7 @@ describe("REST topic integration", () => {
     const progress = aggregateProgress(curriculum, memoryRepository(["rest"]));
 
     expect(completionKeyFor("rest")).toBe("se-workshop-rest-complete");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 10, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });
