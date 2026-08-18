@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const ideLesson: LessonDefinition = {
   title: "用除錯器看見程式正在做什麼",
+  orientation: {
+    what: "IDE 是整合編輯、執行與除錯工具的開發環境；debugger 讓你在程式執行中暫停並檢查當下狀態。",
+    why: "它能把猜測變成證據，直接看見 current line、call stack 與 variables，縮小錯誤發生的範圍。",
+    when: "程式結果不符合預期、錯誤只在特定輸入出現，或需要理解多個函式如何互相呼叫時使用 debugger。",
+    how: "先開啟正確檔案，設定 breakpoint，執行到暫停點，檢查變數與呼叫堆疊，再用 step over 或 continue 觀察下一步。",
+  },
   objectives: [
     "在固定 editor fixture 中開啟檔案並設定 breakpoint。",
     "從 paused state 閱讀 current line、call stack 與 variables。",
