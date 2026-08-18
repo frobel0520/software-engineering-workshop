@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const envLesson: LessonDefinition = {
   title: "讓設定跟著環境走，但別把秘密打包",
+  orientation: {
+    what: "環境變數是由執行環境提供的設定輸入，讓同一份程式在本機、測試與 production 使用不同值而不必改 source code。",
+    why: "把環境差異與秘密從程式碼分離，能避免重打包與誤提交，也讓啟動時可以清楚驗證必要設定。",
+    when: "API base URL、資料庫連線、feature flag 或其他部署相關值會隨環境改變時使用；密碼與 token 不應進入 client bundle。",
+    how: "提交安全的 .env.example，在本機使用未提交的 .env.local，依公開／私密邊界載入與驗證，並用 .gitignore 保護本地檔案。",
+  },
   objectives: [
     "分辨可提交的 .env.example、機器本地的 .env.local 與程式讀取設定的邊界。",
     "理解 Vite 的 VITE_ 變數會進入瀏覽器 bundle，不能放 API key 或密碼。",

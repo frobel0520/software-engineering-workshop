@@ -1,13 +1,15 @@
 import { remoteLesson, remoteLessonSteps } from "./content";
 import { TopicLessonShell } from "../../components/TopicShell";
+import type { LessonOrientation } from "../types";
 
-export function RemoteLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function RemoteLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 03 / REMOTE COLLABORATION"
       moduleNumber="03"
       title={<>把本地工作<br /><em>送進協作流程</em></>}
       description="理解 origin、fetch、rebase、push 與 PR 的責任邊界，再用 deterministic Lab 走完一次可 review、可合併的遠端工作流。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="遠端協作教材">

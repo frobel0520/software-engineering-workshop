@@ -1,6 +1,8 @@
+import { TopicOrientation } from "./TopicShell";
+import type { LessonOrientation } from "../topics/types";
 import { gitCommandGuide, gitLessons, gitPipeline, gitWorkflow } from "../content/git";
 
-export function GitLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function GitLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <div className="page lesson-page">
       <header className="lesson-hero">
@@ -14,6 +16,8 @@ export function GitLesson({ completed, onOpenLab }: { completed: boolean; onOpen
           <div><small>MODULE STATUS</small><b>{completed ? "已完成" : "學習中"}</b></div>
         </div>
       </header>
+
+      <TopicOrientation orientation={orientation} />
 
       <section className="mental-model">
         <div className="section-heading">

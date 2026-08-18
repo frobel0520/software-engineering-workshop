@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const buildLesson: LessonDefinition = {
   title: "把 source 變成可以交付的產品",
+  orientation: {
+    what: "建置工具把 source code、設定與依賴轉成可執行或可部署的 artifact，例如 production bundle 與 dist。",
+    why: "它把型別檢查、模組解析、最佳化與輸出格式固定成可重複流程，讓本機與 CI 產出可檢查的交付物。",
+    when: "要驗證正式 bundle、準備部署、檢查 base path，或需要在乾淨環境重建與預覽 production artifact 時使用。",
+    how: "先執行 typecheck／lint，再用 production build 產生 dist，檢查 artifact 與公開路徑，最後用 preview 驗證正式輸出。",
+  },
   objectives: [
     "分辨 source code、typecheck、bundle 與 dist artifact 各自負責的階段。",
     "理解 npm script 如何把 TypeScript gate 與 Vite production build 串成可重複指令。",
