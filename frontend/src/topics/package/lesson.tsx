@@ -1,13 +1,15 @@
 import { TopicLessonShell } from "../../components/TopicShell";
 import { packageLesson, packageLessonSteps } from "./content";
+import type { LessonOrientation } from "../types";
 
-export function PackageLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function PackageLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 05 / FOUNDATIONS"
       moduleNumber="05"
       title={<>讓依賴可重現<br /><em>而不是碰運氣</em></>}
       description="從 package.json、lockfile 到 clean install，理解版本解析與可重現依賴；所有操作都在固定 fixture 中完成。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="套件管理教材">

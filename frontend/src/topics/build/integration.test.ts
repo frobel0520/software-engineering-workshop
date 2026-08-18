@@ -21,13 +21,13 @@ describe("Build topic integration contract", () => {
     const progress = aggregateProgress(curriculum, memoryRepository([]));
 
     expect(buildTopic?.status).toBe("ready");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 0 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 10, completed: 0 });
   });
 
   it("persists Build completion as Core progress without changing the denominator", () => {
     const progress = aggregateProgress(curriculum, memoryRepository(["build"]));
 
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 9, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 10, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });

@@ -19,10 +19,25 @@ import { EnvLab } from "./env/lab";
 import { EnvLesson } from "./env/lesson";
 import { BuildLab } from "./build/lab";
 import { BuildLesson } from "./build/lesson";
+import { SqlLab } from "./sql/lab";
+import { SqlLesson } from "./sql/lesson";
+import { authOrientation } from "../content/auth";
+import { gitOrientation } from "../content/git";
+import { cliLesson } from "./cli/content";
+import { ideLesson } from "./ide/content";
+import { packageLesson } from "./package/content";
+import { remoteLesson } from "./remote/content";
+import { guardrailLesson } from "./guardrail/content";
+import { restLesson } from "./rest/content";
+import { envLesson } from "./env/content";
+import { buildLesson } from "./build/content";
+import { sqlLesson } from "./sql/content";
+import type { LessonOrientation } from "./types";
 
 export interface TopicLessonViewProps {
   completed: boolean;
   onOpenLab: () => void;
+  orientation: LessonOrientation;
 }
 
 export interface TopicLabViewProps {
@@ -31,21 +46,23 @@ export interface TopicLabViewProps {
 
 export interface TopicViewModule {
   id: string;
+  orientation: LessonOrientation;
   lesson: ComponentType<TopicLessonViewProps>;
   lab: ComponentType<TopicLabViewProps>;
 }
 
 export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = {
-  git: { id: "git", lesson: GitLesson, lab: GitLab },
-  auth: { id: "auth", lesson: AuthLesson, lab: AuthLab },
-  remote: { id: "remote", lesson: RemoteLesson, lab: RemoteLab },
-  cli: { id: "cli", lesson: CliLesson, lab: CliLab },
-  ide: { id: "ide", lesson: IdeLesson, lab: IdeLab },
-  package: { id: "package", lesson: PackageLesson, lab: PackageLab },
-  guardrail: { id: "guardrail", lesson: GuardrailLesson, lab: GuardrailLab },
-  rest: { id: "rest", lesson: RestLesson, lab: RestLab },
-  env: { id: "env", lesson: EnvLesson, lab: EnvLab },
-  build: { id: "build", lesson: BuildLesson, lab: BuildLab },
+  git: { id: "git", orientation: gitOrientation, lesson: GitLesson, lab: GitLab },
+  auth: { id: "auth", orientation: authOrientation, lesson: AuthLesson, lab: AuthLab },
+  remote: { id: "remote", orientation: remoteLesson.orientation, lesson: RemoteLesson, lab: RemoteLab },
+  cli: { id: "cli", orientation: cliLesson.orientation, lesson: CliLesson, lab: CliLab },
+  ide: { id: "ide", orientation: ideLesson.orientation, lesson: IdeLesson, lab: IdeLab },
+  package: { id: "package", orientation: packageLesson.orientation, lesson: PackageLesson, lab: PackageLab },
+  guardrail: { id: "guardrail", orientation: guardrailLesson.orientation, lesson: GuardrailLesson, lab: GuardrailLab },
+  rest: { id: "rest", orientation: restLesson.orientation, lesson: RestLesson, lab: RestLab },
+  env: { id: "env", orientation: envLesson.orientation, lesson: EnvLesson, lab: EnvLab },
+  build: { id: "build", orientation: buildLesson.orientation, lesson: BuildLesson, lab: BuildLab },
+  sql: { id: "sql", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
 };
 
 export const TOPIC_MODULE_IDS: ReadonlySet<string> = new Set(Object.keys(TOPIC_MODULE_REGISTRY));
