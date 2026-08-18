@@ -1,13 +1,15 @@
 import { TopicLessonShell } from "../../components/TopicShell";
 import { envLesson, envLessonSteps } from "./content";
+import type { LessonOrientation } from "../types";
 
-export function EnvLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function EnvLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 06 / FOUNDATIONS"
       moduleNumber="06"
       title={<>讓設定跟著環境走<br /><em>但別把秘密打包</em></>}
       description="從 .env.example、.env.local 到 client bundle，理解設定來源、公開邊界與 fail-fast 驗證；所有操作都在固定 fixture 中完成。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="環境變數教材">

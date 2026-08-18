@@ -1,13 +1,15 @@
 import { TopicLessonShell } from "../../components/TopicShell";
 import { ideLesson, ideLessonSteps } from "./content";
+import type { LessonOrientation } from "../types";
 
-export function IdeLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function IdeLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="TOPIC 04 / FOUNDATIONS"
       moduleNumber="04"
       title={<>用除錯器看見程式<br /><em>正在做什麼</em></>}
       description="先在固定的 editor fixture 建立 context，再設定 breakpoint、閱讀 paused state，最後用 step over 與 continue 觀察程式如何完成。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="IDE／除錯器教材">

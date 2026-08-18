@@ -2,6 +2,12 @@ import type { LessonDefinition } from "../../topics/types";
 
 export const cliLesson: LessonDefinition = {
   title: "在固定工作目錄中讀懂命令列",
+  orientation: {
+    what: "命令列是用文字指令與作業系統或工具互動的介面；每個指令都會在目前工作目錄中讀取輸入並產生結果。",
+    why: "它適合把檢查、建置與部署寫成可重複、可自動化、可被 CI 執行的流程，而不是依賴手動點擊。",
+    when: "需要快速處理檔案、搜尋線索、執行專案 script、檢查 exit code，或在本機重現 CI 步驟時使用。",
+    how: "先用 pwd 確認 context，再用 cd、ls、cat、grep 讀取 fixture，觀察 stdout／stderr 與 exit code，最後重複驗證流程。",
+  },
   objectives: [
     "用 pwd 與 cd 建立目前工作目錄的 context。",
     "用 ls、cat 與 grep 讀取 fixture 並找出線索。",

@@ -1,13 +1,15 @@
 import { guardrailLesson } from "./content";
 import { TopicLessonShell } from "../../components/TopicShell";
+import type { LessonOrientation } from "../types";
 
-export function GuardrailLesson({ completed, onOpenLab }: { completed: boolean; onOpenLab: () => void }) {
+export function GuardrailLesson({ completed, onOpenLab, orientation }: { completed: boolean; onOpenLab: () => void; orientation: LessonOrientation }) {
   return (
     <TopicLessonShell
       eyebrow="EXTENSION / AI & LLM ENGINEERING"
       moduleNumber="EX"
       title={<>在模型邊界<br /><em>放一道防線</em></>}
       description="從 Validator、Guard 到 OnFailAction，理解如何在 input、output 與 tool 三個掛載點建立可解釋、可重設的 deterministic guardrail pipeline。"
+      orientation={orientation}
       completed={completed}
     >
       <section className="lesson-list" aria-label="Guardrail 教材">

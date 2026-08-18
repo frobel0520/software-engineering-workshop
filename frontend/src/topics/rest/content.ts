@@ -82,6 +82,12 @@ export type RestLabEvent =
 
 export const restLesson: LessonDefinition = {
   title: "FastAPI request lifecycle",
+  orientation: {
+    what: "REST API 是以 HTTP resource、method、status 與 representation 定義服務邊界的介面；request 會依序穿過 routing、validation、database 與 response。",
+    why: "清楚的 API 契約讓前端、後端與其他 client 可以獨立演進，也讓成功與錯誤都能被程式可靠處理。",
+    when: "需要讓瀏覽器或其他服務讀寫資料、設計 endpoint、定義輸入輸出 schema，或追查一個 request 為何失敗時使用。",
+    how: "先定義 resource 與 HTTP method，再設定 route、request／response model、dependency 與資料存取，最後用狀態碼和情境測試契約。",
+  },
   objectives: [
     "追蹤前端 fetch 如何形成 HTTP request。",
     "理解 FastAPI routing、dependency injection 與 Pydantic validation 的執行順序。",
