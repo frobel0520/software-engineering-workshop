@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [dev, main]
   pull_request:
     branches: [dev, main]
   workflow_dispatch:
@@ -12,6 +11,9 @@ permissions:
 
 jobs:
   frontend:
+    # The Pages publisher creates a generated gh-pages branch containing only
+    # the built static files, not the frontend package manifest.
+    if: github.ref != 'refs/heads/gh-pages'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
