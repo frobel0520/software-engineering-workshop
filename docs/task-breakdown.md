@@ -138,7 +138,7 @@ Git 與 Auth 都已有可執行 implementation；Git 的 cowork／pipeline 上�
 
 ## 8. Extension track backlog
 
-Guardrails 是第一個 Extension topic，使用既有 TopicModule、route、progress 與 simulator 契約，但不計入 Core 19。
+Guardrails 是第一個 Extension topic；問題處理方法是第二個。兩者都使用既有 TopicModule、route、progress 與 simulator 契約，但不計入 Core 19。
 
 | Task ID | Task | 依賴 | 狀態 |
 | --- | --- | --- | --- |
@@ -149,6 +149,14 @@ Guardrails 是第一個 Extension topic，使用既有 TopicModule、route、pro
 | GUARDRAIL-05 | route、progress、integration、QA | GUARDRAIL-02、GUARDRAIL-04、CORE-002、CORE-004 | done |
 
 Guardrail 的完成狀態與 Core progress 分離；未來其他 Extension topic 可沿用同一組五 task packet。
+
+| Task ID | Task | 依賴 | 狀態 |
+| --- | --- | --- | --- |
+| PROBLEM-01 | 問題處理 acceptance、lesson outline、fixture contract | M0 | done |
+| PROBLEM-02 | 問題處理 Lesson 與教學 fixture | PROBLEM-01 | done |
+| PROBLEM-03 | 問題處理 deterministic simulator | PROBLEM-01、CORE-001、CORE-006 | done |
+| PROBLEM-04 | 問題處理 Lab UI | PROBLEM-03、CORE-005 | done |
+| PROBLEM-05 | route、progress、integration、QA | PROBLEM-02、PROBLEM-04、CORE-002、CORE-004 | done |
 
 ## 9. M3：Data Backlog
 
