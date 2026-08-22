@@ -44,7 +44,7 @@
       "description": "測試、日誌與線索",
       "kind": "core",
       "topics": [
-        { "id": "unit", "title": "單元測試", "summary": "快速回饋", "status": "planned" },
+        { "id": "unit", "title": "單元測試", "summary": "快速回饋", "status": "ready" },
         { "id": "integration", "title": "整合測試", "summary": "模組契約", "status": "planned" },
         { "id": "logs", "title": "日誌", "summary": "留下線索", "status": "planned" }
       ]
