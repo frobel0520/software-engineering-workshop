@@ -26,7 +26,8 @@ function eventForStep(stepId: SqlStepId): SqlLabEvent {
 
 function eventForCommand(rawCommand: string): SqlLabEvent | null {
   const command = rawCommand.trim().replace(/\s+/g, " ");
-  return sqlLessonSteps.find((step) => step.query === command) ? { type: sqlLessonSteps.find((step) => step.query === command)!.id } : null;
+  const step = sqlLessonSteps.find((candidate) => candidate.query === command);
+  return step ? { type: step.id } : null;
 }
 
 function statusTone(state: SqlLabState): TopicStatusTone {

@@ -2,7 +2,6 @@ import type { SimulatorDefinition } from "../../topics/types";
 import {
   buildLabHappyPath,
   buildLabInitialState,
-  type BuildEventType,
   type BuildLabEvent,
   type BuildLabState,
   type BuildStepId,
@@ -20,7 +19,9 @@ export interface BuildRunResult {
   accepted: boolean;
 }
 
-const completionStepIds: readonly BuildStepId[] = buildLabHappyPath.map((event) => event.type as BuildStepId);
+const completionStepIds: readonly BuildStepId[] = buildLabHappyPath
+  .map((event) => event.type)
+  .filter((event): event is BuildStepId => event !== "reset");
 
 function cloneState(state: BuildLabState): BuildLabState {
   return { ...state, completedStepIds: [...state.completedStepIds] };
@@ -157,8 +158,7 @@ export function runBuildEvent(current: BuildLabState, event: BuildLabEvent): Bui
       return { state: nextState, output: ["vite preview", "serving dist/", "BUILD Lab completed"], accepted: true };
     }
     default: {
-      const unknownEvent = event.type as BuildEventType;
-      return failed(state, unknownEvent, `不支援的 build event：${unknownEvent}。`);
+      return failed(state, event.type, `不支援的 build event：${event.type}。`);
     }
   }
 }

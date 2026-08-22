@@ -170,8 +170,16 @@ export const restScenarios: readonly RestScenario[] = [
 
 export const restRequiredScenarioIds: readonly RestScenarioId[] = restScenarios.map((scenario) => scenario.id);
 
-export function findRestScenario(scenarioId: RestScenarioId): RestScenario {
-  return restScenarios.find((scenario) => scenario.id === scenarioId) ?? restScenarios[0];
+export function isRestScenarioId(value: string): value is RestScenarioId {
+  return restScenarios.some((scenario) => scenario.id === value);
+}
+
+export function findRestScenario(scenarioId: string): RestScenario {
+  const scenario = restScenarios.find((candidate) => candidate.id === scenarioId);
+  if (!scenario) {
+    throw new Error(`Unknown REST scenario fixture: ${scenarioId}`);
+  }
+  return scenario;
 }
 
 export const restCodeFiles: readonly RestCodeFile[] = [
@@ -283,10 +291,18 @@ export const restCodeFiles: readonly RestCodeFile[] = [
   },
 ];
 
-export function findRestCodeFile(fileId: RestCodeFileId): RestCodeFile {
-  return restCodeFiles.find((file) => file.id === fileId) ?? restCodeFiles[0];
+export function findRestCodeFile(fileId: string): RestCodeFile {
+  const file = restCodeFiles.find((candidate) => candidate.id === fileId);
+  if (!file) {
+    throw new Error(`Unknown REST code file fixture: ${fileId}`);
+  }
+  return file;
 }
 
 export function findRestCodeLine(lineId: string): RestCodeLine {
-  return restCodeFiles.flatMap((file) => file.lines).find((line) => line.id === lineId) ?? restCodeFiles[0].lines[0];
+  const line = restCodeFiles.flatMap((file) => file.lines).find((candidate) => candidate.id === lineId);
+  if (!line) {
+    throw new Error(`Unknown REST code line fixture: ${lineId}`);
+  }
+  return line;
 }

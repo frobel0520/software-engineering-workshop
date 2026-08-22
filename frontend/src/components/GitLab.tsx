@@ -4,11 +4,11 @@ import {
   GIT_RELEASE_STEPS,
   createInitialGitReleaseState,
   gitReleaseProgress,
+  isGitProvider,
   isGitReleaseComplete,
   nextGitReleaseStep,
   runGitReleaseCommand,
   runGitReleaseEvent,
-  type GitProvider,
   type GitReleaseEvent,
   type GitReleaseState,
 } from "../git/release-simulator";
@@ -109,7 +109,15 @@ export function GitLab({ onComplete }: { onComplete: () => void }) {
             <aside className="mission-panel" aria-label="Git cowork 狀態">
               <p className="kicker">CURRENT MISSION</p>
               <label className="git-provider-picker" htmlFor="git-provider">練習平台
-                <select id="git-provider" value={state.provider} onChange={(event) => dispatch({ type: "set-provider", provider: event.target.value as GitProvider })}>
+                <select
+                  id="git-provider"
+                  value={state.provider}
+                  onChange={(event) => {
+                    if (isGitProvider(event.target.value)) {
+                      dispatch({ type: "set-provider", provider: event.target.value });
+                    }
+                  }}
+                >
                   <option value="github">GitHub · PR</option>
                   <option value="gitlab">GitLab · Merge Request</option>
                 </select>

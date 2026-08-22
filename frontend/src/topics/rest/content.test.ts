@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { restCodeFiles, restScenarios, restTraceStages } from "./content";
+import { findRestCodeFile, findRestCodeLine, findRestScenario, restCodeFiles, restScenarios, restTraceStages } from "./content";
 
 describe("REST teaching content", () => {
   it("annotates every displayed non-empty code line", () => {
@@ -46,5 +46,11 @@ describe("REST teaching content", () => {
       "database",
       "response",
     ]);
+  });
+
+  it("fails explicitly for unknown fixture identifiers", () => {
+    expect(() => findRestScenario("unknown")).toThrow("Unknown REST scenario fixture");
+    expect(() => findRestCodeFile("unknown")).toThrow("Unknown REST code file fixture");
+    expect(() => findRestCodeLine("unknown")).toThrow("Unknown REST code line fixture");
   });
 });
