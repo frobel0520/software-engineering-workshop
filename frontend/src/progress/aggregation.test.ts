@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import curriculumData from "../../../shared/curriculum.json";
+import { curriculum } from "../curriculum";
 import type { Curriculum } from "../types";
 import { aggregateProgress, completedReadyTopicIds } from "./aggregation";
 import type { ProgressRepository } from "./repository";
@@ -23,9 +23,8 @@ class MemoryProgressRepository implements ProgressRepository {
   }
 }
 
-const curriculum = curriculumData as Curriculum;
 const coreReadyTopicIds = curriculum.tracks
-  .filter((track) => (track.kind ?? "core") === "core")
+  .filter((track) => track.kind === "core")
   .flatMap((track) => track.topics)
   .filter((topic) => topic.status === "ready")
   .map((topic) => topic.id);
@@ -57,6 +56,7 @@ describe("progress aggregation", () => {
           id: "core-track",
           title: "Core",
           description: "Core topics",
+          kind: "core",
           topics: [
             { id: "git", title: "Git", summary: "Version control", status: "ready" },
             { id: "future", title: "Future", summary: "Planned", status: "planned" },
@@ -81,7 +81,7 @@ describe("progress aggregation", () => {
   });
 
   it("ignores completion keys for planned topics", () => {
-    const repository = new MemoryProgressRepository(new Set(["git", "schema"]));
+    const repository = new MemoryProgressRepository(new Set(["git", "index"]));
 
     expect(completedReadyTopicIds(curriculum, repository)).toEqual(["git"]);
   });

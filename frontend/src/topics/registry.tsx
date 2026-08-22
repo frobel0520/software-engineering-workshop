@@ -21,6 +21,8 @@ import { BuildLab } from "./build/lab";
 import { BuildLesson } from "./build/lesson";
 import { SqlLab } from "./sql/lab";
 import { SqlLesson } from "./sql/lesson";
+import { SchemaLab } from "./schema/lab";
+import { SchemaLesson } from "./schema/lesson";
 import { authOrientation } from "../content/auth";
 import { gitOrientation } from "../content/git";
 import { cliLesson } from "./cli/content";
@@ -32,6 +34,7 @@ import { restLesson } from "./rest/content";
 import { envLesson } from "./env/content";
 import { buildLesson } from "./build/content";
 import { sqlLesson } from "./sql/content";
+import { schemaLesson } from "./schema/content";
 import type { LessonOrientation } from "./types";
 
 export interface TopicLessonViewProps {
@@ -63,6 +66,7 @@ export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = 
   env: { id: "env", orientation: envLesson.orientation, lesson: EnvLesson, lab: EnvLab },
   build: { id: "build", orientation: buildLesson.orientation, lesson: BuildLesson, lab: BuildLab },
   sql: { id: "sql", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
+  schema: { id: "schema", orientation: schemaLesson.orientation, lesson: SchemaLesson, lab: SchemaLab },
 };
 
 export const TOPIC_MODULE_IDS: ReadonlySet<string> = new Set(Object.keys(TOPIC_MODULE_REGISTRY));

@@ -1,5 +1,10 @@
 export type GitReleasePhase = "initial" | "local" | "published" | "review" | "blocked" | "merged";
 export type GitProvider = "github" | "gitlab";
+
+export function isGitProvider(value: string): value is GitProvider {
+  return value === "github" || value === "gitlab";
+}
+
 export type RepositoryAccess = "none" | "forked" | "cloned";
 export type WorkingTreeState = "clean" | "dirty" | "staged";
 export type RemoteBaseState = "unknown" | "fetched" | "pulled" | "rebased";
@@ -155,10 +160,10 @@ export function runGitReleaseEvent(current: GitReleaseState, event: GitReleaseEv
 
   if (event.type === "resolve-conflict") {
     if (!current.conflict || current.pipeline !== "failed") return blocked(current, "目前沒有待處理的 pipeline conflict。");
-    const state = {
+    const state: GitReleaseState = {
       ...withCompletedStep(current, "resolve-conflict"),
-      phase: "review" as const,
-      pipeline: "not-started" as const,
+      phase: "review",
+      pipeline: "not-started",
       pipelineJobs: [],
       conflict: false,
       lastCommand: "Resolve conflict",

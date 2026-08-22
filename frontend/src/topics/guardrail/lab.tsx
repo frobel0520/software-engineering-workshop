@@ -1,9 +1,9 @@
 import { useState } from "react";
 import {
   guardrailScenarios,
+  guardrailRequiredScenarioIds,
   guardrailValidators,
   type GuardrailStage,
-  type ValidatorId,
 } from "./content";
 import { createInitialGuardrailState, isGuardrailComplete, runGuardrailEvent, type GuardrailEvent, type GuardrailState } from "./simulator";
 import { TopicCompletionCard, TopicLabShell, TopicStatusFeedback } from "../../components/TopicShell";
@@ -15,7 +15,7 @@ const STAGES: readonly { id: GuardrailStage; label: string; hint: string }[] = [
 ];
 
 export function guardrailLabProgress(state: GuardrailState): number {
-  return Math.round((state.completedScenarioIds.length / 3) * 100);
+  return Math.round((state.completedScenarioIds.length / guardrailRequiredScenarioIds.length) * 100);
 }
 
 export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
@@ -46,7 +46,7 @@ export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
     <TopicLabShell
       eyebrow="INTERACTIVE LAB / GUARDRAILS"
       title={<>讓每一次呼叫<br /><em>先通過一道防線</em></>}
-      progressLabel={`${state.completedScenarioIds.length} / 3 SCENARIOS`}
+      progressLabel={`${state.completedScenarioIds.length} / ${guardrailRequiredScenarioIds.length} SCENARIOS`}
       progress={guardrailLabProgress(state)}
       onReset={() => apply({ type: "reset" })}
     >
@@ -93,7 +93,7 @@ export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
                     <input
                       type="checkbox"
                       checked={enabled}
-                      onChange={() => apply({ type: "toggleValidator", id: validator.id as ValidatorId })}
+                      onChange={() => apply({ type: "toggleValidator", id: validator.id })}
                     />
                     <span><b>{validator.label}</b><small>{validator.purpose}</small></span>
                     <i>{validator.latencyMs}ms</i>
