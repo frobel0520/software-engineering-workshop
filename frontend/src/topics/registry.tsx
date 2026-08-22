@@ -25,6 +25,8 @@ import { SchemaLab } from "./schema/lab";
 import { SchemaLesson } from "./schema/lesson";
 import { IndexLab } from "./index/lab";
 import { IndexLesson } from "./index/lesson";
+import { PostgreSqlLab } from "./postgresql/lab";
+import { PostgreSqlLesson } from "./postgresql/lesson";
 import { authOrientation } from "../content/auth";
 import { gitOrientation } from "../content/git";
 import { cliLesson } from "./cli/content";
@@ -38,6 +40,7 @@ import { buildLesson } from "./build/content";
 import { sqlLesson } from "./sql/content";
 import { schemaLesson } from "./schema/content";
 import { indexLesson } from "./index/content";
+import { postgresqlLesson } from "./postgresql/content";
 import type { LessonOrientation } from "./types";
 
 export interface TopicLessonViewProps {
@@ -71,6 +74,7 @@ export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = 
   sql: { id: "sql", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
   schema: { id: "schema", orientation: schemaLesson.orientation, lesson: SchemaLesson, lab: SchemaLab },
   index: { id: "index", orientation: indexLesson.orientation, lesson: IndexLesson, lab: IndexLab },
+  postgresql: { id: "postgresql", orientation: postgresqlLesson.orientation, lesson: PostgreSqlLesson, lab: PostgreSqlLab },
 };
 
 export const TOPIC_MODULE_IDS: ReadonlySet<string> = new Set(Object.keys(TOPIC_MODULE_REGISTRY));

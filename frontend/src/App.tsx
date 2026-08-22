@@ -95,6 +95,7 @@ export default function App() {
           <button className={route.path === "/sql-lab" ? "active" : ""} type="button" onClick={() => goTopic("sql", "lab")}><span>↳</span>SQL Lab</button>
           <button className={route.path === "/schema-lab" ? "active" : ""} type="button" onClick={() => goTopic("schema", "lab")}><span>↳</span>Schema Lab</button>
           <button className={route.path === "/index-lab" ? "active" : ""} type="button" onClick={() => goTopic("index", "lab")}><span>↳</span>Index Lab</button>
+          <button className={route.path === "/postgresql-lab" ? "active" : ""} type="button" onClick={() => goTopic("postgresql", "lab")}><span>↳</span>PostgreSQL Lab</button>
         </nav>
         <div className="nav-label">EXTENSION / AI</div>
         <nav>
