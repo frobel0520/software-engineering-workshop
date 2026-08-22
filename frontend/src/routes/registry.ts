@@ -10,16 +10,15 @@ export interface RouteDefinition {
 }
 
 const TOPIC_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const MAP_ROUTE: RouteDefinition = { path: "/map", kind: "map" };
 
 export const ROUTE_REGISTRY: readonly RouteDefinition[] = [
-  { path: "/map", kind: "map" },
+  MAP_ROUTE,
   { path: "/git", kind: "lesson", topicId: "git" },
   { path: "/lab", kind: "lab", topicId: "git" },
   { path: "/auth", kind: "lesson", topicId: "auth" },
   { path: "/auth-lab", kind: "lab", topicId: "auth" },
 ];
-
-const MAP_ROUTE = ROUTE_REGISTRY[0];
 
 function normalizePath(hashOrPath: string): string {
   const withoutHash = hashOrPath.trim().replace(/^#/, "");
@@ -78,8 +77,9 @@ export function resolveRoute(
     const topic = curriculum.tracks
       .flatMap((track) => track.topics)
       .find((candidate) => candidate.id === route.topicId);
-    const hasView = !availableTopicIds || (topic && availableTopicIds.has(topic.id));
-    return topic?.status === "ready" && hasView ? route : MAP_ROUTE;
+    if (!topic || topic.status !== "ready") return MAP_ROUTE;
+    if (availableTopicIds && !availableTopicIds.has(topic.id)) return MAP_ROUTE;
+    return route;
   }
 
   return route;
