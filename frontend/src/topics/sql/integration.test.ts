@@ -17,7 +17,7 @@ describe("SQL topic integration contract", () => {
   it("contributes SQL completion to Core without changing the 19-topic denominator", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["sql"]));
 
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 15, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 16, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });
