@@ -68,6 +68,15 @@
       "topics": [
         { "id": "guardrail", "title": "Guardrails", "summary": "模型輸入、輸出與工具防線", "status": "ready" }
       ]
+    },
+    {
+      "id": "problem-solving",
+      "title": "問題處理",
+      "description": "從症狀到可驗證的修復",
+      "kind": "extension",
+      "topics": [
+        { "id": "problem-solving", "title": "問題處理方法", "summary": "定義、重現、隔離、驗證與預防", "status": "ready" }
+      ]
     }
   ]
 }

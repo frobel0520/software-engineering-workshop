@@ -35,8 +35,8 @@ describe("progress aggregation", () => {
     const result = aggregateProgress(curriculum, repository);
 
     expect(result.coreProgress).toEqual({ kind: "core", total: 19, ready: coreReadyTopicIds.length, completed: 3, percent: 16 });
-    expect(result.extensionProgress).toEqual({ kind: "extension", total: 1, ready: 1, completed: 0, percent: 0 });
-    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail"]);
+    expect(result.extensionProgress).toEqual({ kind: "extension", total: 2, ready: 2, completed: 0, percent: 0 });
+    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail", "problem-solving"]);
   });
 
   it("does not count planned topics even when the repository contains a value", () => {
@@ -44,8 +44,8 @@ describe("progress aggregation", () => {
     const result = aggregateProgress(curriculum, repository);
 
     expect(result.coreProgress.completed).toBe(coreReadyTopicIds.length);
-    expect(result.extensionProgress.completed).toBe(1);
-    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail"]);
+    expect(result.extensionProgress.completed).toBe(2);
+    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail", "problem-solving"]);
   });
 
   it("calculates extension progress independently from Core", () => {
