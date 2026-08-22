@@ -49,7 +49,11 @@ function envFileLines(state: EnvLabState, fileId: EnvFileId): readonly string[] 
   if (fileId === "env-local" && !state.loadedFiles.includes("env-local")) {
     return ["// .env.local 尚未建立", "// 執行 cp .env.example .env.local"]; 
   }
-  return envFileFixtures.find((file) => file.id === fileId)?.lines ?? [];
+  const file = envFileFixtures.find((candidate) => candidate.id === fileId);
+  if (!file) {
+    throw new Error(`Unknown environment file fixture: ${fileId}`);
+  }
+  return file.lines;
 }
 
 export function envLabProgress(state: EnvLabState): number {

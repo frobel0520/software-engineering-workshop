@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createInitialGitReleaseState,
+  isGitProvider,
   isGitReleaseComplete,
   runGitReleaseCommand,
   runGitReleaseEvent,
@@ -16,6 +17,12 @@ function runCommands(commands: readonly string[]): GitReleaseState {
 }
 
 describe("Git cowork release simulator", () => {
+  it("accepts only supported provider values at the input boundary", () => {
+    expect(isGitProvider("github")).toBe(true);
+    expect(isGitProvider("gitlab")).toBe(true);
+    expect(isGitProvider("bitbucket")).toBe(false);
+  });
+
   it("completes the local-to-pipeline cowork workflow", () => {
     const state = runCommands([
       "Fork repository",
