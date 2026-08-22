@@ -15,7 +15,7 @@ describe("topic view registry", () => {
   });
 
   it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("index")).toBeUndefined();
+    expect(getTopicViewModule("nosql")).toBeUndefined();
   });
 
   it("requires every ready topic to answer the four orientation questions", () => {
