@@ -9,6 +9,7 @@ const routeCurriculum: Curriculum = {
       id: "foundations",
       title: "Foundations",
       description: "Core topics",
+      kind: "core",
       topics: [
         { id: "git", title: "Git", summary: "Version control", status: "ready" },
         { id: "env", title: "Environment", summary: "Configuration", status: "planned" },

@@ -1,7 +1,7 @@
 import type { Curriculum } from "../types";
 
 export function CurriculumMap({ curriculum, onOpenTrack }: { curriculum: Curriculum; onOpenTrack: (trackId: string) => void }) {
-  const topicCount = curriculum.tracks.filter((track) => (track.kind ?? "core") === "core").reduce((total, track) => total + track.topics.length, 0);
+  const topicCount = curriculum.tracks.filter((track) => track.kind === "core").reduce((total, track) => total + track.topics.length, 0);
 
   return (
     <div className="page page-map">
