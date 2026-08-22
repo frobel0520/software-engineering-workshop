@@ -4,7 +4,7 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop`。
 
-目前可操作的 Core 主題有 13 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。其餘 6 個 Core 主題保留在課程路線圖。
+目前可操作的 Core 主題有 14 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**、**單元測試**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。其餘 5 個 Core 主題保留在課程路線圖。
 
 ## Git 單元
 
@@ -29,6 +29,7 @@
 - 環境變數：練習 `.env.example`、`.env.local`、Vite 公開邊界、fail-fast 驗證與 git 保護。
 - 建置工具：練習 TypeScript gate、Vite production bundle、GitHub Pages base path、dist artifact 與 preview。
 - REST API／FastAPI：逐行追蹤 React fetch、routing、validation、dependency、SQLModel／SQLite 與 JSON response。
+- 單元測試：用 unit boundary、Arrange／Act／Assert、red／green、edge case 與 regression suite 建立快速回饋。
 - Guardrails Extension：模擬輸入、輸出與工具呼叫的安全防線，不連線真實模型。
 - 問題處理 Extension：從問題定義、重現、蒐證、假設、錯誤邊界到驗證與預防復發。
 

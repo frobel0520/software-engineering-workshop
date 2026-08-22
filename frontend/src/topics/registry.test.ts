@@ -15,7 +15,7 @@ describe("topic view registry", () => {
   });
 
   it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("unit")).toBeUndefined();
+    expect(getTopicViewModule("integration")).toBeUndefined();
   });
 
   it("requires every ready topic to answer the four orientation questions", () => {
