@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import curriculumData from "@shared/curriculum.json";
+import { curriculum } from "./curriculum";
 import { aggregateProgress, completedReadyTopicIds } from "./progress/aggregation";
 import { createLocalStorageProgressRepository } from "./progress/repository";
 import { parseRoute, resolveRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
@@ -7,9 +7,6 @@ import { TOPIC_MODULE_IDS } from "./topics/registry";
 import { CurriculumMap } from "./components/CurriculumMap";
 import { TrackPage } from "./components/TrackPage";
 import { TopicRouteView } from "./components/TopicRouteView";
-import type { Curriculum } from "./types";
-
-const curriculum = curriculumData as Curriculum;
 
 function routeLabel(route: RouteDefinition): string {
   if (route.kind === "map") return "MAP";
@@ -96,6 +93,7 @@ export default function App() {
           <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
           <button className={route.path === "/rest-lab" ? "active" : ""} type="button" onClick={() => goTopic("rest", "lab")}><span>↳</span>FastAPI Lab</button>
           <button className={route.path === "/sql-lab" ? "active" : ""} type="button" onClick={() => goTopic("sql", "lab")}><span>↳</span>SQL Lab</button>
+          <button className={route.path === "/schema-lab" ? "active" : ""} type="button" onClick={() => goTopic("schema", "lab")}><span>↳</span>Schema Lab</button>
         </nav>
         <div className="nav-label">EXTENSION / AI</div>
         <nav>

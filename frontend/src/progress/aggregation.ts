@@ -23,7 +23,7 @@ export function completedReadyTopicIds(curriculum: Curriculum, repository: Progr
 }
 
 function summarize(curriculum: Curriculum, repository: ProgressRepository, kind: TrackKind): TrackProgress {
-  const tracks = curriculum.tracks.filter((track) => (track.kind ?? "core") === kind);
+  const tracks = curriculum.tracks.filter((track) => track.kind === kind);
   const topics = tracks.flatMap((track) => track.topics);
   const readyTopics = topics.filter((topic) => topic.status === "ready");
   const completed = readyTopics.filter((topic) => repository.read(topic.id)).length;

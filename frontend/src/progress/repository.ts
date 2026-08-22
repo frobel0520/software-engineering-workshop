@@ -13,14 +13,21 @@ type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
 const topicIdPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+function isProtectedTopicId(topicId: string): topicId is keyof typeof PROTECTED_COMPLETION_KEYS {
+  return topicId === "git" || topicId === "auth";
+}
+
 export function completionKeyFor(topicId: string): string {
   const normalizedTopicId = topicId.trim();
   if (!topicIdPattern.test(normalizedTopicId)) {
     throw new Error(`Invalid topic id: ${topicId}`);
   }
 
-  return PROTECTED_COMPLETION_KEYS[normalizedTopicId as keyof typeof PROTECTED_COMPLETION_KEYS]
-    ?? `se-workshop-${normalizedTopicId}-complete`;
+  if (isProtectedTopicId(normalizedTopicId)) {
+    return PROTECTED_COMPLETION_KEYS[normalizedTopicId];
+  }
+
+  return `se-workshop-${normalizedTopicId}-complete`;
 }
 
 export function createLocalStorageProgressRepository(
