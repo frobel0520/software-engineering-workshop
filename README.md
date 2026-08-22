@@ -4,7 +4,7 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop`。
 
-目前可操作的 Core 主題有 13 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**單元測試**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。其餘 6 個 Core 主題保留在課程路線圖。
+目前可操作的 Core 主題有 14 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**、**單元測試**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。其餘 5 個 Core 主題保留在課程路線圖。
 
 ## Git 單元
 
