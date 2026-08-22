@@ -18,7 +18,7 @@
 ## 2. 現況基線
 
 - 課程清單：`shared/curriculum.json`，共 19 個主題
-- Core 已開放：Git、GitHub／GitLab 遠端協作、命令列、IDE／除錯器、套件管理、環境變數、建置工具、REST API／FastAPI、身分驗證與授權，共 9 / 19
+- Core 已開放：Git、GitHub／GitLab 遠端協作、命令列、IDE／除錯器、套件管理、環境變數、建置工具、REST API／FastAPI、身分驗證與授權、SQL、資料庫設計、索引與交易，共 12 / 19
 - Git v1 release gate：已完成 cowork／pipeline、keyboard、mobile、200% zoom 與 reduced-motion 驗收，`GIT-REVIEW` 已於 2026-08-16 通過。
 - Extension 已開放：Guardrails，共 1 個；不計入 Core 19 的完成分母
 - 學習者完成數：依瀏覽器 `localStorage` 個別計算，不在專案文件中固定寫死
@@ -97,9 +97,9 @@
 
 ### Phase 2：資料庫
 
-- SQL
-- 資料庫設計
-- 索引與交易
+- SQL（已完成）
+- 資料庫設計（已完成）
+- 索引與交易（已完成）
 - NoSQL 基礎
 
 ### Phase 3：品質與可觀測性
