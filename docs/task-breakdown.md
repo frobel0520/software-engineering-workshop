@@ -35,7 +35,7 @@ Task 不等於檔案。若一個 task 同時需要修改多個檔案，但輸出
 | M0 | Project Contract | Project Plan、SA、SD、task breakdown 可供開發對齊 | 無 | done |
 | M1 | Module Foundation | 新 topic 可依共同契約接入 route、progress、Lab、tests | M0 | done（P2 架構 follow-up） |
 | M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | in progress |
-| M3 | Data | SQL、schema、index／transaction、NoSQL 開放 | M1 | planned |
+| M3 | Data | SQL、schema、index／transaction、PostgreSQL 開放 | M1 | planned |
 | M4 | Quality | unit、integration、logs 開放 | M1 | planned |
 | M5 | Delivery | Docker、CI/CD、deploy 開放 | M1、既有 CI／Pages baseline | planned |
 | M6 | Hardening／Release | 19 主題一致性、回歸、文件與正式發布完成 | M2–M5 | planned |
@@ -165,11 +165,11 @@ Guardrail 的完成狀態與 Core progress 分離；未來其他 Extension topic
 | sql | SQL | SQL |
 | schema | 資料庫設計 | SCHEMA |
 | index | 索引與交易 | INDEX |
-| nosql | NoSQL 基礎 | NOSQL |
+| postgresql | PostgreSQL | PGSQL |
 
 每個 topic 使用 Topic Task Packet 五個 task。資料庫主題第一版仍以 fixture／模擬資料呈現，不因教學內容而提前引入正式 database。
 
-建議學習順序是 `SQL → Schema → Index／Transaction`，`NoSQL` 可與 `Schema` 平行開發。這是 soft dependency；只有實際共用的 fixture 或 module contract 才建立 hard dependency。
+建議學習順序是 `SQL → Schema → Index／Transaction → PostgreSQL`。這是 soft dependency；只有實際共用的 fixture 或 module contract 才建立 hard dependency。
 
 ## 10. M4：Quality Backlog
 
