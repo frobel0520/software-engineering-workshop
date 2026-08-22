@@ -46,6 +46,10 @@ describe("route registry", () => {
     expect(parseRoute("#/package-lab")).toEqual({ path: "/package-lab", kind: "lab", topicId: "package" });
     expect(topicPath("package", "lesson")).toBe("/package");
     expect(topicPath("package", "lab")).toBe("/package-lab");
+    expect(parseRoute("#/problem-solving")).toEqual({ path: "/problem-solving", kind: "lesson", topicId: "problem-solving" });
+    expect(parseRoute("#/problem-solving-lab")).toEqual({ path: "/problem-solving-lab", kind: "lab", topicId: "problem-solving" });
+    expect(topicPath("problem-solving", "lesson")).toBe("/problem-solving");
+    expect(topicPath("problem-solving", "lab")).toBe("/problem-solving-lab");
   });
 
   it("falls back to the map for unknown or unsafe paths", () => {

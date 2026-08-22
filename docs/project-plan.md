@@ -20,7 +20,7 @@
 - 課程清單：`shared/curriculum.json`，共 19 個主題
 - Core 已開放：Git、GitHub／GitLab 遠端協作、命令列、IDE／除錯器、套件管理、環境變數、建置工具、REST API／FastAPI、身分驗證與授權、SQL、資料庫設計、索引與交易、PostgreSQL，共 13 / 19
 - Git v1 release gate：已完成 cowork／pipeline、keyboard、mobile、200% zoom 與 reduced-motion 驗收，`GIT-REVIEW` 已於 2026-08-16 通過。
-- Extension 已開放：Guardrails，共 1 個；不計入 Core 19 的完成分母
+- Extension 已開放：Guardrails、問題處理方法，共 2 個；不計入 Core 19 的完成分母
 - 學習者完成數：依瀏覽器 `localStorage` 個別計算，不在專案文件中固定寫死
 - 前端：Vite + React + TypeScript，靜態站點
 - 持久化：瀏覽器 `localStorage`
@@ -94,6 +94,7 @@
 ### Extension track
 
 - Guardrails／AI／LLM Engineering（已完成；不改變 Core 19 的學習順序與完成統計）
+- 問題處理方法（已完成；不改變 Core 19 的學習順序與完成統計）
 
 ### Phase 2：資料庫
 
