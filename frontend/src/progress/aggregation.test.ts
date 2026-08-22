@@ -80,8 +80,8 @@ describe("progress aggregation", () => {
     expect(result.extensionProgress).toMatchObject({ total: 2, ready: 1, completed: 1, percent: 50 });
   });
 
-  it("ignores completion keys for planned topics", () => {
-    const repository = new MemoryProgressRepository(new Set(["git", "integration"]));
+  it("ignores completion keys for still-planned topics", () => {
+    const repository = new MemoryProgressRepository(new Set(["git", "logs"]));
 
     expect(completedReadyTopicIds(curriculum, repository)).toEqual(["git"]);
   });
