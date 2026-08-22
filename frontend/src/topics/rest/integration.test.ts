@@ -20,7 +20,7 @@ describe("REST topic integration", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["rest"]));
 
     expect(completionKeyFor("rest")).toBe("se-workshop-rest-complete");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 11, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 12, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });
