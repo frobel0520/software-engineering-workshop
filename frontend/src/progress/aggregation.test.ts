@@ -81,7 +81,7 @@ describe("progress aggregation", () => {
   });
 
   it("ignores completion keys for planned topics", () => {
-    const repository = new MemoryProgressRepository(new Set(["git", "nosql"]));
+    const repository = new MemoryProgressRepository(new Set(["git", "integration"]));
 
     expect(completedReadyTopicIds(curriculum, repository)).toEqual(["git"]);
   });

@@ -35,7 +35,7 @@
         { "id": "sql", "title": "SQL", "summary": "SELECT、篩選、聚合與排序", "status": "ready" },
         { "id": "schema", "title": "資料庫設計", "summary": "資料表、主鍵、外鍵與完整性", "status": "ready" },
         { "id": "index", "title": "索引與交易", "summary": "效能與一致性", "status": "ready" },
-        { "id": "nosql", "title": "NoSQL 基礎", "summary": "不同資料形狀的取捨", "status": "planned" }
+        { "id": "postgresql", "title": "PostgreSQL", "summary": "型別、JSONB、RETURNING 與交易", "status": "ready" }
       ]
     },
     {
