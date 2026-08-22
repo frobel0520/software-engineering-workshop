@@ -9,14 +9,14 @@ describe("CLI topic integration contract", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository());
 
     expect(cli?.status).toBe("ready");
-    expect(progress.coreProgress.ready).toBe(14);
+    expect(progress.coreProgress.ready).toBe(15);
     expect(progress.coreProgress.completed).toBe(0);
   });
 
   it("persists CLI completion as Core progress without changing the denominator", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["cli"]));
 
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 14, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 15, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });
