@@ -76,7 +76,7 @@ export const schemaLesson: LessonDefinition = {
     what: "資料庫 schema 是資料模型的契約；它描述有哪些實體、欄位、主鍵、外鍵與完整性規則。",
     why: "把規則寫在資料形狀裡，能減少重複、孤兒資料與每個服務各自猜欄位的風險。",
     when: "新增功能、拆分資料表、設計 API model、寫 migration，或需要檢查資料關係時使用。",
-    how: "先找出實體，再選穩定主鍵，連接外鍵，標記 required／nullable，最後用 fixture 驗證完整性。",
+    how: "先找出實體，再選穩定主鍵，連接外鍵，標記 required／nullable，最後用測試資料驗證完整性。",
   },
   objectives: [
     "把需求拆成 projects 與 tasks 兩個清楚的資料實體。",
@@ -103,7 +103,7 @@ export const schemaLesson: LessonDefinition = {
     {
       id: "protect-integrity",
       title: "最後決定 required 與 nullable",
-      body: "title 與 project_id 是建立 task 必須有的資料；assignee 與 completed_at 可以暫時沒有值。最後用 fixture 檢查主鍵唯一、外鍵存在與 required 欄位不為空。",
+      body: "title 與 project_id 是建立 task 必須有的資料；assignee 與 completed_at 可以暫時沒有值。最後用測試資料檢查主鍵唯一、外鍵存在與 required 欄位不為空。",
     },
   ],
 };
@@ -141,7 +141,7 @@ export const schemaLessonSteps: readonly SchemaLessonStep[] = [
     id: "validate-integrity",
     title: "驗證資料完整性",
     code: "CHECK PK unique · FK exists · required fields present",
-    explanation: "用固定 fixture 驗證 primary key 沒重複、foreign key 沒有 orphan、required 欄位沒有空值。",
+    explanation: "用測試資料驗證 primary key 沒重複、foreign key 沒有 orphan、required 欄位沒有空值。",
     takeaway: "schema 的完成條件是規則可被檢查，不是圖畫得漂亮。",
   },
 ] as const;
@@ -220,7 +220,7 @@ export const schemaResults: Readonly<Record<SchemaStepId, SchemaResult>> = {
     id: "validate-integrity",
     columns: ["check", "result", "evidence"],
     rows: [
-      ["primary keys", "PASS", "7 unique ids across fixture tables"],
+      ["primary keys", "PASS", "7 unique ids across tables"],
       ["foreign keys", "PASS", "4 task project_id values resolve"],
       ["required fields", "PASS", "project.name, project_id and title are present"],
       ["nullable fields", "PASS", "NULL means not assigned / not finished"],
@@ -249,5 +249,5 @@ export interface SchemaFailureFixture {
 export const schemaFailureFixtures: readonly SchemaFailureFixture[] = [
   { event: "define-keys", message: "請先拆出 projects 與 tasks，再為每張表設定 key。" },
   { event: "link-project-task", message: "請先為兩張表建立 primary key，foreign key 才有可指向的目標。" },
-  { event: "validate-integrity", message: "請先標記 required 與 nullable，再檢查 fixture 的完整性。" },
+  { event: "validate-integrity", message: "請先標記 required 與 nullable，再檢查資料完整性。" },
 ] as const;

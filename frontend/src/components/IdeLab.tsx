@@ -26,7 +26,7 @@ interface DebugHistoryEntry {
 }
 
 const IDE_ACTIONS: readonly IdeAction[] = [
-  { id: "open", label: "開啟固定檔案", command: "open src/order.ts" },
+  { id: "open", label: "開啟檔案", command: "open src/order.ts" },
   { id: "breakpoint", label: "設定第 3 行 breakpoint", command: "breakpoint 3" },
   { id: "run", label: "啟動 calculateTotal", command: "run calculateTotal(10, 2, 3)" },
   { id: "inspect", label: "檢查目前 variables", command: "inspect variables" },
@@ -34,9 +34,7 @@ const IDE_ACTIONS: readonly IdeAction[] = [
   { id: "continue", label: "繼續到程式結束", command: "continue" },
 ];
 
-const initialHistory: readonly DebugHistoryEntry[] = [
-  { lines: ["IDE Workshop sandbox v1", "固定 order.ts fixture 已準備好。選擇一個 debugger action 開始。"] },
-];
+const initialHistory: readonly DebugHistoryEntry[] = [];
 
 function statusTone(state: IdeLabState): TopicStatusTone {
   if (state.phase === "completed") return "success";
@@ -88,12 +86,13 @@ export function IdeLab({ onComplete }: { onComplete?: () => void }) {
   function reset() {
     setIde(createIdeLabState());
     setCommand("");
-    setHistory([{ lines: ["Sandbox 已重設。從開啟 src/order.ts 重新開始。"] }]);
+    setHistory([{ lines: ["已重設。從開啟 src/order.ts 重新開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / IDE"
+      className="foundation-lab-shell"
+      showMeta={false}
       title={<>用除錯器看見<br /><em>程式正在做什麼</em></>}
       progressLabel={completed ? "完成" : `${completedCount} / ${IDE_ACTIONS.length}`}
       progress={Math.round((completedCount / IDE_ACTIONS.length) * 100)}
@@ -104,12 +103,12 @@ export function IdeLab({ onComplete }: { onComplete?: () => void }) {
       {completed ? (
         <TopicCompletionCard
           title="Debug 流程完成"
-          description="你已能設定 breakpoint、讀取 paused frame、逐行觀察 variables，並用 continue 完成固定函式。"
+          description="你已能設定 breakpoint、讀取 paused frame、逐行觀察 variables，並用 continue 完成函式。"
           onReset={reset}
         />
       ) : (
         <div className="ide-lab-layout">
-          <section className="ide-editor-panel" aria-label="IDE editor fixture">
+          <section className="ide-editor-panel" aria-label="IDE 編輯器">
             <div className="ide-editor-top">
               <span className="ide-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>{ide.selectedFile ?? "workspace"}</b>
@@ -161,9 +160,9 @@ export function IdeLab({ onComplete }: { onComplete?: () => void }) {
             <p id="ide-command-help" className="sr-only">可輸入教材中的 debugger 指令，或使用右側 mission buttons。</p>
           </section>
 
-          <aside className="ide-control-panel" aria-label="Debugger controls">
+          <aside className="ide-control-panel" aria-label="除錯操作">
             <div className="ide-panel-heading">
-              <div><p className="kicker">DEBUGGER CONTROL</p><h2>依序收集執行線索</h2></div>
+              <div><h2>依序收集執行線索</h2></div>
               <span className="ide-lab-meta">{ide.selectedFile ?? "no file"}</span>
             </div>
             <div className="ide-action-list">
@@ -185,13 +184,13 @@ export function IdeLab({ onComplete }: { onComplete?: () => void }) {
                 );
               })}
             </div>
-            <p className="ide-current-hint">目前任務：{currentAction.label}。按鈕只派送 deterministic event，不會啟動真實 debugger。</p>
+            <p className="ide-current-hint">目前任務：{currentAction.label}。</p>
           </aside>
         </div>
       )}
 
       <section className="ide-debug-state" aria-labelledby="ide-debug-state-title">
-        <div className="section-heading"><div><p className="kicker">LIVE DEBUG STATE</p><h2 id="ide-debug-state-title">目前的執行線索</h2></div><p>只顯示 simulator 狀態，不連接本機 process。</p></div>
+        <div className="section-heading"><div><h2 id="ide-debug-state-title">目前的執行線索</h2></div></div>
         <div className="ide-state-grid">
           <div><small>PHASE</small><b>{ide.phase}</b></div>
           <div><small>CURRENT LINE</small><b>{ide.currentLine ?? "—"}</b></div>

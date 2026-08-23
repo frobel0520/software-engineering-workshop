@@ -41,7 +41,7 @@ describe("Logs deterministic simulator", () => {
       redactionCheck: "pending",
       terminalOutcome: null,
       lastFeedback: "none",
-      lastMessage: "請先選擇固定 Logs scenario，再逐筆 inspect event。",
+      lastMessage: "請先選擇 Logs scenario，再逐筆 inspect event。",
       canReset: true,
     });
     expect(result.accepted).toBe(false);

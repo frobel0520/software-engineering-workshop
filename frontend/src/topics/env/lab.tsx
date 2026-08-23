@@ -17,9 +17,7 @@ interface EnvHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly EnvHistoryEntry[] = [
-  { lines: ["Environment sandbox v1", "固定 .env fixture 已準備好。請依序檢查設定來源與公開邊界。"] },
-];
+const INITIAL_HISTORY: readonly EnvHistoryEntry[] = [];
 
 function eventForStep(stepId: EnvStepId): EnvLabEvent {
   return envLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -101,12 +99,13 @@ export function EnvLab({ onComplete }: { onComplete?: () => void }) {
     setState(createInitialEnvState());
     setCommand("");
     setSelectedFile("env-example");
-    setHistory([{ lines: ["ENV Lab 已重設。從 cat .env.example 重新開始。"] }]);
+    setHistory([{ lines: ["已重設。從 cat .env.example 重新開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / ENV"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓設定跟著環境走<br /><em>但別把秘密打包</em></>}
       progressLabel={`${completedCount} / ${envLessonSteps.length} STEPS`}
       progress={envLabProgress(state)}
@@ -122,13 +121,13 @@ export function EnvLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="env-lab-grid">
-          <section className="env-workspace-panel" aria-label="Environment workspace fixture">
+          <section className="env-workspace-panel" aria-label="Environment workspace">
             <div className="env-workspace-top">
               <span className="env-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-env-lab</b>
               <span className="env-phase">{state.phase}</span>
             </div>
-            <div className="env-file-tabs" role="tablist" aria-label="Environment fixture files">
+            <div className="env-file-tabs" role="tablist" aria-label="Environment files">
               {envFileFixtures.map((file) => (
                 <button
                   className={selectedFile === file.id ? "active" : ""}
@@ -142,7 +141,7 @@ export function EnvLab({ onComplete }: { onComplete?: () => void }) {
                 </button>
               ))}
             </div>
-            <div className="env-editor" role="region" aria-label={`${selectedFile} fixture`}>
+            <div className="env-editor" role="region" aria-label={selectedFile}>
               {envFileLines(state, selectedFile).map((line, index) => (
                 <div className="env-code-line" key={`${selectedFile}-${index}`}>
                   <span>{String(index + 1).padStart(2, "0")}</span><code>{line || " "}</code>
@@ -175,8 +174,8 @@ export function EnvLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="env-control-panel" aria-label="Environment controls">
             <div className="env-panel-heading">
-              <div><p className="kicker">ENV CONTROL</p><h2>從來源走到安全邊界</h2></div>
-              <span className="env-lab-meta">Vite mode<br />fixture only</span>
+              <div><h2>從來源走到安全邊界</h2></div>
+              <span className="env-lab-meta">Vite mode</span>
             </div>
             <div className="env-action-list">
               {envLessonSteps.map((step, index) => {
@@ -197,13 +196,13 @@ export function EnvLab({ onComplete }: { onComplete?: () => void }) {
                 );
               })}
             </div>
-            <p className="env-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察 simulator 如何保留狀態並提示原因。</p>
+            <p className="env-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察狀態如何保留並提示原因。</p>
           </aside>
         </div>
       )}
 
       <section className="env-state-section" aria-labelledby="env-state-title">
-        <div className="section-heading"><div><p className="kicker">LIVE ENV STATE</p><h2 id="env-state-title">目前的設定線索</h2></div><p>只顯示 simulator 狀態，不讀取真實 .env。</p></div>
+        <div className="section-heading"><div><h2 id="env-state-title">目前的設定線索</h2></div></div>
         <div className="env-state-grid">
           <div><small>SOURCE</small><b>{state.configState}</b></div>
           <div><small>EXPOSURE</small><b>{state.exposureState}</b></div>

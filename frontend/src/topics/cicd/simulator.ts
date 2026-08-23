@@ -214,7 +214,7 @@ export function createInitialCicdState(): CicdLabState {
     regressionVerified: false,
     resetSinceBaseline: false,
     resetCount: 0,
-    lastFeedback: "請先選擇一個 CI/CD deterministic scenario。",
+    lastFeedback: "請先選擇一個 CI/CD scenario。",
     lastCommand: null,
     canReset: true,
   };
@@ -231,7 +231,7 @@ export function resetCicdLab(previous?: CicdLabState): CicdLabState {
     regressionVerified: previous.regressionVerified,
     resetSinceBaseline: previous.resetSinceBaseline || previous.regressionBaselineSignature !== null,
     resetCount: previous.resetCount + 1,
-    lastFeedback: "CI/CD Lab 已重設；可以選擇下一個固定 pipeline scenario。",
+    lastFeedback: "CI/CD Lab 已重設；可以選擇下一個 pipeline scenario。",
   };
 }
 
@@ -255,7 +255,7 @@ export function runCicdEvent(current: CicdLabState, event: CicdLabEvent): CicdEv
 
   if (event.type === "select-scenario") {
     const scenario = cicdScenarioFixtures.find((candidate) => candidate.id === event.scenarioId);
-    if (!scenario) return failed(current, "select-scenario", "請選擇一個有效的 CI/CD deterministic scenario。 ");
+    if (!scenario) return failed(current, "select-scenario", "請選擇一個有效的 CI/CD scenario。 ");
     if (current.selectedScenarioId && current.completedStageIds.length > 0) {
       return blocked(current, "select-scenario", "目前 scenario 尚未 reset；先完成或重設目前的 pipeline flow。 ");
     }
@@ -311,7 +311,7 @@ export function runCicdEvent(current: CicdLabState, event: CicdLabEvent): CicdEv
       return accepted(
         state,
         { phase: "running", activeStageId: "install-dependencies", completedStageIds: withStage(state, event.type), lastCommand: commandFor(event.type) },
-        "fixture source ref 已 checkout；可以建立依賴安裝 context。",
+        "source ref 已 checkout；可以建立依賴安裝 context。",
         [`source ref: ${cicdFixture.sourceRef}`, "checkout: passed", "next: npm ci"],
       );
     case "install-dependencies":

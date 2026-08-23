@@ -56,7 +56,7 @@ describe("Docker deterministic simulator", () => {
       selectedScenarioId: "static-site-success",
       imageState: "built",
       imageTag: "workshop-web:1",
-      imageDigest: "sha256:docker-fixture-001",
+      imageDigest: "sha256:docker-image-001",
       containerState: "removed",
       portMapping: "published",
       probeState: "success",

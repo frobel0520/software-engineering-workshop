@@ -117,7 +117,7 @@ export function runSchemaEvent(current: SchemaLabState, event: SchemaLabEvent): 
           ? "請先為兩張表建立 primary key，foreign key 才有可指向的目標。"
           : event.type === "mark-nullable"
             ? "請先連接 project 與 task，再決定哪些欄位可以是 NULL。"
-            : "請先標記 required 與 nullable，再檢查 fixture 的完整性。";
+            : "請先標記 required 與 nullable，再檢查資料完整性。";
     return blocked(current, event.type, message);
   }
 
