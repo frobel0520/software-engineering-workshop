@@ -35,6 +35,8 @@ describe("Deploy lesson contract", () => {
       repositoryBasePath: "/software-engineering-workshop/",
     });
     expect(deployWorkflowFixture.lines).toContain("publish_branch: gh-pages");
+    expect(deployWorkflowFixture.lines).toContain("npm test && npm run build:pages · cwd frontend");
+    expect(deployLessonSteps.find((step) => step.id === "verify-pages-base")?.command).toBe("cat frontend/.env.pages");
     expect(deployLessonSteps).toHaveLength(8);
     expect(deployStageFixtures.map((fixture) => fixture.id)).toEqual(deployLessonSteps.map((step) => step.id));
     expect(deployStageFixtures.every((fixture) => fixture.successEvidence.length > 0 && fixture.failureEvidence.length > 0)).toBe(true);

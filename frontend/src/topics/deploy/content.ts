@@ -106,8 +106,8 @@ export const deployLessonSteps: readonly DeployLessonStep[] = [
     id: "verify-pages-base",
     sectionId: "artifact-provenance",
     title: "驗證 Pages base path",
-    command: "VITE_BASE=/software-engineering-workshop/",
-    explanation: "確認 Vite base path 與 repository path 一致，避免 HTML 成功 publish 但資源 URL 指錯位置。",
+    command: "cat frontend/.env.pages",
+    explanation: "確認 pages build profile 的 VITE_BASE 與 repository path 一致，避免 HTML 成功 publish 但資源 URL 指錯位置。",
     takeaway: "Artifact 的可用性包含它會被部署到哪個 path。",
   },
   {
@@ -164,8 +164,8 @@ export const deployWorkflowFixture = {
     "actions/checkout@v4",
     "actions/setup-node@v4 · node 22 · cache npm",
     "npm ci · cwd frontend",
-    "npm test && npm run build · cwd frontend",
-    "VITE_BASE: /software-engineering-workshop/",
+    "npm test && npm run build:pages · cwd frontend",
+    "mode: pages · frontend/.env.pages",
     "peaceiris/actions-gh-pages@v4 · publish_dir frontend/dist",
     "publish_branch: gh-pages",
   ],
@@ -265,7 +265,7 @@ export interface DeployFailureFixture {
 
 export const deployFailureFixtures: readonly DeployFailureFixture[] = [
   { command: "artifact: frontend/dist", message: "frontend/dist missing；gh-pages 保持上一個 verified version。", expectedBoundary: "CI / artifact" },
-  { command: "VITE_BASE=/software-engineering-workshop/", message: "base path 尚未 verified；不能把 publish 當成 live。", expectedBoundary: "base path" },
+  { command: "cat frontend/.env.pages", message: "Pages build profile 尚未 verified；不能把 publish 當成 live。", expectedBoundary: "base path" },
   { command: "probe /software-engineering-workshop/", message: "live probe failed；candidate release 需要 rollback。", expectedBoundary: "live probe" },
   { command: "evaluate release / rollback", message: "failed release 尚未完成 rollback evidence，release 維持 blocked。", expectedBoundary: "verify / rollback" },
 ] as const;

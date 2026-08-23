@@ -66,8 +66,8 @@ export const buildLessonSteps: readonly BuildLessonStep[] = [
   {
     id: "bundle",
     title: "產出 production bundle",
-    command: "VITE_BASE=/software-engineering-workshop/ npm run build",
-    explanation: "用 Pages 的公開 base path 執行正式建置，將 source 轉成可部署的 dist artifact。",
+    command: "npm run build:pages",
+    explanation: "用 pages mode 載入 frontend/.env.pages 的公開 base path，將 source 轉成可部署的 dist artifact。",
     takeaway: "部署路徑是 build input，不能等上線後才猜。",
   },
   {
@@ -125,6 +125,7 @@ export const buildFileFixtures: readonly BuildFileFixture[] = [
     lines: [
       '"lint": "tsc --noEmit",',
       '"build": "tsc -b && vite build",',
+      '"build:pages": "tsc -b && vite build --mode pages",',
       '"preview": "vite preview"',
     ],
   },
@@ -132,8 +133,8 @@ export const buildFileFixtures: readonly BuildFileFixture[] = [
     id: "vite-config",
     name: "vite.config.ts",
     lines: [
-      "export default defineConfig({",
-      '  base: process.env.VITE_BASE ?? "/",',
+      'const env = loadEnv(mode, frontendRoot, "");',
+      '  base: process.env.VITE_BASE ?? env.VITE_BASE ?? "/",',
       "  plugins: [react()],",
       "});",
     ],
@@ -172,7 +173,7 @@ export interface BuildFailureFixture {
 
 export const buildFailureFixtures: readonly BuildFailureFixture[] = [
   {
-    command: "npm run build",
+    command: "npm run build:pages",
     message: "請先通過 TypeScript gate，再產出 production bundle。",
     expectedPhase: "blocked",
   },
