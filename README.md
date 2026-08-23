@@ -4,7 +4,7 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop`。
 
-目前可操作的 Core 主題有 18 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**、**單元測試**、**整合測試**、**日誌**、**Docker 基礎**、**CI/CD**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。剩下 1 個 Core 主題保留在課程路線圖。
+目前可操作的 Core 主題有 19 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**、**單元測試**、**整合測試**、**日誌**、**Docker 基礎**、**CI/CD**、**部署**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。Core 19 個主題全部開放。
 
 ## Git 單元
 
@@ -33,6 +33,7 @@
 - 整合測試：用 module contract、deterministic fixture、success／failure scenario 與 boundary evidence 驗證模組協作。
 - 日誌：用結構化事件、severity、correlationId、safe context 與 redaction 留下可追蹤線索。
 - CI/CD：用固定 workflow、trigger／ref、ordered gates、failure boundary、required check 與 merge gate 重跑交付檢查。
+- 部署：用 main release、frontend/dist、GitHub Pages、live probe、release record 與 rollback 驗證可觀測交付。
 - Guardrails Extension：模擬輸入、輸出與工具呼叫的安全防線，不連線真實模型。
 - 問題處理 Extension：從問題定義、重現、蒐證、假設、錯誤邊界到驗證與預防復發。
 

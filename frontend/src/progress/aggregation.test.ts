@@ -81,8 +81,21 @@ describe("progress aggregation", () => {
   });
 
   it("ignores completion keys for still-planned topics", () => {
+    const plannedCurriculum: Curriculum = {
+      version: 1,
+      tracks: [{
+        id: "core-track",
+        title: "Core",
+        description: "Core topics",
+        kind: "core",
+        topics: [
+          { id: "git", title: "Git", summary: "Version control", status: "ready" },
+          { id: "deploy", title: "Deploy", summary: "Release", status: "planned" },
+        ],
+      }],
+    };
     const repository = new MemoryProgressRepository(new Set(["git", "deploy"]));
 
-    expect(completedReadyTopicIds(curriculum, repository)).toEqual(["git"]);
+    expect(completedReadyTopicIds(plannedCurriculum, repository)).toEqual(["git"]);
   });
 });

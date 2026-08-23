@@ -23,6 +23,8 @@ import { DockerLab } from "./docker/lab";
 import { DockerLesson } from "./docker/lesson";
 import { CicdLab } from "./cicd/lab";
 import { CicdLesson } from "./cicd/lesson";
+import { DeployLab } from "./deploy/lab";
+import { DeployLesson } from "./deploy/lesson";
 import { SqlLab } from "./sql/lab";
 import { SqlLesson } from "./sql/lesson";
 import { SchemaLab } from "./schema/lab";
@@ -51,6 +53,7 @@ import { envLesson } from "./env/content";
 import { buildLesson } from "./build/content";
 import { dockerLesson } from "./docker/content";
 import { cicdLesson } from "./cicd/content";
+import { deployLesson } from "./deploy/content";
 import { sqlLesson } from "./sql/content";
 import { schemaLesson } from "./schema/content";
 import { indexLesson } from "./index/content";
@@ -91,6 +94,7 @@ export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = 
   build: { id: "build", orientation: buildLesson.orientation, lesson: BuildLesson, lab: BuildLab },
   docker: { id: "docker", orientation: dockerLesson.orientation, lesson: DockerLesson, lab: DockerLab },
   cicd: { id: "cicd", orientation: cicdLesson.orientation, lesson: CicdLesson, lab: CicdLab },
+  deploy: { id: "deploy", orientation: deployLesson.orientation, lesson: DeployLesson, lab: DeployLab },
   sql: { id: "sql", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
   schema: { id: "schema", orientation: schemaLesson.orientation, lesson: SchemaLesson, lab: SchemaLab },
   index: { id: "index", orientation: indexLesson.orientation, lesson: IndexLesson, lab: IndexLab },

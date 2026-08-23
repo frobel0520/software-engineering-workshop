@@ -57,7 +57,7 @@
       "topics": [
         { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "ready" },
         { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "ready" },
-        { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "planned" }
+        { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "ready" }
       ]
     },
     {
