@@ -28,7 +28,7 @@ describe("Logs topic integration contract", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["logs"]));
 
     expect(completionKeyFor("logs")).toBe("se-workshop-logs-complete");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 17, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 18, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });
