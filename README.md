@@ -4,6 +4,9 @@
 
 目前部署來源：`frobel0520/software-engineering-workshop`。
 
+> 開發狀態：Core／Extension 功能開發已完成，現在進入測試／驗收階段；除測試發現的問題外，不再新增功能。
+> 自動化基線（2026-08-23）：84 個測試檔／279 個測試、TypeScript lint、production build 與 Pages build 均通過。
+
 目前可操作的 Core 主題有 19 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**、**單元測試**、**整合測試**、**日誌**、**Docker 基礎**、**CI/CD**、**部署**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。Core 19 個主題全部開放。
 
 ## Git 單元
