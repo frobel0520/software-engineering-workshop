@@ -37,13 +37,13 @@ Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成�
 
 - `npm --prefix frontend test`：83 test files / 265 tests passed。
 - `npm --prefix frontend run lint`：passed。
-- `VITE_BASE=/software-engineering-workshop/ npm --prefix frontend run build`：passed。
+- `npm --prefix frontend run build:pages`：passed。
 - Pages build output `frontend/dist/index.html` 使用 `/software-engineering-workshop/assets/...` base path。
 - `git diff --check`：passed。
 
 ## RELEASE-006：release、遠端狀態與 Pages
 
-- `git merge-tree --write-tree origin/main origin/dev`：clean，未發現 merge conflict。
+- 初始 `origin/main` ↔ `origin/dev` release merge-tree（功能 release PR #90 前）為 clean；#91 後新增的 closeout 文件在 `main` 與 `dev` 間產生預期的 docs-only add/add／content conflict，已在 `feature/m6-closeout-release` 手動解決，未涉及 source code。
 - M5 的 feature PR（Docker、CI/CD、Deploy）均經 `feature/* → dev`、required checks 與 squash merge。
 - Release PR #90 已 squash merge 到 `main`，merge commit：`2838d34`。
 - Core release Publish workflow #16：`32611711879`，Success。
