@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import curriculumData from "../../../shared/curriculum.json";
-import type { Curriculum } from "../types";
+import { curriculum } from "../curriculum";
 import { getTopicViewModule, TOPIC_MODULE_IDS } from "./registry";
-
-const curriculum = curriculumData as Curriculum;
 
 describe("topic view registry", () => {
   it("registers exactly every ready curriculum topic", () => {
@@ -17,8 +14,8 @@ describe("topic view registry", () => {
     readyTopicIds.forEach((topicId) => expect(getTopicViewModule(topicId)).toBeDefined());
   });
 
-  it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("schema")).toBeUndefined();
+  it("does not expose a module for unknown topics", () => {
+    expect(getTopicViewModule("planned-future-topic")).toBeUndefined();
   });
 
   it("requires every ready topic to answer the four orientation questions", () => {

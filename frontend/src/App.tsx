@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import curriculumData from "@shared/curriculum.json";
+import { curriculum } from "./curriculum";
 import { aggregateProgress, completedReadyTopicIds } from "./progress/aggregation";
 import { createLocalStorageProgressRepository } from "./progress/repository";
 import { parseRoute, resolveRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
@@ -7,9 +7,6 @@ import { TOPIC_MODULE_IDS } from "./topics/registry";
 import { CurriculumMap } from "./components/CurriculumMap";
 import { TrackPage } from "./components/TrackPage";
 import { TopicRouteView } from "./components/TopicRouteView";
-import type { Curriculum } from "./types";
-
-const curriculum = curriculumData as Curriculum;
 
 function routeLabel(route: RouteDefinition): string {
   if (route.kind === "map") return "MAP";
@@ -93,9 +90,18 @@ export default function App() {
           <button className={route.path === "/package-lab" ? "active" : ""} type="button" onClick={() => goTopic("package", "lab")}><span>↳</span>Package Lab</button>
           <button className={route.path === "/env-lab" ? "active" : ""} type="button" onClick={() => goTopic("env", "lab")}><span>↳</span>ENV Lab</button>
           <button className={route.path === "/build-lab" ? "active" : ""} type="button" onClick={() => goTopic("build", "lab")}><span>↳</span>BUILD Lab</button>
+          <button className={route.path === "/docker-lab" ? "active" : ""} type="button" onClick={() => goTopic("docker", "lab")}><span>↳</span>DOCKER Lab</button>
+          <button className={route.path === "/cicd-lab" ? "active" : ""} type="button" onClick={() => goTopic("cicd", "lab")}><span>↳</span>CI/CD Lab</button>
+          <button className={route.path === "/deploy-lab" ? "active" : ""} type="button" onClick={() => goTopic("deploy", "lab")}><span>↳</span>DEPLOY Lab</button>
           <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
           <button className={route.path === "/rest-lab" ? "active" : ""} type="button" onClick={() => goTopic("rest", "lab")}><span>↳</span>FastAPI Lab</button>
           <button className={route.path === "/sql-lab" ? "active" : ""} type="button" onClick={() => goTopic("sql", "lab")}><span>↳</span>SQL Lab</button>
+          <button className={route.path === "/schema-lab" ? "active" : ""} type="button" onClick={() => goTopic("schema", "lab")}><span>↳</span>Schema Lab</button>
+          <button className={route.path === "/index-lab" ? "active" : ""} type="button" onClick={() => goTopic("index", "lab")}><span>↳</span>Index Lab</button>
+          <button className={route.path === "/postgresql-lab" ? "active" : ""} type="button" onClick={() => goTopic("postgresql", "lab")}><span>↳</span>PostgreSQL Lab</button>
+          <button className={route.path === "/unit-lab" ? "active" : ""} type="button" onClick={() => goTopic("unit", "lab")}><span>↳</span>Unit Testing Lab</button>
+          <button className={route.path === "/integration-lab" ? "active" : ""} type="button" onClick={() => goTopic("integration", "lab")}><span>↳</span>Integration Lab</button>
+          <button className={route.path === "/logs-lab" ? "active" : ""} type="button" onClick={() => goTopic("logs", "lab")}><span>↳</span>Logs Lab</button>
         </nav>
         <div className="nav-label">EXTENSION / AI</div>
         <nav>

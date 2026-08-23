@@ -2,7 +2,6 @@ import type { SimulatorDefinition } from "../../topics/types";
 import {
   envLabHappyPath,
   envLabInitialState,
-  type EnvEventType,
   type EnvLabEvent,
   type EnvLabState,
   type EnvStepId,
@@ -20,7 +19,9 @@ export interface EnvRunResult {
   accepted: boolean;
 }
 
-const completionStepIds: readonly EnvStepId[] = envLabHappyPath.map((event) => event.type as EnvStepId);
+const completionStepIds: readonly EnvStepId[] = envLabHappyPath
+  .map((event) => event.type)
+  .filter((event): event is EnvStepId => event !== "reset");
 const publicKeys = ["VITE_API_BASE_URL", "VITE_FEATURE_FLAG"] as const;
 const serverOnlyKeys = ["DATABASE_PASSWORD"] as const;
 
@@ -172,8 +173,7 @@ export function runEnvEvent(current: EnvLabState, event: EnvLabEvent): EnvEventR
       return { state: nextState, output: [".env.local", "ignored by .gitignore", "ENV Lab completed"], accepted: true };
     }
     default: {
-      const unknownEvent = event.type as EnvEventType;
-      return failed(state, unknownEvent, `不支援的 env event：${unknownEvent}。`);
+      return failed(state, event.type, `不支援的 env event：${event.type}。`);
     }
   }
 }
