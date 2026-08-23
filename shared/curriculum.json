@@ -5,6 +5,7 @@
       "id": "foundations",
       "title": "開發基本功",
       "description": "工具與可重複流程",
+      "kind": "core",
       "topics": [
         { "id": "git", "title": "Git", "summary": "版本控制與安全協作", "status": "ready" },
         { "id": "remote", "title": "GitHub / GitLab", "summary": "遠端協作平台", "status": "ready" },
@@ -19,6 +20,7 @@
       "id": "web",
       "title": "Web 與 API",
       "description": "請求、契約與權限",
+      "kind": "core",
       "topics": [
         { "id": "rest", "title": "REST API", "summary": "FastAPI request lifecycle 與服務契約", "status": "ready" },
         { "id": "auth", "title": "身分驗證與授權", "summary": "Entra ID、OIDC 與 SSO", "status": "ready" }
@@ -28,31 +30,34 @@
       "id": "data",
       "title": "資料庫",
       "description": "資料關係與取捨",
+      "kind": "core",
       "topics": [
         { "id": "sql", "title": "SQL", "summary": "SELECT、篩選、聚合與排序", "status": "ready" },
-        { "id": "schema", "title": "資料庫設計", "summary": "資料模型", "status": "planned" },
-        { "id": "index", "title": "索引與交易", "summary": "效能與一致性", "status": "planned" },
-        { "id": "nosql", "title": "NoSQL 基礎", "summary": "不同資料形狀的取捨", "status": "planned" }
+        { "id": "schema", "title": "資料庫設計", "summary": "資料表、主鍵、外鍵與完整性", "status": "ready" },
+        { "id": "index", "title": "索引與交易", "summary": "效能與一致性", "status": "ready" },
+        { "id": "postgresql", "title": "PostgreSQL", "summary": "型別、JSONB、RETURNING 與交易", "status": "ready" }
       ]
     },
     {
       "id": "quality",
       "title": "品質與可觀測性",
       "description": "測試、日誌與線索",
+      "kind": "core",
       "topics": [
-        { "id": "unit", "title": "單元測試", "summary": "快速回饋", "status": "planned" },
-        { "id": "integration", "title": "整合測試", "summary": "模組契約", "status": "planned" },
-        { "id": "logs", "title": "日誌", "summary": "留下線索", "status": "planned" }
+        { "id": "unit", "title": "單元測試", "summary": "快速回饋", "status": "ready" },
+        { "id": "integration", "title": "整合測試", "summary": "模組契約", "status": "ready" },
+        { "id": "logs", "title": "日誌", "summary": "留下線索", "status": "ready" }
       ]
     },
     {
       "id": "delivery",
       "title": "交付與部署",
       "description": "從 commit 到上線",
+      "kind": "core",
       "topics": [
-        { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "planned" },
-        { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "planned" },
-        { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "planned" }
+        { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "ready" },
+        { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "ready" },
+        { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "ready" }
       ]
     },
     {
@@ -62,6 +67,15 @@
       "kind": "extension",
       "topics": [
         { "id": "guardrail", "title": "Guardrails", "summary": "模型輸入、輸出與工具防線", "status": "ready" }
+      ]
+    },
+    {
+      "id": "problem-solving",
+      "title": "問題處理",
+      "description": "從症狀到可驗證的修復",
+      "kind": "extension",
+      "topics": [
+        { "id": "problem-solving", "title": "問題處理方法", "summary": "定義、重現、隔離、驗證與預防", "status": "ready" }
       ]
     }
   ]

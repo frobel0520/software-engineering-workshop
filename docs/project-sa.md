@@ -162,13 +162,15 @@ Curriculum
 
 ## 11. 待決策但不阻塞 Phase 1
 
-- 何種需求會觸發 Phase 2 backend：跨裝置進度、登入、教師 dashboard、真實 provider integration，或其他需求。
-- Phase 2 API／資料庫的 hosting 與成本策略。
-- 是否要保存匿名學習分析，以及保存多久。
-- GitHub／GitLab 真實整合是否仍維持 simulator-first 的替換邊界。
-- 哪些 Extension topics 在完成 feature-level review 後提升為 ready。
+以下問題刻意保留為 Phase 2／產品治理決策；Phase 1 目前維持靜態教材、deterministic simulator 與 simulator-first 的外部副作用邊界：
 
-這些問題由後續 project-level SD 或 Phase 2 計畫處理；不阻塞第一階段的靜態教材與 simulator 交付。
+- **Phase 2 backend 觸發條件**：跨裝置進度、登入、教師 dashboard、真實 provider integration，或其他需求何時足以啟動 backend，仍待產品決策。
+- **Phase 2 API／資料庫的 hosting 與成本**：只有 backend 觸發條件成立後，才進入 hosting、資料庫與維運成本評估。
+- **匿名學習分析**：Phase 1 不收集匿名分析；是否收集、保存哪些資料以及保存多久，仍待隱私與產品決策。
+- **GitHub／GitLab 真實整合**：Phase 1 維持 simulator-first；若要產生真實外部副作用，必須先另立整合契約與授權邊界。
+- **Extension ready 規則**：Guardrails 與問題處理方法目前已是 ready 的 Extension，不計入 Core denominator；未來新增 Extension 仍須先通過 feature-level review，再決定是否開放。
+
+這些問題由後續 project-level SD 或 Phase 2 計畫處理；不阻塞第一階段的靜態教材、simulator 與目前 19 / 19 Core topic 的交付。
 
 ## 12. 與 SD 的交界
 

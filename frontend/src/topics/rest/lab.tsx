@@ -4,6 +4,7 @@ import {
   findRestCodeFile,
   findRestCodeLine,
   findRestScenario,
+  isRestScenarioId,
   restCodeFiles,
   restScenarios,
   restTraceStages,
@@ -17,6 +18,10 @@ import { createInitialRestState, isRestLabComplete, runRestEvent } from "./simul
 
 type RestCodeMode = "annotated" | "source";
 
+const SCENARIO_PROGRESS_WEIGHT = 0.7;
+const STAGE_PROGRESS_WEIGHT = 0.3;
+const PERCENT_SCALE = 100;
+
 function stageIndex(stageId: RestTraceStageId): number {
   return restTraceStages.findIndex((stage) => stage.id === stageId);
 }
@@ -29,13 +34,17 @@ function statusTone(state: RestLabState): TopicStatusTone {
 
 function relatedLine(fileId: RestCodeFileId, stageId: RestTraceStageId): string {
   const file = findRestCodeFile(fileId);
-  return (file.lines.find((line) => line.stages.includes(stageId)) ?? file.lines[0]).id;
+  const line = file.lines.find((candidate) => candidate.stages.includes(stageId));
+  if (!line) {
+    throw new Error(`No REST code line maps to ${fileId} at stage ${stageId}.`);
+  }
+  return line.id;
 }
 
 export function restLabProgress(state: RestLabState): number {
   const scenarioWeight = state.completedScenarioIds.length / restScenarios.length;
   const stageWeight = state.learnedStageIds.length / restTraceStages.length;
-  return Math.round((scenarioWeight * .7 + stageWeight * .3) * 100);
+  return Math.round((scenarioWeight * SCENARIO_PROGRESS_WEIGHT + stageWeight * STAGE_PROGRESS_WEIGHT) * PERCENT_SCALE);
 }
 
 export function RestLab({ onComplete }: { onComplete?: () => void }) {
@@ -59,7 +68,10 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
     if (!isRestLabComplete(state) && isRestLabComplete(result.state)) onComplete?.();
     setState(result.state);
     if (event.type === "start-request" || event.type === "inspect-stage" || event.type === "next-stage") {
-      const nextStage = restTraceStages.find((stage) => stage.id === result.state.activeStageId) ?? restTraceStages[0];
+      const nextStage = restTraceStages.find((stage) => stage.id === result.state.activeStageId);
+      if (!nextStage) {
+        throw new Error(`Unknown REST trace stage: ${result.state.activeStageId}`);
+      }
       setSelectedFileId(nextStage.fileId);
       setSelectedLineId(relatedLine(nextStage.fileId, nextStage.id));
     }
@@ -104,7 +116,14 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
       <section className="rest-request-bar" aria-label="Request controls">
         <label>
           <span>SCENARIO</span>
-          <select value={state.selectedScenarioId} onChange={(event) => selectScenario(event.target.value as RestScenarioId)}>
+          <select
+            value={state.selectedScenarioId}
+            onChange={(event) => {
+              if (isRestScenarioId(event.target.value)) {
+                selectScenario(event.target.value);
+              }
+            }}
+          >
             {restScenarios.map((option) => <option key={option.id} value={option.id}>{state.completedScenarioIds.includes(option.id) ? "✓ " : ""}{option.label}</option>)}
           </select>
         </label>

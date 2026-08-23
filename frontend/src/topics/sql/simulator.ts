@@ -21,7 +21,9 @@ export interface SqlRunResult {
   accepted: boolean;
 }
 
-const completionStepIds: readonly SqlStepId[] = sqlLabHappyPath.map((event) => event.type as SqlStepId);
+const completionStepIds: readonly SqlStepId[] = sqlLabHappyPath
+  .map((event) => event.type)
+  .filter((event): event is SqlStepId => event !== "reset");
 
 function cloneState(state: SqlLabState): SqlLabState {
   return { ...state, completedStepIds: [...state.completedStepIds] };

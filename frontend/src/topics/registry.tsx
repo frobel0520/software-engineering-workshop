@@ -19,8 +19,28 @@ import { EnvLab } from "./env/lab";
 import { EnvLesson } from "./env/lesson";
 import { BuildLab } from "./build/lab";
 import { BuildLesson } from "./build/lesson";
+import { DockerLab } from "./docker/lab";
+import { DockerLesson } from "./docker/lesson";
+import { CicdLab } from "./cicd/lab";
+import { CicdLesson } from "./cicd/lesson";
+import { DeployLab } from "./deploy/lab";
+import { DeployLesson } from "./deploy/lesson";
 import { SqlLab } from "./sql/lab";
 import { SqlLesson } from "./sql/lesson";
+import { SchemaLab } from "./schema/lab";
+import { SchemaLesson } from "./schema/lesson";
+import { IndexLab } from "./index/lab";
+import { IndexLesson } from "./index/lesson";
+import { PostgreSqlLab } from "./postgresql/lab";
+import { PostgreSqlLesson } from "./postgresql/lesson";
+import { ProblemSolvingLab } from "./problem-solving/lab";
+import { ProblemSolvingLesson } from "./problem-solving/lesson";
+import { UnitLab } from "./unit/lab";
+import { UnitLesson } from "./unit/lesson";
+import { IntegrationLab } from "./integration/lab";
+import { IntegrationLesson } from "./integration/lesson";
+import { LogsLab } from "./logs/lab";
+import { LogsLesson } from "./logs/lesson";
 import { authOrientation } from "../content/auth";
 import { gitOrientation } from "../content/git";
 import { cliLesson } from "./cli/content";
@@ -31,7 +51,17 @@ import { guardrailLesson } from "./guardrail/content";
 import { restLesson } from "./rest/content";
 import { envLesson } from "./env/content";
 import { buildLesson } from "./build/content";
+import { dockerLesson } from "./docker/content";
+import { cicdLesson } from "./cicd/content";
+import { deployLesson } from "./deploy/content";
 import { sqlLesson } from "./sql/content";
+import { schemaLesson } from "./schema/content";
+import { indexLesson } from "./index/content";
+import { postgresqlLesson } from "./postgresql/content";
+import { problemSolvingLesson } from "./problem-solving/content";
+import { unitLesson } from "./unit/content";
+import { integrationLesson } from "./integration/content";
+import { logsLesson } from "./logs/content";
 import type { LessonOrientation } from "./types";
 
 export interface TopicLessonViewProps {
@@ -62,7 +92,17 @@ export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = 
   rest: { id: "rest", orientation: restLesson.orientation, lesson: RestLesson, lab: RestLab },
   env: { id: "env", orientation: envLesson.orientation, lesson: EnvLesson, lab: EnvLab },
   build: { id: "build", orientation: buildLesson.orientation, lesson: BuildLesson, lab: BuildLab },
+  docker: { id: "docker", orientation: dockerLesson.orientation, lesson: DockerLesson, lab: DockerLab },
+  cicd: { id: "cicd", orientation: cicdLesson.orientation, lesson: CicdLesson, lab: CicdLab },
+  deploy: { id: "deploy", orientation: deployLesson.orientation, lesson: DeployLesson, lab: DeployLab },
   sql: { id: "sql", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
+  schema: { id: "schema", orientation: schemaLesson.orientation, lesson: SchemaLesson, lab: SchemaLab },
+  index: { id: "index", orientation: indexLesson.orientation, lesson: IndexLesson, lab: IndexLab },
+  postgresql: { id: "postgresql", orientation: postgresqlLesson.orientation, lesson: PostgreSqlLesson, lab: PostgreSqlLab },
+  "problem-solving": { id: "problem-solving", orientation: problemSolvingLesson.orientation, lesson: ProblemSolvingLesson, lab: ProblemSolvingLab },
+  unit: { id: "unit", orientation: unitLesson.orientation, lesson: UnitLesson, lab: UnitLab },
+  integration: { id: "integration", orientation: integrationLesson.orientation, lesson: IntegrationLesson, lab: IntegrationLab },
+  logs: { id: "logs", orientation: logsLesson.orientation, lesson: LogsLesson, lab: LogsLab },
 };
 
 export const TOPIC_MODULE_IDS: ReadonlySet<string> = new Set(Object.keys(TOPIC_MODULE_REGISTRY));
