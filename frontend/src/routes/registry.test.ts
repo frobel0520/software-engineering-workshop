@@ -50,6 +50,10 @@ describe("route registry", () => {
     expect(parseRoute("#/problem-solving-lab")).toEqual({ path: "/problem-solving-lab", kind: "lab", topicId: "problem-solving" });
     expect(topicPath("problem-solving", "lesson")).toBe("/problem-solving");
     expect(topicPath("problem-solving", "lab")).toBe("/problem-solving-lab");
+    expect(parseRoute("#/docker")).toEqual({ path: "/docker", kind: "lesson", topicId: "docker" });
+    expect(parseRoute("#/docker-lab")).toEqual({ path: "/docker-lab", kind: "lab", topicId: "docker" });
+    expect(topicPath("docker", "lesson")).toBe("/docker");
+    expect(topicPath("docker", "lab")).toBe("/docker-lab");
   });
 
   it("falls back to the map for unknown or unsafe paths", () => {

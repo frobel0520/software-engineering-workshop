@@ -37,7 +37,7 @@ Task 不等於檔案。若一個 task 同時需要修改多個檔案，但輸出
 | M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | done |
 | M3 | Data | SQL、schema、index／transaction、PostgreSQL 開放 | M1 | done |
 | M4 | Quality | unit、integration、logs 開放 | M1 | done |
-| M5 | Delivery | Docker、CI/CD、deploy 開放 | M1、既有 CI／Pages baseline | planned |
+| M5 | Delivery | Docker、CI/CD、deploy 開放 | M1、既有 CI／Pages baseline | in progress（Docker ready） |
 | M6 | Hardening／Release | 19 主題一致性、回歸、文件與正式發布完成 | M2–M5 | planned |
 
 M2、M3、M4 可在 M1 完成後平行進行；M5 的教材可平行製作，但共用 CI／Pages contract 必須維持穩定。
@@ -199,6 +199,8 @@ Unit、Integration、Logs 都只依賴 M1 的共用 contract；Integration 可�
 
 M5 的 topic tasks 可平行開發。對教材內容而言，Docker、CI/CD、Deploy 不互相阻塞；只有 M6 的實際 release audit 需要等待相關教材與 workflow 都完成。
 
+DOCKER-01～DOCKER-05 已完成：acceptance contract、lesson／fixture、deterministic simulator、Lab UI、route／progress integration 與 required checks 均已合併到 `dev`。Docker Lab 仍維持 simulator-first，不啟動真實 Docker daemon；下一個 M5 topic 是 `CICD-01`。
+
 ## 12. M6：Hardening／Release
 
 | Task ID | Task | 驗收 |
@@ -242,4 +244,4 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 ## 15. 目前下一個可開工 task
 
-目前 16 / 19 Core topic 已 ready，M2、M3、M4 已完成。下一個可開工的是 M5 Delivery 的 `DOCKER-01`；`CICD-01` 與 `DEPLOY-01` 可平行規劃。若先處理架構債務，仍可開 `CORE-008`；它不阻塞 M5 教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
+目前 17 / 19 Core topic 已 ready，M2、M3、M4 已完成，M5 正在進行且 Docker 已完成。下一個可開工的是 M5 Delivery 的 `CICD-01`；`DEPLOY-01` 可平行規劃。若先處理架構債務，仍可開 `CORE-008`；它不阻塞 M5 教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
