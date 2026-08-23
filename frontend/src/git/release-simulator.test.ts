@@ -68,6 +68,38 @@ describe("Git cowork release simulator", () => {
     expect(result.output.join(" ")).toContain("Fork");
   });
 
+  it("rejects commands with unsupported suffixes instead of matching by prefix", () => {
+    const initial = createInitialGitReleaseState();
+    const invalidClone = runGitReleaseCommand(initial, "git clone --mirror <your-url>");
+    const invalidCommit = runGitReleaseCommand(initial, "git commit --amend");
+
+    expect(invalidClone.accepted).toBe(false);
+    expect(invalidClone.state).toBe(initial);
+    expect(invalidCommit.accepted).toBe(false);
+    expect(invalidCommit.state).toBe(initial);
+  });
+
+  it("rejects force push after the workflow reaches the push step", () => {
+    const beforePush = runCommands([
+      "Fork repository",
+      "git clone <your-url>",
+      "git checkout -b feature/profile",
+      "git stash",
+      "git stash pop",
+      "git diff",
+      "git add src/profile.ts",
+      'git commit -m "add profile page"',
+      "git fetch origin",
+      "git pull --rebase origin dev",
+      "git rebase origin/dev",
+      "git cherry-pick a1b2c3d",
+    ]);
+    const result = runGitReleaseCommand(beforePush, "git push --force");
+
+    expect(result.accepted).toBe(false);
+    expect(result.state).toBe(beforePush);
+  });
+
   it("supports GitLab Merge Request terminology", () => {
     let state = createInitialGitReleaseState();
     state = runGitReleaseEvent(state, { type: "set-provider", provider: "gitlab" }).state;

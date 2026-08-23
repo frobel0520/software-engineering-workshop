@@ -50,7 +50,7 @@ describe("build deterministic simulator", () => {
 
   it("documents the main out-of-order failure fixtures", () => {
     expect(buildFailureFixtures.map((fixture) => fixture.command)).toEqual([
-      "npm run build",
+      "npm run build:pages",
       "ls dist",
       "npm run preview",
     ]);

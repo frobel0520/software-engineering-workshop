@@ -11,7 +11,7 @@
 ```text
 cat package.json
   → npm run lint
-  → VITE_BASE=/software-engineering-workshop/ npm run build
+  → npm run build:pages
   → ls dist
   → npm run preview
   → BUILD complete
@@ -21,7 +21,7 @@ cat package.json
 
 - `lint` 是 TypeScript gate；先擋住 source 層的型別錯誤。
 - `build` 產出 `dist/index.html` 與 hashed assets。
-- `VITE_BASE=/software-engineering-workshop/` 對應 GitHub Pages project site 的 nested path。
+- `npm run build:pages` 透過 `--mode pages` 載入 `frontend/.env.pages`，其 `VITE_BASE=/software-engineering-workshop/` 對應 GitHub Pages project site 的 nested path。
 - `preview` 服務 `dist/`，不是 dev server，也不是 production server。
 - `dist/` 是可發布 artifact，不應被當成手寫 source。
 
