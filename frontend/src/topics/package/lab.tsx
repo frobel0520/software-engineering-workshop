@@ -1,4 +1,4 @@
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
 import {
   packageLabHappyPath,
   packageLessonSteps,
@@ -8,6 +8,7 @@ import {
 } from "./content";
 import { createInitialPackageState, isPackageLabComplete, runPackageEvent } from "./simulator";
 import { TopicCompletionCard, TopicLabShell, TopicStatusFeedback, type TopicStatusTone } from "../../components/TopicShell";
+import { tabIndexForKey } from "../../components/tab-navigation";
 
 interface PackageHistoryEntry {
   command?: string;
@@ -57,6 +58,18 @@ function packageFileLines(state: PackageLabState, file: PackageFile): readonly s
   return state.installedModules.length
     ? ["node_modules/", ...state.installedModules.map((module) => `  ${module}`)]
     : ["node_modules/", "  // 尚未安裝任何依賴"];
+}
+
+function packageFileSlug(file: PackageFile): string {
+  return file.replace(/[^a-z0-9]+/gi, "-");
+}
+
+function packageTabId(file: PackageFile): string {
+  return `package-file-tab-${packageFileSlug(file)}`;
+}
+
+function packagePanelId(file: PackageFile): string {
+  return `package-file-panel-${packageFileSlug(file)}`;
 }
 
 export function packageLabProgress(state: PackageLabState): number {
@@ -130,27 +143,49 @@ export function PackageLab({ onComplete }: { onComplete?: () => void }) {
               <b>workshop-package-lab</b>
               <span className="package-phase">{state.phase}</span>
             </div>
-            <div className="package-file-tabs" role="tablist" aria-label="Package fixture files">
-              {PACKAGE_FILES.map((file) => (
+            <div className="package-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="Package fixture files">
+              {PACKAGE_FILES.map((file, index) => (
                 <button
                   className={selectedFile === file ? "active" : ""}
                   key={file}
                   type="button"
                   role="tab"
+                  id={packageTabId(file)}
+                  aria-controls={packagePanelId(file)}
                   aria-selected={selectedFile === file}
+                  tabIndex={selectedFile === file ? 0 : -1}
+                  onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+                    const nextIndex = tabIndexForKey(event.key, index, PACKAGE_FILES.length);
+                    if (nextIndex === null) return;
+                    event.preventDefault();
+                    const nextFile = PACKAGE_FILES[nextIndex];
+                    setSelectedFile(nextFile);
+                    document.getElementById(packageTabId(nextFile))?.focus();
+                  }}
                   onClick={() => setSelectedFile(file)}
                 >
                   {file}
                 </button>
               ))}
             </div>
-            <div className="package-editor" role="region" aria-label={`${selectedFile} fixture`}>
-              {packageFileLines(state, selectedFile).map((line, index) => (
-                <div className="package-code-line" key={`${selectedFile}-${index}`}>
-                  <span>{String(index + 1).padStart(2, "0")}</span><code>{line || " "}</code>
-                </div>
-              ))}
-            </div>
+            {PACKAGE_FILES.map((file) => (
+              <div
+                className="package-editor"
+                id={packagePanelId(file)}
+                key={file}
+                role="tabpanel"
+                aria-labelledby={packageTabId(file)}
+                aria-label={`${file} fixture`}
+                tabIndex={0}
+                hidden={selectedFile !== file}
+              >
+                {packageFileLines(state, file).map((line, index) => (
+                  <div className="package-code-line" key={`${file}-${index}`}>
+                    <span>{String(index + 1).padStart(2, "0")}</span><code>{line || " "}</code>
+                  </div>
+                ))}
+              </div>
+            ))}
             <div className="package-terminal-output" role="log" aria-live="polite" aria-label="Package command output">
               {history.map((entry, index) => (
                 <div className={`terminal-entry ${entry.accepted === false ? "error" : ""}`} key={`${index}-${entry.command ?? "system"}`}>

@@ -1,4 +1,4 @@
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
 import {
   buildFileFixtures,
   buildLabHappyPath,
@@ -10,6 +10,7 @@ import {
 } from "./content";
 import { createInitialBuildState, isBuildLabComplete, runBuildEvent } from "./simulator";
 import { TopicCompletionCard, TopicLabShell, TopicStatusFeedback, type TopicStatusTone } from "../../components/TopicShell";
+import { tabIndexForKey } from "../../components/tab-navigation";
 
 interface BuildHistoryEntry {
   command?: string;
@@ -54,6 +55,18 @@ function buildFileLines(state: BuildLabState, fileId: BuildFileId): readonly str
     throw new Error(`Unknown build file fixture: ${fileId}`);
   }
   return file.lines;
+}
+
+function buildFileSlug(fileId: BuildFileId): string {
+  return fileId.replace(/[^a-z0-9]+/gi, "-");
+}
+
+function buildTabId(fileId: BuildFileId): string {
+  return `build-file-tab-${buildFileSlug(fileId)}`;
+}
+
+function buildPanelId(fileId: BuildFileId): string {
+  return `build-file-panel-${buildFileSlug(fileId)}`;
 }
 
 export function buildLabProgress(state: BuildLabState): number {
@@ -128,27 +141,49 @@ export function BuildLab({ onComplete }: { onComplete?: () => void }) {
               <b>workshop-build-lab</b>
               <span className="build-phase">{state.phase}</span>
             </div>
-            <div className="build-file-tabs" role="tablist" aria-label="Build fixture files">
-              {buildFileFixtures.map((file) => (
+            <div className="build-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="Build fixture files">
+              {buildFileFixtures.map((file, index) => (
                 <button
                   className={selectedFile === file.id ? "active" : ""}
                   key={file.id}
                   type="button"
                   role="tab"
+                  id={buildTabId(file.id)}
+                  aria-controls={buildPanelId(file.id)}
                   aria-selected={selectedFile === file.id}
+                  tabIndex={selectedFile === file.id ? 0 : -1}
+                  onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+                    const nextIndex = tabIndexForKey(event.key, index, buildFileFixtures.length);
+                    if (nextIndex === null) return;
+                    event.preventDefault();
+                    const nextFile = buildFileFixtures[nextIndex];
+                    setSelectedFile(nextFile.id);
+                    document.getElementById(buildTabId(nextFile.id))?.focus();
+                  }}
                   onClick={() => setSelectedFile(file.id)}
                 >
                   {file.name}
                 </button>
               ))}
             </div>
-            <div className="build-editor" role="region" aria-label={`${selectedFile} fixture`}>
-              {buildFileLines(state, selectedFile).map((line, index) => (
-                <div className="build-code-line" key={`${selectedFile}-${index}`}>
-                  <span>{String(index + 1).padStart(2, "0")}</span><code>{line || " "}</code>
-                </div>
-              ))}
-            </div>
+            {buildFileFixtures.map((file) => (
+              <div
+                className="build-editor"
+                id={buildPanelId(file.id)}
+                key={file.id}
+                role="tabpanel"
+                aria-labelledby={buildTabId(file.id)}
+                aria-label={`${file.id} fixture`}
+                tabIndex={0}
+                hidden={selectedFile !== file.id}
+              >
+                {buildFileLines(state, file.id).map((line, index) => (
+                  <div className="build-code-line" key={`${file.id}-${index}`}>
+                    <span>{String(index + 1).padStart(2, "0")}</span><code>{line || " "}</code>
+                  </div>
+                ))}
+              </div>
+            ))}
             <div className="build-terminal-output" role="log" aria-live="polite" aria-label="Build command output">
               {history.map((entry, index) => (
                 <div className={`terminal-entry ${entry.accepted === false ? "error" : ""}`} key={`${index}-${entry.command ?? "system"}`}>
