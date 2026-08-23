@@ -66,7 +66,7 @@ export type DeployBasePathState = "unknown" | "verified" | "mismatch";
 export type DeployPublishState = "pending" | "published" | "blocked";
 export type DeployDeploymentState = "pending" | "live" | "failed" | "rolled-back";
 export type DeployReleaseRecord = "none" | "verified" | "failed" | "blocked" | "rolled-back";
-export type DeployScenarioId = "main-pages-success" | "missing-artifact-blocked" | "rollback-after-probe-failure";
+export type DeployScenarioId = "main-pages-success" | "missing-artifact-blocked" | "base-path-mismatch-blocked" | "rollback-after-probe-failure";
 
 export interface DeployLessonStep {
   id: DeployStageId;
@@ -180,7 +180,7 @@ export interface DeployScenarioFixture {
   previousVerifiedVersion: string;
   ciOutcome: "passed";
   artifactOutcome: DeployArtifactState;
-  basePathOutcome: "verified";
+  basePathOutcome: Exclude<DeployBasePathState, "unknown">;
   publishOutcome: "published" | "blocked";
   deploymentOutcome: "live" | "failed" | "rolled-back";
   liveStatus: number | null;
@@ -220,6 +220,22 @@ export const deployScenarioFixtures: readonly DeployScenarioFixture[] = [
     liveStatus: null,
     finalRecord: "blocked",
     learningPoint: "沒有 frontend/dist 時 gh-pages 必須保持上一個 verified version，不能假裝已上線。",
+  },
+  {
+    id: "base-path-mismatch-blocked",
+    title: "Base path mismatch 阻擋發布",
+    trigger: "workflow_dispatch",
+    releaseSource: "main",
+    candidateVersion: deployFixture.candidateRelease,
+    previousVerifiedVersion: deployFixture.currentVerifiedRelease,
+    ciOutcome: "passed",
+    artifactOutcome: "verified",
+    basePathOutcome: "mismatch",
+    publishOutcome: "blocked",
+    deploymentOutcome: "failed",
+    liveStatus: null,
+    finalRecord: "blocked",
+    learningPoint: "artifact 存在不代表 Pages 可用；base path mismatch 時 publish 必須阻擋並保留上一版。",
   },
   {
     id: "rollback-after-probe-failure",
@@ -265,7 +281,7 @@ export interface DeployFailureFixture {
 
 export const deployFailureFixtures: readonly DeployFailureFixture[] = [
   { command: "artifact: frontend/dist", message: "frontend/dist missing；gh-pages 保持上一個 verified version。", expectedBoundary: "CI / artifact" },
-  { command: "cat frontend/.env.pages", message: "Pages build profile 尚未 verified；不能把 publish 當成 live。", expectedBoundary: "base path" },
+  { command: "cat frontend/.env.pages", message: "VITE_BASE mismatch；不能安全更新 gh-pages。", expectedBoundary: "base path" },
   { command: "probe /software-engineering-workshop/", message: "live probe failed；candidate release 需要 rollback。", expectedBoundary: "live probe" },
   { command: "evaluate release / rollback", message: "failed release 尚未完成 rollback evidence，release 維持 blocked。", expectedBoundary: "verify / rollback" },
 ] as const;
