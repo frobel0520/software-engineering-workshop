@@ -248,4 +248,4 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 ## 15. 目前下一個可開工 task
 
-目前 19 / 19 Core topic 已 ready，M2、M3、M4、M5、M6 已完成；release PR #90 已合併至 `main`，GitHub Pages publish workflow #16 與 live site smoke check 均通過。`CORE-008` 仍是非阻塞 architecture follow-up，沒有阻擋本 release 的未完成 Core task。
+目前 19 / 19 Core topic 已 ready，M2、M3、M4、M5、M6 已完成；release PR #90 與 final documentation closeout PR #92 已合併至 `main`，GitHub Pages publish workflow #16／#17 與 live site smoke check 均通過。`CORE-008` 仍是非阻塞 architecture follow-up，沒有阻擋本 release 的未完成 Core task。
