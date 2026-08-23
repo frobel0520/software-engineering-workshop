@@ -55,7 +55,7 @@ export const sqlLesson: LessonDefinition = {
     what: "SQL 是描述資料問題的查詢語言；你用 SELECT、WHERE、GROUP BY 與 ORDER BY 表達想看哪些資料。",
     why: "把查詢寫成可重複的契約，能讓同一個問題在不同資料量與不同工具中得到可檢查的結果。",
     when: "需要讀取資料、篩選條件、統計群組、排序報表，或追查 API 背後到底查了什麼時使用。",
-    how: "先確認資料表與欄位，再選欄位、過濾 rows、聚合群組，最後排序結果；每一步都用固定 fixture 驗證。",
+    how: "先確認資料表與欄位，再選欄位、過濾 rows、聚合群組，最後排序結果；每一步都用範例資料驗證。",
   },
   objectives: [
     "看懂 SELECT 如何決定結果欄位與資料列。",
@@ -92,7 +92,7 @@ export const sqlLessonSteps: readonly SqlLessonStep[] = [
     id: "inspect-schema",
     title: "確認 orders schema",
     query: "PRAGMA table_info(orders);",
-    explanation: "先讀 SQLite fixture 的欄位與型別，確認後面的 customer、status、amount 都真的存在。",
+    explanation: "先讀 SQLite orders table 的欄位與型別，確認後面的 customer、status、amount 都真的存在。",
     takeaway: "查詢的第一個契約是資料形狀，不是憑印象猜欄位。",
   },
   {

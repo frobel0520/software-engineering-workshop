@@ -127,7 +127,7 @@ function selectedScenarioOrBlock(current: LogsLabState):
   return {
     result: blocked(
       current,
-      failureText("inspect-without-scenario", "尚未選擇 scenario；請先載入固定 Logs fixture。"),
+      failureText("inspect-without-scenario", "尚未選擇 scenario；請先載入 Logs 測試資料。"),
     ),
   };
 }
@@ -269,7 +269,7 @@ export function createInitialLogsState(): LogsLabState {
     redactionCheck: "pending",
     terminalOutcome: null,
     lastFeedback: "none",
-    lastMessage: "請先選擇固定 Logs scenario，再逐筆 inspect event。",
+    lastMessage: "請先選擇 Logs scenario，再逐筆 inspect event。",
     canReset: true,
   };
 }
@@ -284,12 +284,12 @@ export function isLogsLabComplete(state: LogsLabState): boolean {
 
 function selectScenario(current: LogsLabState, scenarioId: LogsScenarioId): LogsEventResult {
   const scenario = scenarioFor(scenarioId);
-  if (!scenario) return blocked(current, `找不到 ${scenarioId} Logs scenario fixture。`);
+  if (!scenario) return blocked(current, `找不到 ${scenarioId} Logs scenario。`);
   if (current.completedScenarioIds.includes(scenario.id)) {
     return blocked(current, `${scenario.title} 已完成；請先 reset 後再重練，不要重複累加 completion。`);
   }
 
-  const message = `${scenario.title} fixture 已載入；下一步 inspect sequence 1。`;
+  const message = `${scenario.title} 已載入；下一步 inspect sequence 1。`;
   return {
     state: {
       ...cloneState(current),
@@ -327,7 +327,7 @@ function inspectEvent(current: LogsLabState, sequence: number): LogsEventResult 
 
   const event = scenario.events[current.activeEventIndex];
   if (!event || event.sequence !== sequence) {
-    return blocked(current, `找不到 ${scenario.id} 的 sequence ${sequence} event；請回到固定 fixture。`);
+    return blocked(current, `找不到 ${scenario.id} 的 sequence ${sequence} event；請重新選擇 scenario。`);
   }
 
   const visibleEventIds = [...current.visibleEventIds, eventIdFor(scenario.id, event.sequence)];
@@ -420,7 +420,7 @@ function verifyTerminal(current: LogsLabState, observation: LogsTerminalObservat
       current,
       failureText(
         "wrong-severity",
-        "terminal evidence 與 fixture contract 不一致；請檢查 level、source、statusCode、outcome 與 correlationId。",
+        "terminal evidence contract 不一致；請檢查 level、source、statusCode、outcome 與 correlationId。",
       ),
     );
   }
@@ -445,7 +445,7 @@ function verifyTerminal(current: LogsLabState, observation: LogsTerminalObservat
 
 export function runLogsEvent(current: LogsLabState, event: LogsLabEvent): LogsEventResult {
   if (event.type === "reset") {
-    return { state: resetLogsLab(), output: ["Logs Lab 已重設，可以重新 inspect 固定 scenarios。"], accepted: true };
+    return { state: resetLogsLab(), output: ["Logs Lab 已重設，可以重新 inspect scenarios。"], accepted: true };
   }
 
   if (current.phase === "completed") {

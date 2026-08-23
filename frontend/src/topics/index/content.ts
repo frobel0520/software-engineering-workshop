@@ -107,7 +107,7 @@ export const indexLessonSteps: readonly IndexLessonStep[] = [
     id: "inspect-plan",
     title: "看見 table scan",
     code: "EXPLAIN QUERY PLAN SELECT * FROM orders WHERE customer_id = 42;",
-    explanation: "沒有索引時，fixture 會逐列檢查 orders，先記下目前的查詢成本。",
+    explanation: "沒有索引時，orders 會逐列檢查，先記下目前的查詢成本。",
     takeaway: "優化前先量測，否則無法證明索引帶來了什麼改變。",
   },
   {

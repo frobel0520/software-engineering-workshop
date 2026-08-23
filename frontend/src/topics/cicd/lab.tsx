@@ -26,7 +26,6 @@ interface CicdHistoryEntry {
 }
 
 const INITIAL_HISTORY: readonly CicdHistoryEntry[] = [
-  { lines: ["CI/CD sandbox v1", "固定 workflow、required check 與四個 pipeline scenario 已準備好。"] },
 ];
 
 function scenarioFor(scenarioId: CicdScenarioId | null): CicdScenarioFixture | undefined {
@@ -110,12 +109,13 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
   function reset() {
     dispatch({ type: "reset" });
     setCommand("");
-    setHistory([{ lines: ["CI/CD Lab 已重設；保留 scenario audit，從固定 workflow 重新開始。"] }]);
+    setHistory([]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / CI/CD"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓每次變更都經過同一條<br /><em>可重跑的檢查線</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${cicdScenarioFixtures.length} SCENARIOS · ${state.regressionVerified ? "REPLAY OK" : "REPLAY PENDING"}`}
       progress={cicdLabProgress(state)}
@@ -133,8 +133,7 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
 
       <section className="cicd-scenario-panel" aria-labelledby="cicd-scenario-title">
         <div className="cicd-panel-heading">
-          <div><p className="kicker">FIXED PIPELINES</p><h2 id="cicd-scenario-title">先選擇一條可重跑的 CI/CD flow</h2></div>
-          <span>{cicdScenarioFixtures.length} required outcomes</span>
+          <div><h2 id="cicd-scenario-title">先選擇一條可重跑的 CI/CD flow</h2></div>
         </div>
         <div className="cicd-scenario-list" role="group" aria-label="Required CI/CD scenarios">
           {cicdScenarioFixtures.map((item, index) => {
@@ -159,17 +158,17 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
 
       <section className="cicd-workbench-panel" aria-labelledby="cicd-workbench-title">
         <div className="cicd-panel-heading cicd-workbench-heading">
-          <div><p className="kicker">PIPELINE WORKBENCH</p><h2 id="cicd-workbench-title">每個 stage 都留下 gate evidence</h2></div>
-          <span>{scenario ? `${state.completedStageIds.length} / ${cicdLessonSteps.length} stages` : "waiting for fixture"}</span>
+          <div><h2 id="cicd-workbench-title">每個 stage 都留下 gate evidence</h2></div>
+          <span>{scenario ? `${state.completedStageIds.length} / ${cicdLessonSteps.length} stages` : "未選擇"}</span>
         </div>
         <div className="cicd-workbench-grid">
           <section className="cicd-context-panel" aria-labelledby="cicd-context-title">
             <div className="cicd-file-header">
-              <div><p className="kicker">WORKFLOW FIXTURE</p><h3 id="cicd-context-title">固定 CI workflow</h3></div>
+              <div><h3 id="cicd-context-title">CI workflow</h3></div>
               <span>{cicdFixture.workingDirectory}</span>
             </div>
-            <div className="cicd-file-card" aria-label="CI workflow fixture">
-              <header><span>{cicdWorkflowFixture.path}</span><b>fixture only</b></header>
+            <div className="cicd-file-card" aria-label="CI workflow">
+              <header><span>{cicdWorkflowFixture.path}</span></header>
               {cicdWorkflowFixture.lines.map((line, index) => (
                 <div className="cicd-code-line" key={`${line}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><code>{line}</code></div>
               ))}
@@ -200,8 +199,8 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="cicd-control-panel" aria-label="CI/CD Lab controls">
             <div className="cicd-panel-heading">
-              <div><p className="kicker">STAGE CONTROL</p><h3>從 trigger 走到 merge gate</h3></div>
-              <span className="cicd-lab-meta">fixture only<br />no runner</span>
+              <div><h3>從 trigger 走到 merge gate</h3></div>
+              <span className="cicd-lab-meta">no runner</span>
             </div>
             <div className="cicd-action-list">
               {cicdLessonSteps.map((step, index) => {
@@ -228,7 +227,7 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
       </section>
 
       <section className="cicd-state-section" aria-labelledby="cicd-state-title">
-        <div className="cicd-panel-heading"><div><p className="kicker">LIVE PIPELINE STATE</p><h2 id="cicd-state-title">目前的 workflow／gate 線索</h2></div><span>只顯示 simulator，不啟動 runner</span></div>
+        <div className="cicd-panel-heading"><div><h2 id="cicd-state-title">目前的 workflow／gate 線索</h2></div></div>
         <div className="cicd-state-grid">
           <div><small>PHASE</small><b>{state.phase}</b></div>
           <div><small>SCENARIO</small><b>{state.selectedScenarioId ?? "—"}</b></div>
@@ -250,7 +249,7 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
       </section>
 
       <section className="cicd-evidence-section" aria-labelledby="cicd-evidence-title">
-        <div className="cicd-panel-heading"><div><p className="kicker">OBSERVABLE CONTRACT</p><h2 id="cicd-evidence-title">每個 stage 都有 success／failure evidence</h2></div><span>不以顏色代替結果</span></div>
+        <div className="cicd-panel-heading"><div><h2 id="cicd-evidence-title">每個 stage 都有 success／failure evidence</h2></div></div>
         <div className="cicd-evidence-table" role="table" aria-label="CI/CD stage evidence">
           {cicdStageFixtures.map((fixture) => (
             <div className="cicd-evidence-row" key={fixture.id} role="row">

@@ -77,10 +77,10 @@ function runKnownCommand(state: IdeLabState, command: string): IdeCommandResult 
   if (command.startsWith("open ")) {
     const path = command.slice(5);
     if (path !== ideFileFixture.path) {
-      return appendFailure(state, `open: ${path}: file not found`, "檔案不存在；請開啟固定的 src/order.ts。", 1);
+      return appendFailure(state, `open: ${path}: file not found`, "檔案不存在；請開啟 src/order.ts。", 1);
     }
     state.selectedFile = ideFileFixture.path;
-    return appendSuccess(state, `Opened ${ideFileFixture.path}`, "已開啟固定的 order.ts fixture。", "open");
+    return appendSuccess(state, `Opened ${ideFileFixture.path}`, "已開啟 order.ts。", "open");
   }
 
   if (command.startsWith("breakpoint ")) {
@@ -100,7 +100,7 @@ function runKnownCommand(state: IdeLabState, command: string): IdeCommandResult 
 
   if (command === "run calculateTotal(10, 2, 3)") {
     if (state.selectedFile !== ideFileFixture.path) {
-      return appendFailure(state, "run: no file is open", "先開啟 src/order.ts，再啟動固定函式。", 2);
+      return appendFailure(state, "run: no file is open", "先開啟 src/order.ts，再啟動 calculateTotal。", 2);
     }
     if (!state.breakpointLines.includes(3)) {
       return appendFailure(state, "run: no breakpoint at line 3", "先在第 3 行設定 breakpoint，再執行函式。", 2);
@@ -138,7 +138,7 @@ function runKnownCommand(state: IdeLabState, command: string): IdeCommandResult 
 
   if (command === "continue") {
     if (state.phase !== "paused" || state.currentLine === null) {
-      return appendFailure(state, "continue: program has not started", "先 run 固定函式，再 continue 到下一個 breakpoint 或結束。", 2);
+      return appendFailure(state, "continue: program has not started", "先 run calculateTotal，再 continue 到下一個 breakpoint 或結束。", 2);
     }
     if (!state.completedStepIds.includes("step")) {
       return appendFailure(state, "continue: step over the paused line first", "先完成 inspect 與 step over，再 continue。", 2);
@@ -164,7 +164,7 @@ export function runIdeCommand(current: IdeLabState, rawCommand: string): IdeComm
   const knownResult = runKnownCommand(state, command);
   if (knownResult) return knownResult;
 
-  return appendFailure(state, `${command}: command not found`, "命令不存在；請使用教材中的固定 debugger 指令。", 127);
+  return appendFailure(state, `${command}: command not found`, "命令不存在；請使用教材中的 debugger 指令。", 127);
 }
 
 export const ideSimulator: SimulatorDefinition<IdeLabState, IdeLabEvent> = {

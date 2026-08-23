@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { LessonOrientation } from "../topics/types";
 
-export function TopicOrientation({ orientation }: { orientation: LessonOrientation }) {
+export function TopicOrientation({ orientation, showMeta = true }: { orientation: LessonOrientation; showMeta?: boolean }) {
   const cards = [
     ["What", orientation.what],
     ["Why", orientation.why],
@@ -12,8 +12,11 @@ export function TopicOrientation({ orientation }: { orientation: LessonOrientati
   return (
     <section className="lesson-orientation" aria-labelledby="lesson-orientation-title">
       <div className="section-heading">
-        <div><p className="kicker">START HERE</p><h2 id="lesson-orientation-title">先回答四個問題</h2></div>
-        <p>先知道它解決什麼問題，再進入操作與細節。</p>
+        <div>
+          {showMeta ? <p className="kicker">START HERE</p> : null}
+          <h2 id="lesson-orientation-title">先回答四個問題</h2>
+        </div>
+        {showMeta ? <p>先知道它解決什麼問題，再進入操作與細節。</p> : null}
       </div>
       <div className="orientation-grid">
         {cards.map(([label, answer]) => (
@@ -28,7 +31,9 @@ export function TopicOrientation({ orientation }: { orientation: LessonOrientati
 }
 
 export interface TopicLessonShellProps {
-  eyebrow: string;
+  eyebrow?: string;
+  className?: string;
+  showMeta?: boolean;
   title: ReactNode;
   description: ReactNode;
   orientation: LessonOrientation;
@@ -39,6 +44,8 @@ export interface TopicLessonShellProps {
 
 export function TopicLessonShell({
   eyebrow,
+  className,
+  showMeta = true,
   title,
   description,
   orientation,
@@ -47,20 +54,20 @@ export function TopicLessonShell({
   children,
 }: TopicLessonShellProps) {
   return (
-    <div className="page lesson-page topic-lesson-shell">
+    <div className={`page lesson-page topic-lesson-shell${className ? ` ${className}` : ""}`}>
       <header className="lesson-hero">
         <div>
-          <p className="kicker">{eyebrow}</p>
+          {showMeta && eyebrow ? <p className="kicker">{eyebrow}</p> : null}
           <h1>{title}</h1>
           <p>{description}</p>
         </div>
         <div className={`module-status ${completed ? "done" : ""}`} aria-label={completed ? "主題已完成" : "主題學習中"}>
           <span aria-hidden="true">{completed ? "✓" : moduleNumber}</span>
-          <div><small>MODULE STATUS</small><b>{completed ? "已完成" : "學習中"}</b></div>
+          <div>{showMeta ? <small>MODULE STATUS</small> : null}<b>{completed ? "已完成" : "學習中"}</b></div>
         </div>
       </header>
       <section className="topic-lesson-content">
-        <TopicOrientation orientation={orientation} />
+        <TopicOrientation orientation={orientation} showMeta={showMeta} />
         {children}
       </section>
     </div>
@@ -68,7 +75,9 @@ export function TopicLessonShell({
 }
 
 export interface TopicLabShellProps {
-  eyebrow: string;
+  eyebrow?: string;
+  className?: string;
+  showMeta?: boolean;
   title: ReactNode;
   progressLabel: string;
   progress: number;
@@ -78,6 +87,8 @@ export interface TopicLabShellProps {
 
 export function TopicLabShell({
   eyebrow,
+  className,
+  showMeta = true,
   title,
   progressLabel,
   progress,
@@ -87,9 +98,9 @@ export function TopicLabShell({
   const boundedProgress = Math.max(0, Math.min(100, progress));
 
   return (
-    <div className="page lab-page topic-lab-shell">
+    <div className={`page lab-page topic-lab-shell${className ? ` ${className}` : ""}`}>
       <header className="lab-header">
-        <div><p className="kicker">{eyebrow}</p><h1>{title}</h1></div>
+        <div>{showMeta && eyebrow ? <p className="kicker">{eyebrow}</p> : null}<h1>{title}</h1></div>
         <div className="lab-progress" role="progressbar" aria-label="Lab 進度" aria-valuemin={0} aria-valuemax={100} aria-valuenow={boundedProgress}>
           <span>{progressLabel}</span>
           <div><i style={{ width: `${boundedProgress}%` }} /></div>

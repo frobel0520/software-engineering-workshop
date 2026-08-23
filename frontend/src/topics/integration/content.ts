@@ -127,11 +127,11 @@ export const integrationLesson: LessonDefinition = {
     what: "整合測試驗證多個模組透過公開契約協作時，輸入、輸出與錯誤是否仍然一致。",
     why: "單一函式都通過，不代表 adapter、service 與 repository 接在一起時真的能完成一條可用流程。",
     when: "需要確認模組組合、資料 mapping、依賴邊界或錯誤傳遞，而不必啟動整個 production 系統時使用。",
-    how: "保留要驗證的真實模組，只在外部依賴邊界使用 deterministic fixture，沿著 success 與 failure scenario 觀察契約。",
+    how: "保留要驗證的真實模組，只在外部依賴邊界使用可控的測試資料，沿著 success 與 failure scenario 觀察契約。",
   },
   objectives: [
     "分辨 unit boundary 與 checkoutClient、orderService、orderRepository 之間的整合 boundary。",
-    "用固定 order input 與 repository outcome 建立可重跑的 integration fixture。",
+    "用固定 order input 與 repository outcome 建立可重跑的整合測試案例。",
     "追蹤成功流程如何跨過 client、service、repository 與 response 四個 boundary。",
     "從 response-contract-error 與 dependency-unavailable 判斷失敗位置和未發生的副作用。",
     "理解整合測試、unit test 與 E2E test 各自保護的範圍，不用一層測試取代其他層。",
@@ -144,7 +144,7 @@ export const integrationLesson: LessonDefinition = {
     },
     {
       id: "fixture",
-      title: "準備小而完整的 fixture",
+      title: "準備小而完整的測試資料",
       body: "固定的 order input、repository response 與 dependency outcome 讓每次執行都有相同證據，不需要呼叫真實資料庫或服務。",
     },
     {
@@ -175,15 +175,15 @@ export const integrationLessonSteps: readonly IntegrationLessonStep[] = [
     id: "define-boundary",
     title: "選定整合 boundary",
     code: "checkoutClient → orderService → orderRepository → orderResponse",
-    explanation: "這條路徑保留多個真實模組，並只把 repository 的外部結果固定成 fixture；純粹的 subtotal 計算仍可由 unit test 保護。",
+    explanation: "這條路徑保留多個真實模組，並只把 repository 的外部結果固定成測試資料；純粹的 subtotal 計算仍可由 unit test 保護。",
     takeaway: "先決定哪些模組要一起工作，整合測試才不會變成沒有邊界的 E2E。",
   },
   {
     id: "load-fixture",
-    title: "載入固定 order fixture",
+    title: "載入 order 測試資料",
     code: 'const input = { items: [{ sku: "book", quantity: 2, unitPrice: 50 }], discount: 10 };',
     explanation: "subtotal 固定為 100，discount 固定為 10；同一個 input 能讓成功與兩個 failure scenarios 只改變必要的 dependency outcome。",
-    takeaway: "小 fixture 要能直接推導 expected result，也要能隔離每一種失敗原因。",
+    takeaway: "小型測試資料要能直接推導 expected result，也要能隔離每一種失敗原因。",
   },
   {
     id: "trace-success",
@@ -210,7 +210,7 @@ export const integrationLessonSteps: readonly IntegrationLessonStep[] = [
     id: "run-regression",
     title: "重跑完整 regression",
     code: "success + response-contract-error + repository-unavailable",
-    explanation: "三個 scenario 必須在同一組 fixture 規則下重跑，確認 success、錯誤位置與 side effect 都與第一次相同。",
+    explanation: "三個 scenario 必須在同一組規則下重跑，確認 success、錯誤位置與 side effect 都與第一次相同。",
     takeaway: "回歸不是只看綠燈，而是確認每條可觀察路徑都沒有被改壞。",
   },
 ] as const;
@@ -282,7 +282,7 @@ export const integrationScenarios: readonly IntegrationScenarioFixture[] = [
     trace: [
       { boundary: "client", input: "items[book × 2] + discount 10", output: "CreateOrderRequest", evidence: "all request fields preserved" },
       { boundary: "service", input: "CreateOrderRequest", output: "OrderDraft total 90", evidence: "subtotal 100 - discount 10" },
-      { boundary: "repository", input: "OrderDraft", output: "ord-001 / created", evidence: "deterministic repository success" },
+      { boundary: "repository", input: "OrderDraft", output: "ord-001 / created", evidence: "repository success" },
       { boundary: "response", input: "OrderResponse", output: "201 Created", evidence: "orderId, total and status present" },
     ],
   },
@@ -314,7 +314,7 @@ export const integrationScenarios: readonly IntegrationScenarioFixture[] = [
     repositoryResult: {
       kind: "dependency-unavailable",
       errorCode: "dependency-unavailable",
-      message: "order repository fixture is unavailable",
+      message: "order repository is unavailable",
     },
     expected: {
       kind: "dependency-unavailable",
@@ -326,7 +326,7 @@ export const integrationScenarios: readonly IntegrationScenarioFixture[] = [
     trace: [
       { boundary: "client", input: "items[book × 2] + discount 10", output: "CreateOrderRequest", evidence: "request mapping passed" },
       { boundary: "service", input: "CreateOrderRequest", output: "OrderDraft total 90", evidence: "service prepared repository call" },
-      { boundary: "repository", input: "OrderDraft", output: "dependency-unavailable", evidence: "fixed dependency error preserved" },
+      { boundary: "repository", input: "OrderDraft", output: "dependency-unavailable", evidence: "dependency error preserved" },
     ],
   },
 ] as const;
@@ -349,7 +349,7 @@ export const integrationResults: Readonly<Record<IntegrationStepId, IntegrationL
   "define-boundary": {
     id: "define-boundary",
     columns: ["module", "boundary", "external I/O", "test purpose"],
-    rows: integrationBoundaryFixtures.map((boundary) => [boundary.module, boundary.id, boundary.externalBoundary ? "fixture" : "in-process", boundary.responsibility]),
+    rows: integrationBoundaryFixtures.map((boundary) => [boundary.module, boundary.id, boundary.externalBoundary ? "external" : "in-process", boundary.responsibility]),
     caption: "4 module boundaries · 1 controlled external edge",
   },
   "load-fixture": {
@@ -358,9 +358,9 @@ export const integrationResults: Readonly<Record<IntegrationStepId, IntegrationL
     rows: [
       ["items", "book × 2 @ 50", "subtotal 100"],
       ["discount", 10, "expected total 90"],
-      ["orderId", "ord-001", "deterministic repository response"],
+      ["orderId", "ord-001", "repository response"],
     ],
-    caption: "1 order input · fixed outcome",
+    caption: "1 order input · same outcome",
   },
   "trace-success": {
     id: "trace-success",
@@ -388,7 +388,7 @@ export const integrationResults: Readonly<Record<IntegrationStepId, IntegrationL
       ["response-contract-error", "response boundary error", "none"],
       ["repository-unavailable", "dependency error", "none"],
     ],
-    caption: "regression fixture · 3 scenarios stable",
+    caption: "regression · 3 scenarios stable",
   },
 };
 

@@ -130,7 +130,7 @@ function blocked(current: IntegrationLabState, message: string): IntegrationEven
 }
 
 function selectedScenarioMessage(scenario: NonNullable<ReturnType<typeof scenarioFor>>): string {
-  return `${scenario.title} fixture 已載入；下一步觀察 client boundary。`;
+  return `${scenario.title} 已載入；下一步觀察 client boundary。`;
 }
 
 function boundaryMessage(
@@ -140,7 +140,7 @@ function boundaryMessage(
   const observation = boundaryObservation(scenario, boundary);
   const nextStage = nextStageFor(scenario, boundary);
   const nextMessage = nextStage ? `下一步觀察 ${nextStage} boundary。` : "這是目前 scenario 的 terminal boundary。";
-  return `${boundary} boundary 通過：${observation?.evidence ?? "已保留固定 fixture 證據"} ${nextMessage}`;
+  return `${boundary} boundary 通過：${observation?.evidence ?? "已保留 evidence"} ${nextMessage}`;
 }
 
 function failureMessage(
@@ -149,7 +149,7 @@ function failureMessage(
 ): string {
   const fixture = failureFixtureFor(scenario.id);
   const observation = boundaryObservation(scenario, boundary);
-  return `${fixture?.message ?? `${boundary} boundary failure。`} 證據：${fixture?.evidence ?? observation?.evidence ?? "固定 fixture outcome"}`;
+  return `${fixture?.message ?? `${boundary} boundary failure。`} 證據：${fixture?.evidence ?? observation?.evidence ?? "failure outcome"}`;
 }
 
 function terminalResult(
@@ -214,7 +214,7 @@ function advanceToStage(
   }
 
   if (stageId === "input") {
-    return accepted(current, { activeStageId: "input" }, "固定 input fixture 已確認；下一步觀察 client boundary。");
+    return accepted(current, { activeStageId: "input" }, "input 已確認；下一步觀察 client boundary。");
   }
 
   const visitedBoundaryIds = appendUnique(current.visitedBoundaryIds, stageId);
@@ -239,7 +239,7 @@ export function createInitialIntegrationState(): IntegrationLabState {
     phase: "initial",
     response: null,
     sideEffects: "none",
-    lastMessage: "請先選擇固定 scenario fixture，再開始 trace。",
+    lastMessage: "請先選擇 scenario，再開始 trace。",
     canReset: true,
   };
 }
@@ -263,7 +263,7 @@ export function runIntegrationEvent(current: IntegrationLabState, event: Integra
 
   if (event.type === "select-scenario") {
     const scenario = scenarioFor(event.scenarioId);
-    if (!scenario) return blocked(current, `找不到 ${event.scenarioId} scenario fixture。`);
+    if (!scenario) return blocked(current, `找不到 ${event.scenarioId} scenario。`);
     const state = cloneState(current);
     return {
       state: {
@@ -283,7 +283,7 @@ export function runIntegrationEvent(current: IntegrationLabState, event: Integra
 
   const state = cloneState(current);
   const scenario = scenarioFor(state.selectedScenarioId);
-  if (!scenario) return blocked(state, "尚未選擇 scenario；請先載入固定 fixture，再開始 trace。");
+  if (!scenario) return blocked(state, "尚未選擇 scenario；請先載入測試資料，再開始 trace。");
 
   if (state.response !== null) {
     return blocked(state, `${scenario.title} 已到 terminal outcome；請先選擇另一個 scenario 或 reset。`);

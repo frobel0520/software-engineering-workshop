@@ -135,7 +135,7 @@ export const postgresqlLessonSteps: readonly PostgreSqlLessonStep[] = [
     title: "查詢 JSONB payload",
     code: "SELECT payload->>'kind' FROM events WHERE payload @> '{\"kind\":\"signup\"}';",
     explanation: "->> 取出文字值，@> 判斷 JSONB 是否包含指定結構；查詢的是資料形狀，不是原始字串。",
-    takeaway: "JSONB 仍然需要明確的查詢語意與可驗證的 fixture。",
+    takeaway: "JSONB 仍然需要明確的查詢語意與可驗證的範例資料。",
   },
   {
     id: "create-jsonb-index",
@@ -148,7 +148,7 @@ export const postgresqlLessonSteps: readonly PostgreSqlLessonStep[] = [
     id: "explain-query",
     title: "讀懂 PostgreSQL EXPLAIN",
     code: "EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM events WHERE payload @> '{\"kind\":\"signup\"}';",
-    explanation: "在 GIN index 已建立並完成 ANALYZE 後，EXPLAIN 顯示 plan 與 buffer 線索；本 Lab 用 deterministic fixture 示範 Bitmap Index Scan，真實 PostgreSQL 仍可能依 table size 選擇 Seq Scan。",
+    explanation: "在 GIN index 已建立並完成 ANALYZE 後，EXPLAIN 顯示 plan 與 buffer 線索；本 Lab 用範例資料示範 Bitmap Index Scan，真實 PostgreSQL 仍可能依 table size 選擇 Seq Scan。",
     takeaway: "先看實際 plan 和 rows，再判斷 index 是否真的改善查詢。",
   },
   {
