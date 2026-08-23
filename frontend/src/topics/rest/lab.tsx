@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 import { TopicCompletionCard, TopicLabShell, TopicStatusFeedback, type TopicStatusTone } from "../../components/TopicShell";
 import {
   findRestCodeFile,
@@ -15,6 +15,7 @@ import {
   type RestTraceStageId,
 } from "./content";
 import { createInitialRestState, isRestLabComplete, isRestStageUnlocked, runRestEvent } from "./simulator";
+import { tabIndexForKey } from "../../components/tab-navigation";
 
 type RestCodeMode = "annotated" | "source";
 
@@ -54,6 +55,18 @@ function firstLineId(fileId: RestCodeFileId): string {
   return firstLine.id;
 }
 
+function restFileSlug(fileId: RestCodeFileId): string {
+  return fileId.replace(/[^a-z0-9]+/gi, "-");
+}
+
+function restTabId(fileId: RestCodeFileId): string {
+  return `rest-file-tab-${restFileSlug(fileId)}`;
+}
+
+function restPanelId(fileId: RestCodeFileId): string {
+  return `rest-file-panel-${restFileSlug(fileId)}`;
+}
+
 export function lineForFileSelection(fileId: RestCodeFileId, stageId: RestTraceStageId): string {
   return relatedLine(fileId, stageId) ?? firstLineId(fileId);
 }
@@ -76,11 +89,6 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
   const terminalIndex = stageIndex(scenario.terminalStageId);
   const currentIndex = stageIndex(state.activeStageId);
   const completed = isRestLabComplete(state);
-  const activeLineIds = useMemo(
-    () => selectedFile.lines.filter((line) => line.stages.includes(state.activeStageId)).map((line) => line.id),
-    [selectedFile, state.activeStageId],
-  );
-
   function dispatch(event: RestLabEvent) {
     const result = runRestEvent(state, event);
     if (!isRestLabComplete(state) && isRestLabComplete(result.state)) onComplete?.();
@@ -181,9 +189,29 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
       <div className="rest-workbench">
         <section className="rest-code-panel" aria-label="Full stack source code">
           <header className="rest-code-toolbar">
-            <div className="rest-file-tabs" role="tablist" aria-label="程式檔案">
-              {restCodeFiles.map((file) => (
-                <button key={file.id} type="button" role="tab" aria-selected={selectedFileId === file.id} className={selectedFileId === file.id ? "active" : ""} onClick={() => changeFile(file.id)}>{file.id}</button>
+            <div className="rest-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="程式檔案">
+              {restCodeFiles.map((file, index) => (
+                <button
+                  key={file.id}
+                  id={restTabId(file.id)}
+                  type="button"
+                  role="tab"
+                  aria-controls={restPanelId(file.id)}
+                  aria-selected={selectedFileId === file.id}
+                  tabIndex={selectedFileId === file.id ? 0 : -1}
+                  className={selectedFileId === file.id ? "active" : ""}
+                  onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+                    const nextIndex = tabIndexForKey(event.key, index, restCodeFiles.length);
+                    if (nextIndex === null) return;
+                    event.preventDefault();
+                    const nextFile = restCodeFiles[nextIndex];
+                    changeFile(nextFile.id);
+                    document.getElementById(restTabId(nextFile.id))?.focus();
+                  }}
+                  onClick={() => changeFile(file.id)}
+                >
+                  {file.id}
+                </button>
               ))}
             </div>
             <div className="rest-mode-switch" aria-label="Code display mode">
@@ -193,23 +221,40 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
           </header>
           <div className="rest-code-meta"><span>{selectedFile.path}</span><small>{selectedFile.language} · {selectedFile.role}</small></div>
           {fileSelectionNotice ? <p className="rest-code-notice" role="status">{fileSelectionNotice}</p> : null}
-          <div className="rest-code-lines" role="listbox" aria-label={`${selectedFile.id} 逐行程式碼`}>
-            {selectedFile.lines.map((line, index) => {
-              const isRelated = activeLineIds.includes(line.id);
-              return (
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={selectedLineId === line.id}
-                  className={`${selectedLineId === line.id ? "selected" : ""} ${isRelated ? "related" : ""}`}
-                  key={line.id}
-                  onClick={() => setSelectedLineId(line.id)}
-                >
-                  <span>{String(index + 1).padStart(2, "0")}</span><code>{line.code}</code>{codeMode === "annotated" ? <small>{line.explanation}</small> : null}
-                </button>
-              );
-            })}
-          </div>
+          {restCodeFiles.map((file) => {
+            const isSelected = selectedFileId === file.id;
+            const activeLineIds = file.lines.filter((line) => line.stages.includes(state.activeStageId)).map((line) => line.id);
+            return (
+              <div
+                className="rest-code-tabpanel"
+                id={restPanelId(file.id)}
+                key={file.id}
+                role="tabpanel"
+                aria-labelledby={restTabId(file.id)}
+                aria-label={`${file.id} 逐行程式碼`}
+                tabIndex={0}
+                hidden={!isSelected}
+              >
+                <div className="rest-code-lines" role="listbox" aria-label={`${file.id} 逐行程式碼`}>
+                  {file.lines.map((line, index) => {
+                    const isRelated = activeLineIds.includes(line.id);
+                    return (
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={selectedLineId === line.id}
+                        className={`${selectedLineId === line.id ? "selected" : ""} ${isRelated ? "related" : ""}`}
+                        key={line.id}
+                        onClick={() => setSelectedLineId(line.id)}
+                      >
+                        <span>{String(index + 1).padStart(2, "0")}</span><code>{line.code}</code>{codeMode === "annotated" ? <small>{line.explanation}</small> : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </section>
 
         <aside className="rest-explanation-panel" aria-live="polite">
