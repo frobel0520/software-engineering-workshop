@@ -286,8 +286,12 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
           completedStepIds: withStep(state, "inspect-context"),
           lastCommand: commandFor(event.type),
         },
-        "Dockerfile 與 dist/index.html 都在固定 build context；可以開始 build。",
-        ["Dockerfile: found", "dist/index.html: found", "context: .", "next: docker build"],
+        scenario.id === "missing-build-artifact"
+          ? "Dockerfile 已找到，但 dist/index.html 缺少；下一步 build 會在 COPY boundary 停止。"
+          : "Dockerfile 與 dist/index.html 都在固定 build context；可以開始 build。",
+        scenario.id === "missing-build-artifact"
+          ? ["Dockerfile: found", "dist/index.html: missing", "context: .", "next: docker build → COPY failure"]
+          : ["Dockerfile: found", "dist/index.html: found", "context: .", "next: docker build"],
       );
     case "build-image":
       if (!hasCompletedStep(state, "inspect-context")) {
