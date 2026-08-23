@@ -27,9 +27,7 @@ jobs:
         run: npm ci
       - name: Test and build
         working-directory: frontend
-        env:
-          VITE_BASE: /${{ github.event.repository.name }}/
-        run: npm test && npm run build
+        run: npm test && npm run build:pages
       - name: Publish gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:

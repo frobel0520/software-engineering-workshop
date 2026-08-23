@@ -37,7 +37,7 @@ Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成�
 
 - `npm --prefix frontend test`：83 test files / 265 tests passed。
 - `npm --prefix frontend run lint`：passed。
-- `VITE_BASE=/software-engineering-workshop/ npm --prefix frontend run build`：passed。
+- `npm --prefix frontend run build:pages`：passed。
 - Pages build output `frontend/dist/index.html` 使用 `/software-engineering-workshop/assets/...` base path。
 - `git diff --check`：passed。
 
