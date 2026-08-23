@@ -2,7 +2,7 @@
 
 > 適用範圍：App shell、課程地圖、所有 Lesson、所有 Lab 與 Extension topics
 > 對應 task：`CORE-007`
-> 狀態：Contract ready；完整 accessibility audit pending
+> 狀態：Contract ready；M6 release audit completed（2026-08-23）
 
 本清單是每個 ready topic 在 integration／release 前的共用驗收契約。它不取代瀏覽器與輔助技術的實測；每個 topic PR 應指出已驗證的 route、操作流程與例外。
 
@@ -16,6 +16,14 @@
 - planned 與未知 topic route 會回到課程地圖；瀏覽器 Console 無錯誤。
 
 這次只確認 route reachability 與離開路徑，不宣稱已完成鍵盤、200% zoom、窄 viewport、讀屏工具或 reduced-motion 的完整驗收。
+
+### 2026-08-23：M6 delivery topic release review completed
+
+- CI/CD 與 Deploy 的 Lesson → Lab、成功、失敗、reset／replay 與完成狀態均完成瀏覽器 smoke check。
+- CI/CD 已驗證 green pipeline 與 test failure；Deploy 已驗證 green release、artifact blocked 與 probe failure rollback。
+- 390×844 mobile viewport 下兩個 delivery Lab 的 document width 為 375，無水平溢出；mobile menu 可開關，command／terminal input 可取得焦點。
+- CI/CD 與 Deploy 的 topic stylesheet 均含 `prefers-reduced-motion` rule；必要資訊與操作不依賴動畫或顏色。
+- M6 automated regression 為 83 test files／265 tests、lint 與 Pages base build 全部通過；live GitHub Pages route smoke 亦通過。
 
 ### 2026-08-16：Git topic release review completed
 
