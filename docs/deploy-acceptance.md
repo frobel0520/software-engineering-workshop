@@ -26,6 +26,8 @@ fixture 以目前 repository 的 `.github/workflows/deploy-pages.yml` 為輸入�
 
 本主題不重新定義 CI 的 test／lint／build gate；它只接收一個固定的 CI passed／artifact state，專注 release、publish、verify、record 與 rollback。真實 domain、DNS、CDN、帳號權限與維運告警留給後續產品決策。
 
+Pages build 使用 `frontend/.env.pages` 與 `npm run build:pages` 載入 repository-specific `VITE_BASE`；這個公開路徑設定不依賴 shell-specific environment assignment。
+
 ## 3. Lesson／Lab Pageflow
 
 ```text
@@ -108,10 +110,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
         working-directory: frontend
-      - run: npm test && npm run build
+      - run: npm test && npm run build:pages
         working-directory: frontend
-        env:
-          VITE_BASE: /${{ github.event.repository.name }}/
       - uses: peaceiris/actions-gh-pages@v4
         with:
           publish_dir: ./frontend/dist
@@ -140,7 +140,7 @@ inspect-workflow
 | inspect workflow | `cat .github/workflows/deploy-pages.yml` | main trigger、workflow_dispatch、dist、gh-pages 可見 | 未 inspect 時不可選擇 release source |
 | select release | `main → release-2026.08.23` | source、candidate version 與 previous verified version 可見 | 非 main source 應被阻擋 |
 | verify CI artifact | `artifact: frontend/dist` | CI passed、dist exists、artifact provenance 可見 | artifact missing 時 publish 不可更新 gh-pages |
-| verify Pages base | `VITE_BASE=/software-engineering-workshop/` | base path 與 repository path 一致 | base path mismatch 時 deployment blocked |
+| verify Pages base | `cat frontend/.env.pages` | profile 的 base path 與 repository path 一致 | base path mismatch 時 deployment blocked |
 | publish Pages | `publish → gh-pages` | gh-pages pointer 指向 candidate version | artifact／base path 不完整時 branch 保持 previous version |
 | verify deployment | `probe /software-engineering-workshop/` | live status 200、candidate version 可觀測 | probe failure 要保留 failed version，不宣稱 live |
 | record release | `record release` | version、source、artifact、URL、status 完整 | 沒有 deployment evidence 時不可寫 verified record |
