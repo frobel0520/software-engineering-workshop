@@ -25,7 +25,7 @@ describe("PostgreSQL topic integration contract", () => {
   it("contributes PostgreSQL completion to Core without changing the 19-topic denominator", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["postgresql"]));
 
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 18, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 19, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });
