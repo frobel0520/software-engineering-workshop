@@ -92,6 +92,35 @@ export const GIT_RELEASE_PIPELINE_JOBS: readonly GitReleaseState["pipelineJobs"]
   "build",
 ];
 
+const GIT_RELEASE_COMMAND_ALLOWLIST: Readonly<Record<string, GitReleaseStepId>> = {
+  "fork repository": "fork",
+  fork: "fork",
+  "git clone <your-url>": "clone",
+  "git checkout -b feature/profile": "checkout",
+  "git switch -c feature/profile": "checkout",
+  "git stash": "stash",
+  "git stash pop": "stash-pop",
+  "git stash apply": "stash-pop",
+  "git diff": "diff",
+  "git add src/profile.ts": "add",
+  'git commit -m "add profile page"': "commit",
+  "git commit -m 'add profile page'": "commit",
+  "git fetch origin": "fetch",
+  "git pull --rebase origin dev": "pull",
+  "git rebase origin/dev": "rebase",
+  "git cherry-pick a1b2c3d": "cherry-pick",
+  "git push -u origin feature/profile": "push",
+  "open pr": "open-review",
+  "open mr": "open-review",
+  "open pr / mr": "open-review",
+  "run pipeline": "pipeline",
+  "ci run": "pipeline",
+  "resolve conflict": "resolve-conflict",
+  "merge pr": "merge",
+  "merge mr": "merge",
+  "merge pr / mr": "merge",
+};
+
 export function createInitialGitReleaseState(): GitReleaseState {
   return {
     phase: "initial",
@@ -235,23 +264,7 @@ export function runGitReleaseEvent(current: GitReleaseState, event: GitReleaseEv
 
 export function runGitReleaseCommand(current: GitReleaseState, rawCommand: string): GitReleaseCommandResult {
   const command = rawCommand.trim().replace(/\s+/g, " ");
-  const lower = command.toLowerCase();
-  if (lower === "fork repository" || lower === "fork") return runGitReleaseEvent(current, { type: "fork" });
-  if (lower.startsWith("git clone")) return runGitReleaseEvent(current, { type: "clone" });
-  if (lower.startsWith("git checkout") || lower.startsWith("git switch")) return runGitReleaseEvent(current, { type: "checkout" });
-  if (lower === "git stash") return runGitReleaseEvent(current, { type: "stash" });
-  if (lower === "git stash pop" || lower === "git stash apply") return runGitReleaseEvent(current, { type: "stash-pop" });
-  if (lower === "git diff") return runGitReleaseEvent(current, { type: "diff" });
-  if (lower.startsWith("git add")) return runGitReleaseEvent(current, { type: "add" });
-  if (lower.startsWith("git commit")) return runGitReleaseEvent(current, { type: "commit" });
-  if (lower.startsWith("git fetch")) return runGitReleaseEvent(current, { type: "fetch" });
-  if (lower.startsWith("git pull")) return runGitReleaseEvent(current, { type: "pull" });
-  if (lower.startsWith("git rebase")) return runGitReleaseEvent(current, { type: "rebase" });
-  if (lower.startsWith("git cherry-pick")) return runGitReleaseEvent(current, { type: "cherry-pick" });
-  if (lower.startsWith("git push")) return runGitReleaseEvent(current, { type: "push" });
-  if (lower === "open pr" || lower === "open mr" || lower === "open pr / mr") return runGitReleaseEvent(current, { type: "open-review" });
-  if (lower === "run pipeline" || lower === "ci run") return runGitReleaseEvent(current, { type: "pipeline" });
-  if (lower === "resolve conflict") return runGitReleaseEvent(current, { type: "resolve-conflict" });
-  if (lower === "merge pr" || lower === "merge mr" || lower === "merge pr / mr") return runGitReleaseEvent(current, { type: "merge" });
+  const step = GIT_RELEASE_COMMAND_ALLOWLIST[command.toLowerCase()];
+  if (step) return runGitReleaseEvent(current, { type: step });
   return blocked(current, "這個操作不在本次 Git release fixture；請先讀目前任務與下一步提示。");
 }
