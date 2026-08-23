@@ -38,7 +38,7 @@ Task 不等於檔案。若一個 task 同時需要修改多個檔案，但輸出
 | M3 | Data | SQL、schema、index／transaction、PostgreSQL 開放 | M1 | done |
 | M4 | Quality | unit、integration、logs 開放 | M1 | done |
 | M5 | Delivery | Docker、CI/CD、deploy 開放 | M1、既有 CI／Pages baseline | done |
-| M6 | Hardening／Release | 19 主題一致性、回歸、文件與正式發布完成 | M2–M5 | in progress |
+| M6 | Hardening／Release | 19 主題一致性、回歸、文件與正式發布完成 | M2–M5 | done |
 
 M2、M3、M4 可在 M1 完成後平行進行；M5 的教材可平行製作，但共用 CI／Pages contract 必須維持穩定。
 
@@ -66,7 +66,7 @@ M0 完成條件：專案層級目標、需求、技術邊界、Milestone、task 
 | CORE-004 | 重作 progress aggregation | 從 curriculum + repository 計算總進度 | CORE-002、`curriculum.json` | done |
 | CORE-005 | 建立共用 Lesson／Lab shell | topic header、status feedback、reset、completion treatment | CORE-001 | done |
 | CORE-006 | 建立 simulator test harness | 共用測試 fixture、reset、completion assertion pattern | CORE-001 | done |
-| CORE-007 | 建立共用可及性檢查清單 | keyboard、live region、mobile、reduced motion 驗收點 | M0 | done（完整 audit pending） |
+| CORE-007 | 建立共用可及性檢查清單 | keyboard、live region、mobile、reduced motion 驗收點 | M0 | done（2026-08-23；M6 release audit completed） |
 | CORE-008 | App registry-driven dispatcher | 移除 App 中 topic-specific render 分支，讓 route registry／module contract 成為唯一 dispatch 入口 | CORE-001、CORE-003、CORE-005 | backlog |
 
 M1 的 foundation contract、progress、route resolver、test harness 與 checklist 已完成。原始的「App 不新增 topic-specific 分支」目標仍是 P2 架構 follow-up，追蹤於 `CORE-008`；目前不阻塞既有 ready topics 的 pageflow。
@@ -203,7 +203,7 @@ DOCKER-01～DOCKER-05 已完成：acceptance contract、lesson／fixture、deter
 
 CICD-01～CICD-05 已完成：workflow acceptance contract、lesson／fixture、deterministic simulator、Lab UI、route／progress integration 與 required checks 均已合併到 `dev`。CI/CD Lab 以固定 workflow 與 scenario 模擬，不啟動真實 runner。
 
-DEPLOY-01～DEPLOY-05 已完成：release／artifact／Pages／live probe／rollback acceptance contract、lesson／fixture、deterministic simulator、Lab UI、route／progress integration 與 required checks 均已合併到 `dev`。Deploy Lab 以固定 workflow 與 release scenario 模擬，不連線真實 GitHub Pages；M5 Delivery 已完成，下一步是 M6 release audit。
+DEPLOY-01～DEPLOY-05 已完成：release／artifact／Pages／live probe／rollback acceptance contract、lesson／fixture、deterministic simulator、Lab UI、route／progress integration 與 required checks 均已合併到 `dev`。Deploy Lab 以固定 workflow 與 release scenario 模擬，不連線真實 GitHub Pages；M5 Delivery 已完成。
 
 ## 12. M6：Hardening／Release
 
@@ -248,4 +248,4 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 ## 15. 目前下一個可開工 task
 
-目前 19 / 19 Core topic 已 ready，M2、M3、M4、M5 已完成，M6 正在進行。下一步是 `RELEASE-001`～`RELEASE-007` 的 status、回歸、accessibility、文件、release 與 GitHub Pages audit；`CORE-008` 仍是非阻塞 architecture follow-up。
+目前 19 / 19 Core topic 已 ready，M2、M3、M4、M5、M6 已完成；release PR #90 已合併至 `main`，GitHub Pages publish workflow #16 與 live site smoke check 均通過。`CORE-008` 仍是非阻塞 architecture follow-up，沒有阻擋本 release 的未完成 Core task。
