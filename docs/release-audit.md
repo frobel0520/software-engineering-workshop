@@ -58,7 +58,13 @@ Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成�
 
 - README、project plan、project SA、project SD、task breakdown、accessibility checklist、acceptance contracts 與本 audit 對齊 19/19。
 - M5 Delivery 與 M6 Hardening／Release 均標記 done。
-- `CORE-008` 維持非阻塞 architecture follow-up，不阻擋本 release。
+- `CORE-008` 已由 PR #106 合併至 `dev`；App registry-driven dispatcher 已完成。
+
+## DEV-008：開發收尾與測試基線
+
+- CORE-008 PR #106 已合併至 `dev`，本機 `dev` 與 `origin/dev` 已同步，feature branch 已清理。
+- 最新自動化基線：84 個測試檔／279 個測試、TypeScript lint、production build 與 Pages build 均通過。
+- 目前專案階段：開發完成，進入測試／驗收；除測試發現的問題外不再新增功能。
 
 ## Known follow-up
 
