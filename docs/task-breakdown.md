@@ -1,7 +1,7 @@
 # Software Engineering Workshop：Milestone／Task Breakdown
 
 > 狀態：Active backlog
-> 日期：2026-08-16
+> 日期：2026-08-23
 > 依據：[project-plan.md](./project-plan.md)、[project-sa.md](./project-sa.md)、[project-sd.md](./project-sd.md)
 
 ## 1. 為什麼需要 Milestone
@@ -34,9 +34,9 @@ Task 不等於檔案。若一個 task 同時需要修改多個檔案，但輸出
 | --- | --- | --- | --- | --- |
 | M0 | Project Contract | Project Plan、SA、SD、task breakdown 可供開發對齊 | 無 | done |
 | M1 | Module Foundation | 新 topic 可依共同契約接入 route、progress、Lab、tests | M0 | done（P2 架構 follow-up） |
-| M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | in progress |
-| M3 | Data | SQL、schema、index／transaction、PostgreSQL 開放 | M1 | planned |
-| M4 | Quality | unit、integration、logs 開放 | M1 | planned |
+| M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | done |
+| M3 | Data | SQL、schema、index／transaction、PostgreSQL 開放 | M1 | done |
+| M4 | Quality | unit、integration、logs 開放 | M1 | done |
 | M5 | Delivery | Docker、CI/CD、deploy 開放 | M1、既有 CI／Pages baseline | planned |
 | M6 | Hardening／Release | 19 主題一致性、回歸、文件與正式發布完成 | M2–M5 | planned |
 
@@ -128,7 +128,7 @@ CORE-007（獨立）
 
 例如第一個主題會產生：`REMOTE-01` acceptance、`REMOTE-02` lesson、`REMOTE-03` simulator、`REMOTE-04` Lab、`REMOTE-05` integration／QA。
 
-M2 的 hard dependency 只有 M1。Remote、CLI、IDE、Package、Env、Build、REST 之間的先後是學習順序，不是工程阻塞；若某 topic 需要共用 fixture，應把 fixture contract 放進該 topic 的 `-01`，不要直接依賴另一個 topic 的完成。
+M2 的 9 個 Core topic（含既有 Git 與 Auth）均已 ready。M2 的 hard dependency 只有 M1；Remote、CLI、IDE、Package、Env、Build、REST 之間的先後是學習順序，不是工程阻塞。若某 topic 需要共用 fixture，應把 fixture contract 放進該 topic 的 `-01`，不要直接依賴另一個 topic 的完成。
 
 Git 與 Auth 都已有可執行 implementation；Git 的 cowork／pipeline 上線門檻與 accessibility release review 已通過。兩者仍需在 M6 建立 regression／migration 檢查。
 
@@ -169,6 +169,8 @@ Guardrail 的完成狀態與 Core progress 分離；未來其他 Extension topic
 
 每個 topic 使用 Topic Task Packet 五個 task。資料庫主題第一版仍以 fixture／模擬資料呈現，不因教學內容而提前引入正式 database。
 
+M3 的 4 個 Data topic 均已 ready；上述建議學習順序只描述學習路徑，不是工程阻塞。
+
 建議學習順序是 `SQL → Schema → Index／Transaction → PostgreSQL`。這是 soft dependency；只有實際共用的 fixture 或 module contract 才建立 hard dependency。
 
 ## 10. M4：Quality Backlog
@@ -180,6 +182,8 @@ Guardrail 的完成狀態與 Core progress 分離；未來其他 Extension topic
 | logs | 日誌 | LOGS |
 
 每個 topic 使用 Topic Task Packet 五個 task；共用測試工具的改動歸 M1 或獨立 task，不重複塞進每個 topic。
+
+M4 的 3 個 Quality topic 均已 ready；Logs 以 deterministic fixture 與結構化事件呈現可觀測性，不連線真實 logging backend。
 
 Unit、Integration、Logs 都只依賴 M1 的共用 contract；Integration 可在 Unit 教材完成前開發，避免把「測試概念順序」誤當成程式依賴。
 
@@ -238,4 +242,4 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 ## 15. 目前下一個可開工 task
 
-下一個可開工的是尚未 ready 的後續 Core topic；`ENV-01` 與 `BUILD-01` 已完成。`REST-01` 到 `REST-05` 已依 `docs/rest-acceptance.md` 完成。若先處理架構債務，則開 `CORE-008`；它不阻塞上述教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
+目前 16 / 19 Core topic 已 ready，M2、M3、M4 已完成。下一個可開工的是 M5 Delivery 的 `DOCKER-01`；`CICD-01` 與 `DEPLOY-01` 可平行規劃。若先處理架構債務，仍可開 `CORE-008`；它不阻塞 M5 教材 task。M6 的 release audit 要等所有 Core topic integration 完成後再收斂。
