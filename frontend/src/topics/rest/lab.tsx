@@ -32,13 +32,30 @@ function statusTone(state: RestLabState): TopicStatusTone {
   return "neutral";
 }
 
-function relatedLine(fileId: RestCodeFileId, stageId: RestTraceStageId): string {
+function relatedLine(fileId: RestCodeFileId, stageId: RestTraceStageId): string | undefined {
   const file = findRestCodeFile(fileId);
   const line = file.lines.find((candidate) => candidate.stages.includes(stageId));
-  if (!line) {
+  return line?.id;
+}
+
+function requiredRelatedLine(fileId: RestCodeFileId, stageId: RestTraceStageId): string {
+  const lineId = relatedLine(fileId, stageId);
+  if (!lineId) {
     throw new Error(`No REST code line maps to ${fileId} at stage ${stageId}.`);
   }
-  return line.id;
+  return lineId;
+}
+
+function firstLineId(fileId: RestCodeFileId): string {
+  const firstLine = findRestCodeFile(fileId).lines[0];
+  if (!firstLine) {
+    throw new Error(`REST code file ${fileId} has no code lines.`);
+  }
+  return firstLine.id;
+}
+
+export function lineForFileSelection(fileId: RestCodeFileId, stageId: RestTraceStageId): string {
+  return relatedLine(fileId, stageId) ?? firstLineId(fileId);
 }
 
 export function restLabProgress(state: RestLabState): number {
@@ -51,6 +68,7 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
   const [state, setState] = useState<RestLabState>(createInitialRestState);
   const [selectedFileId, setSelectedFileId] = useState<RestCodeFileId>("api.ts");
   const [selectedLineId, setSelectedLineId] = useState("api-6");
+  const [fileSelectionNotice, setFileSelectionNotice] = useState<string | null>(null);
   const [codeMode, setCodeMode] = useState<RestCodeMode>("annotated");
   const scenario = findRestScenario(state.selectedScenarioId);
   const selectedFile = findRestCodeFile(selectedFileId);
@@ -73,7 +91,8 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
         throw new Error(`Unknown REST trace stage: ${result.state.activeStageId}`);
       }
       setSelectedFileId(nextStage.fileId);
-      setSelectedLineId(relatedLine(nextStage.fileId, nextStage.id));
+      setSelectedLineId(requiredRelatedLine(nextStage.fileId, nextStage.id));
+      setFileSelectionNotice(null);
     }
   }
 
@@ -81,6 +100,7 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
     setState(createInitialRestState());
     setSelectedFileId("api.ts");
     setSelectedLineId("api-6");
+    setFileSelectionNotice(null);
     setCodeMode("annotated");
   }
 
@@ -88,11 +108,14 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
     dispatch({ type: "select-scenario", scenarioId });
     setSelectedFileId("api.ts");
     setSelectedLineId(scenarioId === "create-success" || scenarioId === "validation-error" ? "api-6" : "api-15");
+    setFileSelectionNotice(null);
   }
 
   function changeFile(fileId: RestCodeFileId) {
+    const mappedLineId = relatedLine(fileId, state.activeStageId);
     setSelectedFileId(fileId);
-    setSelectedLineId(relatedLine(fileId, state.activeStageId));
+    setSelectedLineId(lineForFileSelection(fileId, state.activeStageId));
+    setFileSelectionNotice(mappedLineId ? null : `目前 ${state.activeStageId} stage 沒有 ${fileId} 的對應執行行，先顯示檔案第一行。`);
   }
 
   return (
@@ -168,6 +191,7 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
             </div>
           </header>
           <div className="rest-code-meta"><span>{selectedFile.path}</span><small>{selectedFile.language} · {selectedFile.role}</small></div>
+          {fileSelectionNotice ? <p className="rest-code-notice" role="status">{fileSelectionNotice}</p> : null}
           <div className="rest-code-lines" role="listbox" aria-label={`${selectedFile.id} 逐行程式碼`}>
             {selectedFile.lines.map((line, index) => {
               const isRelated = activeLineIds.includes(line.id);
