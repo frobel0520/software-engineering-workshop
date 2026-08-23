@@ -1,6 +1,6 @@
 # Software Engineering Workshop：Milestone／Task Breakdown
 
-> 狀態：Active backlog
+> 狀態：Complete
 > 日期：2026-08-23
 > 依據：[project-plan.md](./project-plan.md)、[project-sa.md](./project-sa.md)、[project-sd.md](./project-sd.md)
 
@@ -33,7 +33,7 @@ Task 不等於檔案。若一個 task 同時需要修改多個檔案，但輸出
 | ID | Milestone | 結果 | 依賴 | 狀態 |
 | --- | --- | --- | --- | --- |
 | M0 | Project Contract | Project Plan、SA、SD、task breakdown 可供開發對齊 | 無 | done |
-| M1 | Module Foundation | 新 topic 可依共同契約接入 route、progress、Lab、tests | M0 | done（P2 架構 follow-up） |
+| M1 | Module Foundation | 新 topic 可依共同契約接入 route、progress、Lab、tests | M0 | done |
 | M2 | Foundations／Web | 開發基本功與 Web 主題逐站開放 | M1 | done |
 | M3 | Data | SQL、schema、index／transaction、PostgreSQL 開放 | M1 | done |
 | M4 | Quality | unit、integration、logs 開放 | M1 | done |
@@ -67,9 +67,9 @@ M0 完成條件：專案層級目標、需求、技術邊界、Milestone、task 
 | CORE-005 | 建立共用 Lesson／Lab shell | topic header、status feedback、reset、completion treatment | CORE-001 | done |
 | CORE-006 | 建立 simulator test harness | 共用測試 fixture、reset、completion assertion pattern | CORE-001 | done |
 | CORE-007 | 建立共用可及性檢查清單 | keyboard、live region、mobile、reduced motion 驗收點 | M0 | done（2026-08-23；M6 release audit completed） |
-| CORE-008 | App registry-driven dispatcher | 移除 App 中 topic-specific render 分支，讓 route registry／module contract 成為唯一 dispatch 入口 | CORE-001、CORE-003、CORE-005 | backlog |
+| CORE-008 | App registry-driven dispatcher | 移除 App 中 topic-specific render 分支，讓 route registry／module contract 成為唯一 dispatch 入口 | CORE-001、CORE-003、CORE-005 | done（2026-08-23） |
 
-M1 的 foundation contract、progress、route resolver、test harness 與 checklist 已完成。原始的「App 不新增 topic-specific 分支」目標仍是 P2 架構 follow-up，追蹤於 `CORE-008`；目前不阻塞既有 ready topics 的 pageflow。
+M1 的 foundation contract、progress、route resolver、test harness、checklist 與 registry-driven dispatcher 已完成。App 的 topic lesson、Lab 與 Extension 導航現在由 route／module registry 與 curriculum contract 產生；新增 ready topic 不需再增加 App 的 topic-specific JSX 分支。
 
 M1 的可平行工作線：
 
@@ -248,4 +248,4 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 ## 15. 目前下一個可開工 task
 
-目前 19 / 19 Core topic 已 ready，M2、M3、M4、M5、M6 已完成；release PR #90 與 final documentation closeout PR #92 已合併至 `main`，GitHub Pages publish workflow #16／#17 與 live site smoke check 均通過。`CORE-008` 仍是非阻塞 architecture follow-up，沒有阻擋本 release 的未完成 Core task。
+目前 19 / 19 Core topic 已 ready，M1、M2、M3、M4、M5、M6 與 `CORE-008` 已完成；release PR #90 與 final documentation closeout PR #92 已合併至 `main`，GitHub Pages publish workflow #16／#17 與 live site smoke check 均通過。本專案目前沒有 canonical backlog task。
