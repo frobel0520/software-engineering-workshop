@@ -26,7 +26,7 @@ interface CicdHistoryEntry {
 }
 
 const INITIAL_HISTORY: readonly CicdHistoryEntry[] = [
-  { lines: ["CI/CD sandbox v1", "固定 workflow、required check 與三個 pipeline scenario 已準備好。"] },
+  { lines: ["CI/CD sandbox v1", "固定 workflow、required check 與四個 pipeline scenario 已準備好。"] },
 ];
 
 function scenarioFor(scenarioId: CicdScenarioId | null): CicdScenarioFixture | undefined {
@@ -60,6 +60,7 @@ function eventForCommand(rawCommand: string): CicdLabEvent | null {
 
 function scenarioOutcomeLabel(scenario: CicdScenarioFixture): string {
   if (scenario.mergeGate === "mergeable") return "MERGEABLE";
+  if (scenario.failureStage === "install-dependencies") return "INSTALL BLOCKED";
   if (scenario.failureStage === "run-test") return "TEST BLOCKED";
   return "BUILD BLOCKED";
 }
@@ -124,7 +125,7 @@ export function CicdLab({ onComplete }: { onComplete?: () => void }) {
 
       {completed ? (
         <TopicCompletionCard
-          title="三個 CI/CD scenarios 與 replay 都完成了。"
+          title="四個 CI/CD scenarios 與 replay 都完成了。"
           description="你已驗證 workflow input、ordered gates、failure boundary、required check 與 merge gate；CI/CD Lab 完成。"
           onReset={reset}
         />

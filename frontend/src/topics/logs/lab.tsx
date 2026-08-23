@@ -230,7 +230,7 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
             <article>
               <header><span>SAFE REQUEST FIXTURE</span><b>{scenario ? "loaded" : "waiting"}</b></header>
               <pre>{scenario ? safeRequestSummary(scenario) : "先選 scenario"}</pre>
-              <p>authorization 與 email 只作為 redaction fixture，不會渲染 raw value。</p>
+          <p>authorization、password、accessToken、cookie 與 email 只作為 redaction fixture，不會渲染 raw value。</p>
             </article>
             <article>
               <header><span>EXPECTED TERMINAL</span><b>{scenario ? scenario.expected.level : "—"}</b></header>

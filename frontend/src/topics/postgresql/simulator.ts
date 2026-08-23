@@ -43,7 +43,8 @@ function requiredStep(stepId: PostgreSqlStepId): PostgreSqlStepId | null {
   if (stepId === "define-contract") return "inspect-session";
   if (stepId === "insert-returning") return "define-contract";
   if (stepId === "read-jsonb") return "insert-returning";
-  if (stepId === "explain-query") return "read-jsonb";
+  if (stepId === "create-jsonb-index") return "read-jsonb";
+  if (stepId === "explain-query") return "create-jsonb-index";
   if (stepId === "commit-transaction") return "explain-query";
   return null;
 }
@@ -81,6 +82,7 @@ function accepted(
       returnedId: stepId === "insert-returning" ? 104 : current.returnedId,
       jsonbMatchCount: stepId === "read-jsonb" ? 2 : current.jsonbMatchCount,
       plan,
+      indexCreated: current.indexCreated || stepId === "create-jsonb-index",
       transactionStatus: stepId === "commit-transaction" ? "committed" : current.transactionStatus,
       result,
       lastCode: codeFor(stepId),
@@ -140,7 +142,8 @@ export function runPostgreSqlEvent(
       "define-contract": "請先確認 psql session，再建立資料契約。",
       "insert-returning": "請先建立 events schema，RETURNING 才有明確的資料邊界。",
       "read-jsonb": "請先用 INSERT ... RETURNING 建立並取得 event row。",
-      "explain-query": "請先完成 JSONB containment 查詢，再閱讀 PostgreSQL plan。",
+      "create-jsonb-index": "請先完成 JSONB containment 查詢，再建立 GIN index。",
+      "explain-query": "請先建立 JSONB GIN index，再閱讀 PostgreSQL plan。",
       "commit-transaction": "請先讀完 EXPLAIN plan，再提交完整 transaction。",
     };
     return blocked(current, event.type, messages[event.type]);
@@ -162,8 +165,12 @@ export function runPostgreSqlEvent(
     return accepted(current, event.type, "JSONB @> 找到 2 筆 signup events，->> 取出 kind 文字值。");
   }
 
+  if (event.type === "create-jsonb-index") {
+    return accepted(current, event.type, "idx_events_payload_gin 已建立並完成 ANALYZE；可以檢查 planner plan。");
+  }
+
   if (event.type === "explain-query") {
-    return accepted(current, event.type, "EXPLAIN 顯示 Bitmap Index Scan，plan 與 rows 都可被觀察。");
+    return accepted(current, event.type, "EXPLAIN fixture 顯示 Bitmap Index Scan；真實 planner 仍要依資料量與成本驗證。");
   }
 
   return accepted(current, event.type, "events 的新增與更新都完成，COMMIT 讓 transaction 正式可見。", "completed");

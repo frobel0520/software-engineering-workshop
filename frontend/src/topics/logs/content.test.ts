@@ -89,16 +89,16 @@ describe("Logs lesson content", () => {
   });
 
   it("proves redaction before serialized event output", () => {
-    expect(logsSensitiveFieldNames).toEqual(["authorization", "email"]);
-    expect(logsFixtureRedactedFields).toEqual(["authorization", "email"]);
+    expect(logsSensitiveFieldNames).toEqual(["authorization", "password", "accessToken", "cookie", "email"]);
+    expect(logsFixtureRedactedFields).toEqual(["authorization", "password", "accessToken", "cookie", "email"]);
 
-    const sensitiveValues = [logsBaseRequest.authorization, logsBaseRequest.email];
+    const sensitiveValues = logsSensitiveFieldNames.map((field) => logsBaseRequest[field]);
     const serializedEvents = JSON.stringify(logsScenarios.map((scenario) => scenario.events));
 
     sensitiveValues.forEach((value) => expect(serializedEvents).not.toContain(value));
     logsScenarios.forEach((scenario) => {
       scenario.events.forEach((event) => {
-        expect(event.redactedFields).toEqual(["authorization", "email"]);
+        expect(event.redactedFields).toEqual(logsFixtureRedactedFields);
         expect(Object.keys(event.context).every((key) => logsSafeContextKeys.includes(key as (typeof logsSafeContextKeys)[number]))).toBe(true);
       });
     });

@@ -110,6 +110,7 @@ export function PostgreSqlLab({ onComplete }: { onComplete?: () => void }) {
             </div>
             <div className="postgresql-plan-card">
               <div><small>DATABASE</small><strong>{state.session?.database ?? "—"}</strong></div>
+              <div><small>JSONB INDEX</small><strong>{state.indexCreated ? "GIN READY" : "—"}</strong></div>
               <div><small>PLAN</small><strong>{planLabel(state.plan)}</strong></div>
               <div><small>TRANSACTION</small><b>{state.transactionStatus}</b></div>
             </div>

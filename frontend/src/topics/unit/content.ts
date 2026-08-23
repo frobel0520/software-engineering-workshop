@@ -35,6 +35,11 @@ export interface UnitTestCase {
   actualAfterFix: number;
 }
 
+export function unitBeforeFixTotal(subtotal: number, discount: number): number {
+  void discount;
+  return subtotal;
+}
+
 export interface UnitLabResult {
   id: UnitStepId;
   columns: readonly string[];
@@ -156,7 +161,7 @@ export const unitTestCases: readonly UnitTestCase[] = [
     title: "standard order",
     input: "items [100, 50] · discount 10",
     expected: 140,
-    actualBeforeFix: 150,
+    actualBeforeFix: unitBeforeFixTotal(150, 10),
     actualAfterFix: 140,
   },
   {
@@ -164,7 +169,7 @@ export const unitTestCases: readonly UnitTestCase[] = [
     title: "empty cart",
     input: "items [] · discount 0",
     expected: 0,
-    actualBeforeFix: 0,
+    actualBeforeFix: unitBeforeFixTotal(0, 0),
     actualAfterFix: 0,
   },
   {
@@ -172,7 +177,7 @@ export const unitTestCases: readonly UnitTestCase[] = [
     title: "discount exceeds subtotal",
     input: "items [50] · discount 80",
     expected: 0,
-    actualBeforeFix: -30,
+    actualBeforeFix: unitBeforeFixTotal(50, 80),
     actualAfterFix: 0,
   },
 ] as const;

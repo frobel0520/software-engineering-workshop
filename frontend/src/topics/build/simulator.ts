@@ -105,7 +105,7 @@ export function runBuildEvent(current: BuildLabState, event: BuildLabEvent): Bui
         state,
         { selectedFile: "package-json", completedStepIds: withStep(state, "inspect-scripts"), lastCommand: "cat package.json" },
         "已確認 lint、build、preview 三個 script 的責任分界。",
-        ["lint: tsc --noEmit", "build: tsc -b && vite build", "preview: vite preview"],
+        ["lint: tsc --noEmit", "build: tsc -b && vite build", "build:pages: tsc -b && vite build --mode pages", "preview: vite preview"],
       );
     case "typecheck":
       if (!hasCompleted(state, "inspect-scripts")) {
@@ -119,7 +119,7 @@ export function runBuildEvent(current: BuildLabState, event: BuildLabEvent): Bui
       );
     case "bundle":
       if (!hasCompleted(state, "typecheck") || state.typecheckState !== "passed") {
-        return blocked(state, "npm run build", "請先通過 TypeScript gate，再產出 production bundle。 ");
+        return blocked(state, "npm run build:pages", "請先通過 TypeScript gate，再產出 production bundle。 ");
       }
       return accepted(
         state,
@@ -128,10 +128,10 @@ export function runBuildEvent(current: BuildLabState, event: BuildLabEvent): Bui
           bundleState: "created",
           basePath: "/software-engineering-workshop/",
           completedStepIds: withStep(state, "bundle"),
-          lastCommand: "VITE_BASE=/software-engineering-workshop/ npm run build",
+          lastCommand: "npm run build:pages",
         },
         "production bundle 已產生，並套用 GitHub Pages base path。",
-        ["tsc -b: passed", "vite build: passed", "base: /software-engineering-workshop/", "output: dist/"],
+        ["tsc -b: passed", "vite build --mode pages: passed", "base: /software-engineering-workshop/", "output: dist/"],
       );
     case "inspect-dist":
       if (!hasCompleted(state, "bundle") || state.bundleState !== "created") {

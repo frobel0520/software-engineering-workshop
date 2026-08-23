@@ -18,6 +18,16 @@ const missingArtifactPath = [
   { type: "evaluate-release" as const },
 ];
 
+const basePathMismatchPath = [
+  { type: "select-scenario" as const, scenarioId: "base-path-mismatch-blocked" as const },
+  { type: "inspect-workflow" as const },
+  { type: "select-release" as const },
+  { type: "verify-ci-artifact" as const },
+  { type: "verify-pages-base" as const },
+  { type: "record-release" as const },
+  { type: "evaluate-release" as const },
+];
+
 const rollbackPath = [
   { type: "select-scenario" as const, scenarioId: "rollback-after-probe-failure" as const },
   { type: "inspect-workflow" as const },
@@ -108,6 +118,25 @@ describe("Deploy deterministic simulator", () => {
     });
   });
 
+  it("blocks publish and preserves the previous Pages pointer on base path mismatch", () => {
+    const result = runDeployEvents(basePathMismatchPath);
+
+    expect(result.accepted).toBe(true);
+    expect(result.results[4]?.observedFailure).toBe(true);
+    expect(result.state).toMatchObject({
+      phase: "completed",
+      artifactState: "verified",
+      basePathState: "mismatch",
+      publishState: "blocked",
+      pagesBranchVersion: "release-2026.08.16",
+      deploymentState: "failed",
+      liveStatus: null,
+      releaseRecord: "blocked",
+      completedScenarioIds: ["base-path-mismatch-blocked"],
+    });
+    expect(result.state.lastFeedback).toContain("blocked");
+  });
+
   it("preserves failed candidate evidence and rolls back after probe failure", () => {
     const result = runDeployEvents(rollbackPath);
 
@@ -133,6 +162,8 @@ describe("Deploy deterministic simulator", () => {
       { type: "reset" as const },
       ...missingArtifactPath,
       { type: "reset" as const },
+      ...basePathMismatchPath,
+      { type: "reset" as const },
       ...rollbackPath,
       { type: "reset" as const },
       ...deployGreenHappyPath,
@@ -145,6 +176,7 @@ describe("Deploy deterministic simulator", () => {
     expect(first.state.completedScenarioIds).toEqual([
       "main-pages-success",
       "missing-artifact-blocked",
+      "base-path-mismatch-blocked",
       "rollback-after-probe-failure",
     ]);
     expect(first.state.regressionVerified).toBe(true);

@@ -26,7 +26,7 @@ interface DeployHistoryEntry {
 }
 
 const INITIAL_HISTORY: readonly DeployHistoryEntry[] = [
-  { lines: ["Deploy sandbox v1", "固定 Pages workflow、release record 與三個 deployment scenario 已準備好。"] },
+  { lines: ["Deploy sandbox v1", "固定 Pages workflow、release record 與四個 deployment scenario 已準備好。"] },
 ];
 
 function scenarioFor(scenarioId: DeployScenarioId | null): DeployScenarioFixture | undefined {
@@ -124,7 +124,7 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
 
       {completed ? (
         <TopicCompletionCard
-          title="三個 Deploy scenarios 與 replay 都完成了。"
+          title="四個 Deploy scenarios 與 replay 都完成了。"
           description="你已驗證 main release、artifact provenance、Pages publish、live probe、release record 與 rollback；Deploy Lab 完成。"
           onReset={reset}
         />

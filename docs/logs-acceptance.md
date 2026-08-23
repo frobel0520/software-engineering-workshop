@@ -107,6 +107,9 @@ const baseRequest = {
   method: "POST",
   route: "/orders",
   authorization: "Bearer test-secret-001",
+  password: "workshop-password-001",
+  accessToken: "access-token-001",
+  cookie: "session=workshop-session-001",
   email: "learner@example.test",
   payload: { sku: "book", quantity: 1 },
 };
@@ -131,7 +134,7 @@ Fixture rules：
 - 每個 scenario 至少先產生 `request.received`，再產生一筆固定 terminal event；兩筆 event 的 `correlationId` 必須相同。
 - `request.received` 的 `level` 固定為 `debug`、`source` 固定為 `api`、`outcome` 固定為 `started`。
 - `request-success` 只能改變 terminal success outcome；不得同時加入 timeout 或 validation failure。
-- `validation-rejected` 只能因缺少 `amount` 被拒絕；不得輸出 `authorization`、`email` 或完整 payload。
+- `validation-rejected` 只能因缺少 `amount` 被拒絕；不得輸出任何敏感欄位或完整 payload。
 - `dependency-timeout` 只能因固定 `payment-provider` 在 `3000ms` 逾時失敗；不得產生成功付款或訂單副作用。
 - 相同 initial state 加上相同 event sequence，必須得到相同的 events、feedback、terminal outcome 與 completion 結果。
 - 不可使用目前時間、random UUID、網路回應、真實 provider、瀏覽器 local state 以外的外部輸入。
@@ -141,7 +144,7 @@ Fixture rules：
 Redaction 必須在 event 格式化前完成，而不是只在畫面上用 CSS 或字串替換遮住結果：
 
 - `authorization`、`password`、`accessToken`、`cookie` 與 `email` 的 raw value 不得出現在 `message`、`context`、`redactedFields` 或 serialized event output。
-- `redactedFields` 必須至少記錄本 fixture 中被移除的 `authorization` 與 `email`，並以固定順序輸出。
+- `redactedFields` 必須記錄本 fixture 中被移除的 `authorization`、`password`、`accessToken`、`cookie` 與 `email`，並以固定順序輸出。
 - 安全輸出只能使用 allowlist 欄位；不得透過 `JSON.stringify(baseRequest)` 再事後刪除一部分文字。
 - 任一 raw sensitive value 被找到時，scenario 必須進入 `redaction-failed` feedback，不能完成，也不能把該 event 當作有效證據。
 - reset 後 redaction 結果必須與第一次執行完全一致。
