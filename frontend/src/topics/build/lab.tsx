@@ -29,8 +29,7 @@ function eventForCommand(rawCommand: string): BuildLabEvent | null {
   const command = rawCommand.trim().replace(/\s+/g, " ");
   if (command === "cat package.json") return { type: "inspect-scripts" };
   if (command === "npm run lint") return { type: "typecheck" };
-  if (command === "VITE_BASE=/software-engineering-workshop/ npm run build") return { type: "bundle" };
-  if (command === "npm run build") return { type: "bundle" };
+  if (command === "npm run build:pages") return { type: "bundle" };
   if (command === "ls dist") return { type: "inspect-dist" };
   if (command === "npm run preview") return { type: "preview" };
   return null;
