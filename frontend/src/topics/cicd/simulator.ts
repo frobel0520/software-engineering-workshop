@@ -316,6 +316,15 @@ export function runCicdEvent(current: CicdLabState, event: CicdLabEvent): CicdEv
       );
     case "install-dependencies":
       if (!hasCompletedStage(state, "checkout-source")) return blocked(state, commandFor(event.type), "請先 checkout source，再執行 npm ci。 ");
+      if (scenario.installOutcome === "failed") {
+        return accepted(
+          state,
+          { phase: "blocked", activeStageId: "publish-required-check", completedStageIds: withStage(state, event.type), installState: "failed", testState: "not-run", lintState: "not-run", buildState: "not-run", artifactState: "missing", lastCommand: commandFor(event.type) },
+          "npm ci failed；test、lint 與 build 維持 not-run，required check 後續會 blocked。",
+          [`node: ${cicdFixture.nodeVersion}`, `cache: ${cicdFixture.cacheDependencyPath}`, "npm ci: failed", "test: not-run", "lint: not-run", "build: not-run", "next: publish required check"],
+          true,
+        );
+      }
       return accepted(
         state,
         { phase: "running", activeStageId: "run-test", completedStageIds: withStage(state, event.type), installState: scenario.installOutcome, lastCommand: commandFor(event.type) },
@@ -366,7 +375,7 @@ export function runCicdEvent(current: CicdLabState, event: CicdLabEvent): CicdEv
       );
     case "publish-required-check": {
       const hasFailure = [state.installState, state.testState, state.lintState, state.buildState].includes("failed");
-      if (!hasCompletedStage(state, "run-test")) return blocked(state, commandFor(event.type), "至少要先執行 test gate，才能彙總 required check。 ");
+      if (!hasCompletedStage(state, "install-dependencies")) return blocked(state, commandFor(event.type), "至少要先執行 install gate，才能彙總 required check。 ");
       if (!hasFailure && !hasCompletedStage(state, "run-build")) return blocked(state, commandFor(event.type), "test、lint、build 尚未全部完成，不能提前發布 required check。 ");
       const requiredCheck = hasFailure ? "failed" : "passed";
       return accepted(
@@ -395,7 +404,7 @@ export function runCicdEvent(current: CicdLabState, event: CicdLabEvent): CicdEv
       if (scenario.id === "pull-request-green") {
         Object.assign(nextState, completionAfterGreen(nextState));
         if (nextState.regressionVerified && scenarioIds.every((scenarioId) => nextState.completedScenarioIds.includes(scenarioId))) {
-          nextState.lastFeedback = "三個 CI/CD scenario 與 reset regression 都完成；CI/CD Lab 完成。";
+          nextState.lastFeedback = "四個 CI/CD scenario 與 reset regression 都完成；CI/CD Lab 完成。";
         }
       }
       return {
