@@ -1,21 +1,10 @@
 import { describe, expect, it } from "vitest";
-import curriculumData from "../../../../shared/curriculum.json";
+import { curriculum } from "../../curriculum";
 import { aggregateProgress } from "../../progress/aggregation";
-import { completionKeyFor, type ProgressRepository } from "../../progress/repository";
+import { completionKeyFor } from "../../progress/repository";
 import { resolveRoute } from "../../routes/registry";
-import type { Curriculum } from "../../types";
 import { TOPIC_MODULE_IDS, getTopicViewModule } from "../registry";
-
-const curriculum = curriculumData as Curriculum;
-
-function memoryRepository(completedTopicIds: readonly string[]): ProgressRepository {
-  const completed = new Set(completedTopicIds);
-  return {
-    read: (topicId) => completed.has(topicId),
-    markComplete: (topicId) => completed.add(topicId),
-    clear: (topicId) => completed.delete(topicId),
-  };
-}
+import { createMemoryProgressRepository } from "../../testing/progress";
 
 describe("REST topic integration", () => {
   it("is a ready Core topic with lesson and Lab routes", () => {
@@ -28,10 +17,10 @@ describe("REST topic integration", () => {
   });
 
   it("uses an independent completion key and contributes to Core progress", () => {
-    const progress = aggregateProgress(curriculum, memoryRepository(["rest"]));
+    const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["rest"]));
 
     expect(completionKeyFor("rest")).toBe("se-workshop-rest-complete");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 10, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 19, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 });

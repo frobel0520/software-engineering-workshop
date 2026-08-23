@@ -3,7 +3,10 @@ import { restDatabaseFixture, restScenarios, restTraceStages, type RestLabEvent,
 import { createInitialRestState, isRestLabComplete, runRestEvent, runRestEvents } from "./simulator";
 
 function completeScenarioEvents(scenarioId: RestScenarioId): RestLabEvent[] {
-  const scenario = restScenarios.find((item) => item.id === scenarioId) ?? restScenarios[0];
+  const scenario = restScenarios.find((item) => item.id === scenarioId);
+  if (!scenario) {
+    throw new Error(`Unknown REST scenario fixture: ${scenarioId}`);
+  }
   const terminalIndex = restTraceStages.findIndex((stage) => stage.id === scenario.terminalStageId);
   return [
     { type: "select-scenario", scenarioId },

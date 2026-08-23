@@ -13,12 +13,11 @@ export interface Track {
   id: string;
   title: string;
   description: string;
-  /** Existing curriculum data defaults to core until extension metadata is added. */
-  kind?: TrackKind;
-  topics: Topic[];
+  kind: TrackKind;
+  topics: readonly Topic[];
 }
 
 export interface Curriculum {
   version: number;
-  tracks: Track[];
+  tracks: readonly Track[];
 }

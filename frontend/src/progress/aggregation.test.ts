@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import curriculumData from "../../../shared/curriculum.json";
+import { curriculum } from "../curriculum";
 import type { Curriculum } from "../types";
 import { aggregateProgress, completedReadyTopicIds } from "./aggregation";
 import type { ProgressRepository } from "./repository";
@@ -23,9 +23,8 @@ class MemoryProgressRepository implements ProgressRepository {
   }
 }
 
-const curriculum = curriculumData as Curriculum;
 const coreReadyTopicIds = curriculum.tracks
-  .filter((track) => (track.kind ?? "core") === "core")
+  .filter((track) => track.kind === "core")
   .flatMap((track) => track.topics)
   .filter((topic) => topic.status === "ready")
   .map((topic) => topic.id);
@@ -36,8 +35,8 @@ describe("progress aggregation", () => {
     const result = aggregateProgress(curriculum, repository);
 
     expect(result.coreProgress).toEqual({ kind: "core", total: 19, ready: coreReadyTopicIds.length, completed: 3, percent: 16 });
-    expect(result.extensionProgress).toEqual({ kind: "extension", total: 1, ready: 1, completed: 0, percent: 0 });
-    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail"]);
+    expect(result.extensionProgress).toEqual({ kind: "extension", total: 2, ready: 2, completed: 0, percent: 0 });
+    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail", "problem-solving"]);
   });
 
   it("does not count planned topics even when the repository contains a value", () => {
@@ -45,8 +44,8 @@ describe("progress aggregation", () => {
     const result = aggregateProgress(curriculum, repository);
 
     expect(result.coreProgress.completed).toBe(coreReadyTopicIds.length);
-    expect(result.extensionProgress.completed).toBe(1);
-    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail"]);
+    expect(result.extensionProgress.completed).toBe(2);
+    expect(repository.reads).toEqual([...coreReadyTopicIds, "guardrail", "problem-solving"]);
   });
 
   it("calculates extension progress independently from Core", () => {
@@ -57,6 +56,7 @@ describe("progress aggregation", () => {
           id: "core-track",
           title: "Core",
           description: "Core topics",
+          kind: "core",
           topics: [
             { id: "git", title: "Git", summary: "Version control", status: "ready" },
             { id: "future", title: "Future", summary: "Planned", status: "planned" },
@@ -80,9 +80,22 @@ describe("progress aggregation", () => {
     expect(result.extensionProgress).toMatchObject({ total: 2, ready: 1, completed: 1, percent: 50 });
   });
 
-  it("ignores completion keys for planned topics", () => {
-    const repository = new MemoryProgressRepository(new Set(["git", "schema"]));
+  it("ignores completion keys for still-planned topics", () => {
+    const plannedCurriculum: Curriculum = {
+      version: 1,
+      tracks: [{
+        id: "core-track",
+        title: "Core",
+        description: "Core topics",
+        kind: "core",
+        topics: [
+          { id: "git", title: "Git", summary: "Version control", status: "ready" },
+          { id: "deploy", title: "Deploy", summary: "Release", status: "planned" },
+        ],
+      }],
+    };
+    const repository = new MemoryProgressRepository(new Set(["git", "deploy"]));
 
-    expect(completedReadyTopicIds(curriculum, repository)).toEqual(["git"]);
+    expect(completedReadyTopicIds(plannedCurriculum, repository)).toEqual(["git"]);
   });
 });

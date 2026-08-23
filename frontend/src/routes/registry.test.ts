@@ -9,6 +9,7 @@ const routeCurriculum: Curriculum = {
       id: "foundations",
       title: "Foundations",
       description: "Core topics",
+      kind: "core",
       topics: [
         { id: "git", title: "Git", summary: "Version control", status: "ready" },
         { id: "env", title: "Environment", summary: "Configuration", status: "planned" },
@@ -45,6 +46,22 @@ describe("route registry", () => {
     expect(parseRoute("#/package-lab")).toEqual({ path: "/package-lab", kind: "lab", topicId: "package" });
     expect(topicPath("package", "lesson")).toBe("/package");
     expect(topicPath("package", "lab")).toBe("/package-lab");
+    expect(parseRoute("#/problem-solving")).toEqual({ path: "/problem-solving", kind: "lesson", topicId: "problem-solving" });
+    expect(parseRoute("#/problem-solving-lab")).toEqual({ path: "/problem-solving-lab", kind: "lab", topicId: "problem-solving" });
+    expect(topicPath("problem-solving", "lesson")).toBe("/problem-solving");
+    expect(topicPath("problem-solving", "lab")).toBe("/problem-solving-lab");
+    expect(parseRoute("#/docker")).toEqual({ path: "/docker", kind: "lesson", topicId: "docker" });
+    expect(parseRoute("#/docker-lab")).toEqual({ path: "/docker-lab", kind: "lab", topicId: "docker" });
+    expect(topicPath("docker", "lesson")).toBe("/docker");
+    expect(topicPath("docker", "lab")).toBe("/docker-lab");
+    expect(parseRoute("#/cicd")).toEqual({ path: "/cicd", kind: "lesson", topicId: "cicd" });
+    expect(parseRoute("#/cicd-lab")).toEqual({ path: "/cicd-lab", kind: "lab", topicId: "cicd" });
+    expect(topicPath("cicd", "lesson")).toBe("/cicd");
+    expect(topicPath("cicd", "lab")).toBe("/cicd-lab");
+    expect(parseRoute("#/deploy")).toEqual({ path: "/deploy", kind: "lesson", topicId: "deploy" });
+    expect(parseRoute("#/deploy-lab")).toEqual({ path: "/deploy-lab", kind: "lab", topicId: "deploy" });
+    expect(topicPath("deploy", "lesson")).toBe("/deploy");
+    expect(topicPath("deploy", "lab")).toBe("/deploy-lab");
   });
 
   it("falls back to the map for unknown or unsafe paths", () => {
