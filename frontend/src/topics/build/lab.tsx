@@ -50,7 +50,11 @@ function buildFileLines(state: BuildLabState, fileId: BuildFileId): readonly str
   if (fileId === "dist" && state.bundleState === "created") {
     return ["dist/", "├── index.html", "└── assets/", "    ├── index-[hash].js", "    └── index-[hash].css"];
   }
-  return buildFileFixtures.find((file) => file.id === fileId)?.lines ?? [];
+  const file = buildFileFixtures.find((candidate) => candidate.id === fileId);
+  if (!file) {
+    throw new Error(`Unknown build file fixture: ${fileId}`);
+  }
+  return file.lines;
 }
 
 export function buildLabProgress(state: BuildLabState): number {

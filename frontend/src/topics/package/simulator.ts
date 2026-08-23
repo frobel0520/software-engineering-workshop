@@ -3,7 +3,6 @@ import {
   packageLabInitialState,
   packageLabHappyPath,
   packageLockFixture,
-  type PackageEventType,
   type PackageLabEvent,
   type PackageLabState,
   type PackageStepId,
@@ -21,7 +20,9 @@ export interface PackageRunResult {
   accepted: boolean;
 }
 
-const completionStepIds: readonly PackageStepId[] = packageLabHappyPath.map((event) => event.type as PackageStepId);
+const completionStepIds: readonly PackageStepId[] = packageLabHappyPath
+  .map((event) => event.type)
+  .filter((event): event is PackageStepId => event !== "reset");
 
 const installedModules = ["@workshop/format@1.3.0", "@workshop/shared@1.0.0"] as const;
 
@@ -204,8 +205,7 @@ export function runPackageEvent(current: PackageLabState, event: PackageLabEvent
         return { state: nextState, output: ["node_modules cleared", ...installedModules, "PACKAGE Lab completed"], accepted: true };
       }
     default: {
-      const unknownEvent = event.type as PackageEventType;
-      return blocked(state, unknownEvent, `不支援的 package event：${unknownEvent}。`);
+      return blocked(state, event.type, `不支援的 package event：${event.type}。`);
     }
   }
 }
