@@ -14,7 +14,7 @@ import {
   type RestScenarioId,
   type RestTraceStageId,
 } from "./content";
-import { createInitialRestState, isRestLabComplete, runRestEvent } from "./simulator";
+import { createInitialRestState, isRestLabComplete, isRestStageUnlocked, runRestEvent } from "./simulator";
 
 type RestCodeMode = "annotated" | "source";
 
@@ -163,12 +163,13 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
         {restTraceStages.map((stage, index) => {
           const isBlocked = index > terminalIndex;
           const isVisited = state.currentVisitedStageIds.includes(stage.id);
+          const isLocked = state.requestStarted && !isRestStageUnlocked(state, stage.id);
           return (
             <button
               className={`${state.activeStageId === stage.id ? "active" : ""} ${isVisited ? "visited" : ""}`}
               type="button"
               key={stage.id}
-              disabled={!state.requestStarted || isBlocked}
+              disabled={!state.requestStarted || isBlocked || isLocked}
               onClick={() => dispatch({ type: "inspect-stage", stageId: stage.id })}
             >
               <span>{stage.label}</span><b>{stage.actor}</b><small>{isBlocked ? "此 request 不執行" : stage.summary}</small>
