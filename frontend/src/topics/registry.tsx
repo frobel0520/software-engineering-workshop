@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { Curriculum } from "../types";
 import { AuthLab } from "../components/AuthLab";
 import { AuthLesson } from "../components/AuthLesson";
 import { GitLab } from "../components/GitLab";
@@ -76,37 +77,65 @@ export interface TopicLabViewProps {
 
 export interface TopicViewModule {
   id: string;
+  navigationLabel: string;
+  labNavigationLabel?: string;
   orientation: LessonOrientation;
   lesson: ComponentType<TopicLessonViewProps>;
   lab: ComponentType<TopicLabViewProps>;
 }
 
+export interface TopicNavigationEntry {
+  topicId: string;
+  trackKind: "core" | "extension";
+  navigationLabel: string;
+  labNavigationLabel: string;
+}
+
 export const TOPIC_MODULE_REGISTRY: Readonly<Record<string, TopicViewModule>> = {
-  git: { id: "git", orientation: gitOrientation, lesson: GitLesson, lab: GitLab },
-  auth: { id: "auth", orientation: authOrientation, lesson: AuthLesson, lab: AuthLab },
-  remote: { id: "remote", orientation: remoteLesson.orientation, lesson: RemoteLesson, lab: RemoteLab },
-  cli: { id: "cli", orientation: cliLesson.orientation, lesson: CliLesson, lab: CliLab },
-  ide: { id: "ide", orientation: ideLesson.orientation, lesson: IdeLesson, lab: IdeLab },
-  package: { id: "package", orientation: packageLesson.orientation, lesson: PackageLesson, lab: PackageLab },
-  guardrail: { id: "guardrail", orientation: guardrailLesson.orientation, lesson: GuardrailLesson, lab: GuardrailLab },
-  rest: { id: "rest", orientation: restLesson.orientation, lesson: RestLesson, lab: RestLab },
-  env: { id: "env", orientation: envLesson.orientation, lesson: EnvLesson, lab: EnvLab },
-  build: { id: "build", orientation: buildLesson.orientation, lesson: BuildLesson, lab: BuildLab },
-  docker: { id: "docker", orientation: dockerLesson.orientation, lesson: DockerLesson, lab: DockerLab },
-  cicd: { id: "cicd", orientation: cicdLesson.orientation, lesson: CicdLesson, lab: CicdLab },
-  deploy: { id: "deploy", orientation: deployLesson.orientation, lesson: DeployLesson, lab: DeployLab },
-  sql: { id: "sql", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
-  schema: { id: "schema", orientation: schemaLesson.orientation, lesson: SchemaLesson, lab: SchemaLab },
-  index: { id: "index", orientation: indexLesson.orientation, lesson: IndexLesson, lab: IndexLab },
-  postgresql: { id: "postgresql", orientation: postgresqlLesson.orientation, lesson: PostgreSqlLesson, lab: PostgreSqlLab },
-  "problem-solving": { id: "problem-solving", orientation: problemSolvingLesson.orientation, lesson: ProblemSolvingLesson, lab: ProblemSolvingLab },
-  unit: { id: "unit", orientation: unitLesson.orientation, lesson: UnitLesson, lab: UnitLab },
-  integration: { id: "integration", orientation: integrationLesson.orientation, lesson: IntegrationLesson, lab: IntegrationLab },
-  logs: { id: "logs", orientation: logsLesson.orientation, lesson: LogsLesson, lab: LogsLab },
+  git: { id: "git", navigationLabel: "Git", orientation: gitOrientation, lesson: GitLesson, lab: GitLab },
+  auth: { id: "auth", navigationLabel: "Auth", orientation: authOrientation, lesson: AuthLesson, lab: AuthLab },
+  remote: { id: "remote", navigationLabel: "Remote", orientation: remoteLesson.orientation, lesson: RemoteLesson, lab: RemoteLab },
+  cli: { id: "cli", navigationLabel: "CLI", orientation: cliLesson.orientation, lesson: CliLesson, lab: CliLab },
+  ide: { id: "ide", navigationLabel: "IDE", orientation: ideLesson.orientation, lesson: IdeLesson, lab: IdeLab },
+  package: { id: "package", navigationLabel: "Package", orientation: packageLesson.orientation, lesson: PackageLesson, lab: PackageLab },
+  guardrail: { id: "guardrail", navigationLabel: "Guardrails", labNavigationLabel: "Guardrail", orientation: guardrailLesson.orientation, lesson: GuardrailLesson, lab: GuardrailLab },
+  rest: { id: "rest", navigationLabel: "FastAPI", orientation: restLesson.orientation, lesson: RestLesson, lab: RestLab },
+  env: { id: "env", navigationLabel: "ENV", orientation: envLesson.orientation, lesson: EnvLesson, lab: EnvLab },
+  build: { id: "build", navigationLabel: "BUILD", orientation: buildLesson.orientation, lesson: BuildLesson, lab: BuildLab },
+  docker: { id: "docker", navigationLabel: "DOCKER", orientation: dockerLesson.orientation, lesson: DockerLesson, lab: DockerLab },
+  cicd: { id: "cicd", navigationLabel: "CI/CD", orientation: cicdLesson.orientation, lesson: CicdLesson, lab: CicdLab },
+  deploy: { id: "deploy", navigationLabel: "DEPLOY", orientation: deployLesson.orientation, lesson: DeployLesson, lab: DeployLab },
+  sql: { id: "sql", navigationLabel: "SQL", orientation: sqlLesson.orientation, lesson: SqlLesson, lab: SqlLab },
+  schema: { id: "schema", navigationLabel: "Schema", orientation: schemaLesson.orientation, lesson: SchemaLesson, lab: SchemaLab },
+  index: { id: "index", navigationLabel: "Index", orientation: indexLesson.orientation, lesson: IndexLesson, lab: IndexLab },
+  postgresql: { id: "postgresql", navigationLabel: "PostgreSQL", orientation: postgresqlLesson.orientation, lesson: PostgreSqlLesson, lab: PostgreSqlLab },
+  "problem-solving": { id: "problem-solving", navigationLabel: "Problem-solving", orientation: problemSolvingLesson.orientation, lesson: ProblemSolvingLesson, lab: ProblemSolvingLab },
+  unit: { id: "unit", navigationLabel: "Unit Testing", orientation: unitLesson.orientation, lesson: UnitLesson, lab: UnitLab },
+  integration: { id: "integration", navigationLabel: "Integration", orientation: integrationLesson.orientation, lesson: IntegrationLesson, lab: IntegrationLab },
+  logs: { id: "logs", navigationLabel: "Logs", orientation: logsLesson.orientation, lesson: LogsLesson, lab: LogsLab },
 };
 
 export const TOPIC_MODULE_IDS: ReadonlySet<string> = new Set(Object.keys(TOPIC_MODULE_REGISTRY));
 
 export function getTopicViewModule(topicId: string | undefined): TopicViewModule | undefined {
   return topicId ? TOPIC_MODULE_REGISTRY[topicId] : undefined;
+}
+
+export function getTopicNavigationEntries(curriculum: Curriculum): readonly TopicNavigationEntry[] {
+  return curriculum.tracks.flatMap((track) =>
+    track.topics
+      .filter((topic) => topic.status === "ready")
+      .map((topic) => {
+        const topicModule = getTopicViewModule(topic.id);
+        return topicModule
+          ? {
+              topicId: topic.id,
+              trackKind: track.kind,
+              navigationLabel: topicModule.navigationLabel,
+              labNavigationLabel: topicModule.labNavigationLabel ?? topicModule.navigationLabel,
+            }
+          : undefined;
+      })
+      .filter((entry): entry is TopicNavigationEntry => entry !== undefined),
+  );
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { curriculum } from "../curriculum";
-import { getTopicViewModule, TOPIC_MODULE_IDS } from "./registry";
+import { getTopicNavigationEntries, getTopicViewModule, TOPIC_MODULE_IDS } from "./registry";
 
 describe("topic view registry", () => {
   it("registers exactly every ready curriculum topic", () => {
@@ -31,5 +31,41 @@ describe("topic view registry", () => {
           expect(orientation?.[field].trim().length).toBeGreaterThan(20);
         });
       });
+  });
+
+  it("builds practice navigation from ready topics and their track kind", () => {
+    const readyTopicIds = curriculum.tracks.flatMap((track) =>
+      track.topics.filter((topic) => topic.status === "ready").map((topic) => topic.id),
+    );
+    const navigationEntries = getTopicNavigationEntries(curriculum);
+
+    expect(navigationEntries.map((entry) => entry.topicId)).toEqual(readyTopicIds);
+    expect(navigationEntries.filter((entry) => entry.trackKind === "core")).toHaveLength(19);
+    expect(navigationEntries.filter((entry) => entry.trackKind === "extension").map((entry) => entry.topicId)).toEqual([
+      "guardrail",
+      "problem-solving",
+    ]);
+    expect(navigationEntries.find((entry) => entry.topicId === "rest")?.navigationLabel).toBe("FastAPI");
+    expect(navigationEntries.find((entry) => entry.topicId === "guardrail")?.labNavigationLabel).toBe("Guardrail");
+  });
+
+  it("omits planned or unregistered topics from navigation", () => {
+    const navigationEntries = getTopicNavigationEntries({
+      version: 1,
+      tracks: [
+        {
+          id: "future",
+          title: "Future",
+          description: "Future topics",
+          kind: "core",
+          topics: [
+            { id: "planned-topic", title: "Planned", summary: "Not ready", status: "planned" },
+            { id: "unregistered-topic", title: "Unregistered", summary: "No module", status: "ready" },
+          ],
+        },
+      ],
+    });
+
+    expect(navigationEntries).toEqual([]);
   });
 });
