@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { curriculum } from "./curriculum";
 import { aggregateProgress, completedReadyTopicIds } from "./progress/aggregation";
 import { createLocalStorageProgressRepository } from "./progress/repository";
 import { parseRoute, resolveRoute, topicPath, trackPath, type RouteDefinition } from "./routes/registry";
-import { TOPIC_MODULE_IDS } from "./topics/registry";
+import { getTopicNavigationEntries, TOPIC_MODULE_IDS } from "./topics/registry";
 import { CurriculumMap } from "./components/CurriculumMap";
 import { TrackPage } from "./components/TrackPage";
 import { TopicRouteView } from "./components/TopicRouteView";
@@ -14,6 +14,10 @@ function routeLabel(route: RouteDefinition): string {
   const topic = route.topicId?.toUpperCase() ?? "TOPIC";
   return route.kind === "lab" ? `${topic} LAB` : topic;
 }
+
+const topicNavigationEntries = getTopicNavigationEntries(curriculum);
+const corePracticeTopics = topicNavigationEntries.filter((topic) => topic.trackKind === "core");
+const extensionTopics = topicNavigationEntries.filter((topic) => topic.trackKind === "extension");
 
 export default function App() {
   const [route, setRoute] = useState<RouteDefinition>(() => resolveRoute(window.location.hash, curriculum, TOPIC_MODULE_IDS));
@@ -83,30 +87,24 @@ export default function App() {
         </nav>
         <div className="nav-label">實作 / PRACTICE</div>
         <nav>
-          <button className={route.path === "/lab" ? "active" : ""} type="button" onClick={() => goTopic("git", "lab")}><span>↳</span>Git Lab</button>
-          <button className={route.path === "/auth-lab" ? "active" : ""} type="button" onClick={() => goTopic("auth", "lab")}><span>↳</span>Auth Lab</button>
-          <button className={route.path === "/cli-lab" ? "active" : ""} type="button" onClick={() => goTopic("cli", "lab")}><span>↳</span>CLI Lab</button>
-          <button className={route.path === "/ide-lab" ? "active" : ""} type="button" onClick={() => goTopic("ide", "lab")}><span>↳</span>IDE Lab</button>
-          <button className={route.path === "/package-lab" ? "active" : ""} type="button" onClick={() => goTopic("package", "lab")}><span>↳</span>Package Lab</button>
-          <button className={route.path === "/env-lab" ? "active" : ""} type="button" onClick={() => goTopic("env", "lab")}><span>↳</span>ENV Lab</button>
-          <button className={route.path === "/build-lab" ? "active" : ""} type="button" onClick={() => goTopic("build", "lab")}><span>↳</span>BUILD Lab</button>
-          <button className={route.path === "/docker-lab" ? "active" : ""} type="button" onClick={() => goTopic("docker", "lab")}><span>↳</span>DOCKER Lab</button>
-          <button className={route.path === "/cicd-lab" ? "active" : ""} type="button" onClick={() => goTopic("cicd", "lab")}><span>↳</span>CI/CD Lab</button>
-          <button className={route.path === "/deploy-lab" ? "active" : ""} type="button" onClick={() => goTopic("deploy", "lab")}><span>↳</span>DEPLOY Lab</button>
-          <button className={route.path === "/remote-lab" ? "active" : ""} type="button" onClick={() => goTopic("remote", "lab")}><span>↳</span>Remote Lab</button>
-          <button className={route.path === "/rest-lab" ? "active" : ""} type="button" onClick={() => goTopic("rest", "lab")}><span>↳</span>FastAPI Lab</button>
-          <button className={route.path === "/sql-lab" ? "active" : ""} type="button" onClick={() => goTopic("sql", "lab")}><span>↳</span>SQL Lab</button>
-          <button className={route.path === "/schema-lab" ? "active" : ""} type="button" onClick={() => goTopic("schema", "lab")}><span>↳</span>Schema Lab</button>
-          <button className={route.path === "/index-lab" ? "active" : ""} type="button" onClick={() => goTopic("index", "lab")}><span>↳</span>Index Lab</button>
-          <button className={route.path === "/postgresql-lab" ? "active" : ""} type="button" onClick={() => goTopic("postgresql", "lab")}><span>↳</span>PostgreSQL Lab</button>
-          <button className={route.path === "/unit-lab" ? "active" : ""} type="button" onClick={() => goTopic("unit", "lab")}><span>↳</span>Unit Testing Lab</button>
-          <button className={route.path === "/integration-lab" ? "active" : ""} type="button" onClick={() => goTopic("integration", "lab")}><span>↳</span>Integration Lab</button>
-          <button className={route.path === "/logs-lab" ? "active" : ""} type="button" onClick={() => goTopic("logs", "lab")}><span>↳</span>Logs Lab</button>
+          {corePracticeTopics.map(({ topicId, labNavigationLabel }) => (
+            <button className={route.path === topicPath(topicId, "lab") ? "active" : ""} type="button" key={topicId} onClick={() => goTopic(topicId, "lab")}>
+              <span>↳</span>{labNavigationLabel} Lab
+            </button>
+          ))}
         </nav>
         <div className="nav-label">EXTENSION / AI</div>
         <nav>
-          <button className={route.path === "/guardrail" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lesson")}><span>EX</span>Guardrails {progressRepository.read("guardrail") ? <i>✓</i> : null}</button>
-          <button className={route.path === "/guardrail-lab" ? "active" : ""} type="button" onClick={() => goTopic("guardrail", "lab")}><span>↳</span>Guardrail Lab</button>
+          {extensionTopics.map(({ topicId, navigationLabel, labNavigationLabel }) => (
+            <Fragment key={topicId}>
+              <button className={route.path === topicPath(topicId, "lesson") ? "active" : ""} type="button" onClick={() => goTopic(topicId, "lesson")}>
+                <span>EX</span>{navigationLabel} {progressRepository.read(topicId) ? <i>✓</i> : null}
+              </button>
+              <button className={route.path === topicPath(topicId, "lab") ? "active" : ""} type="button" onClick={() => goTopic(topicId, "lab")}>
+                <span>↳</span>{labNavigationLabel} Lab
+              </button>
+            </Fragment>
+          ))}
         </nav>
         <div className="sidebar-progress">
           <div><span>總進度</span><b>{progress.coreProgress.completed} / {progress.coreProgress.total}</b></div>
