@@ -20,6 +20,16 @@ const testFailurePath = [
   { type: "evaluate-merge-gate" as const },
 ];
 
+const installFailurePath = [
+  { type: "select-scenario" as const, scenarioId: "pull-request-install-failure" as const },
+  { type: "inspect-workflow" as const },
+  { type: "select-trigger" as const },
+  { type: "checkout-source" as const },
+  { type: "install-dependencies" as const },
+  { type: "publish-required-check" as const },
+  { type: "evaluate-merge-gate" as const },
+];
+
 const buildFailurePath = [
   { type: "select-scenario" as const, scenarioId: "pull-request-build-failure" as const },
   { type: "inspect-workflow" as const },
@@ -126,6 +136,32 @@ describe("CI/CD deterministic simulator", () => {
     });
   });
 
+  it("stops install failure before test and keeps every downstream gate not-run", () => {
+    const beforeCheck = runCicdEvents(installFailurePath.slice(0, 5));
+
+    expect(beforeCheck.accepted).toBe(true);
+    expect(beforeCheck.results.at(-1)?.observedFailure).toBe(true);
+    expect(beforeCheck.state).toMatchObject({
+      phase: "blocked",
+      installState: "failed",
+      testState: "not-run",
+      lintState: "not-run",
+      buildState: "not-run",
+      artifactState: "missing",
+      requiredCheck: "pending",
+      mergeGate: "pending",
+    });
+    expect(beforeCheck.state.lastFeedback).toContain("not-run");
+
+    const completed = runCicdEvents(installFailurePath, beforeCheck.state);
+    expect(completed.state).toMatchObject({
+      phase: "completed",
+      requiredCheck: "failed",
+      mergeGate: "blocked",
+      completedScenarioIds: ["pull-request-install-failure"],
+    });
+  });
+
   it("preserves test/lint success when build fails", () => {
     const result = runCicdEvents(buildFailurePath);
 
@@ -147,6 +183,8 @@ describe("CI/CD deterministic simulator", () => {
     const fullFlow = [
       ...cicdGreenHappyPath,
       { type: "reset" as const },
+      ...installFailurePath,
+      { type: "reset" as const },
       ...testFailurePath,
       { type: "reset" as const },
       ...buildFailurePath,
@@ -160,6 +198,7 @@ describe("CI/CD deterministic simulator", () => {
     expect(first.state).toEqual(second.state);
     expect(first.state.completedScenarioIds).toEqual([
       "pull-request-green",
+      "pull-request-install-failure",
       "pull-request-test-failure",
       "pull-request-build-failure",
     ]);
