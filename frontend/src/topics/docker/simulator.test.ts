@@ -122,6 +122,7 @@ describe("Docker deterministic simulator", () => {
       probeState: "unreachable",
       completedScenarioIds: [],
     });
+    expect(beforeRepair.state.completedStepIds).not.toContain("verify-probe");
 
     const completed = runDockerEvents(unpublishedPortPath, beforeRepair.state);
     expect(completed.state).toMatchObject({
