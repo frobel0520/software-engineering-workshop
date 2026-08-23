@@ -46,8 +46,11 @@ Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成�
 - `git merge-tree --write-tree origin/main origin/dev`：clean，未發現 merge conflict。
 - M5 的 feature PR（Docker、CI/CD、Deploy）均經 `feature/* → dev`、required checks 與 squash merge。
 - Release PR #90 已 squash merge 到 `main`，merge commit：`2838d34`。
-- Publish workflow #16：`32611711879`，Success。
-- GitHub Pages build/deploy #16：`32611742414`，Success；`origin/gh-pages`：`4204778`。
+- Core release Publish workflow #16：`32611711879`，Success。
+- Core release GitHub Pages build/deploy #16：`32611742414`，Success。
+- Final documentation closeout PR #92 已 squash merge 到 `main`，merge commit：`2f3f6a2`。
+- Final main CI #228：`32612203633`，Success；final Publish workshop #17：`32612203591`，Success。
+- Final GitHub Pages build/deploy #17：`32612231187`，Success；`origin/gh-pages`：`960b7ea`。
 - Live site：[GitHub Pages](https://frobel0520.github.io/software-engineering-workshop/) 與 `#/deploy-lab` route smoke check 通過，頁面顯示 `19 / 19`。
 - GitHub audit：0 open pull requests、0 open issues。
 
