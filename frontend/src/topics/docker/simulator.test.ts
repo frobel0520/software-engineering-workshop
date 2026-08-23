@@ -97,6 +97,7 @@ describe("Docker deterministic simulator", () => {
 
     expect(result.accepted).toBe(true);
     expect(result.results.at(-1)?.observedFailure).toBe(true);
+    expect(result.results[1]?.output).toContain("dist/index.html: missing");
     expect(result.state).toMatchObject({
       phase: "blocked",
       imageState: "absent",
