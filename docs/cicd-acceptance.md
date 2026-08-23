@@ -15,7 +15,7 @@
 2. 讀懂 workflow trigger，知道 push、pull request 與手動 dispatch 會在什麼 ref 上啟動哪些 fixture job。
 3. 理解 checkout、Node setup／cache、install、test、lint、build 的順序與 gate 責任。
 4. 以 required check 判斷 pull request 是否可以進入 merge，而不是只看某個單獨 step 的綠色結果。
-5. 分辨 test failure 與 build failure 的 evidence，知道下游 step 在 job failure 後不應被偽造為已執行。
+5. 分辨 install、test 與 build failure 的 evidence，知道下游 step 在 job failure 後不應被偽造為已執行。
 6. 用固定的 success／failure scenario 重跑 pipeline，理解 reset、retry 與 deterministic feedback 的關係；本 Lab 不連接真實 GitHub Actions。
 
 ## 2. 教學邊界
@@ -45,7 +45,7 @@ CI/CD Lesson
   → run build
   → publish required check
   → 判斷 mergeable／blocked
-  → 完成 success、test failure、build failure 三個 scenarios
+  → 完成 success、install failure、test failure、build failure 四個 scenarios
   → reset 後重跑 green pipeline regression
   → 標記 CI/CD topic complete
 ```
@@ -67,6 +67,7 @@ CI/CD Lesson
 | Scenario | Fixture input | Fixture outcome | 教學重點 |
 | --- | --- | --- | --- |
 | `pull-request-green` | event `pull_request`、base `dev`、test／lint／build 全部 pass | `frontend` required check passed，merge gate `mergeable` | 完整 CI gate 通過才表示 pull request 可以進入 merge。 |
+| `pull-request-install-failure` | event `pull_request`、base `dev`、`npm ci` fixture failed | install `failed`；test／lint／build `not-run`；required check failed；merge gate blocked | install 是第一個依賴 boundary，不能用舊的 node_modules 或下游輸出假裝通過。 |
 | `pull-request-test-failure` | event `pull_request`、base `dev`、test fixture failed | test `failed`；lint／build `not-run`；required check failed；merge gate blocked | 不把下游未執行的 steps 畫成綠色，先保留第一個 failure boundary。 |
 | `pull-request-build-failure` | event `pull_request`、base `dev`、test／lint pass、build fixture failed | build `failed`；required check failed；merge gate blocked | test 與 lint 綠色不能掩蓋 production build failure。 |
 
@@ -204,8 +205,9 @@ CicdLabState {
 
 只有下列條件全部成立時，CI/CD Lab 才算完成：
 
-- 三個 required scenarios 都完成各自的 terminal outcome。
+- 四個 required scenarios 都完成各自的 terminal outcome。
 - `pull-request-green` 顯示完整 stage、required check passed 與 mergeable。
+- `pull-request-install-failure` 顯示 install failed、test／lint／build not-run、required check failed 與 merge gate blocked。
 - `pull-request-test-failure` 顯示 test failed、lint／build not-run、required check failed 與 merge gate blocked。
 - `pull-request-build-failure` 顯示 test／lint passed、build failed、artifact missing、required check failed 與 merge gate blocked。
 - reset 後重跑 green pipeline，trigger、ref、stage status、check、merge gate 與 feedback 與第一次一致。
@@ -224,7 +226,7 @@ CicdLabState {
 
 ## 11. CICD-01 驗收
 
-- 文件明確描述 CI／CD boundary、trigger／ref、workflow fixture、九個 observable stages、三個 scenarios、failure feedback、completion 與 out-of-scope。
+- 文件明確描述 CI／CD boundary、trigger／ref、workflow fixture、九個 observable stages、四個 scenarios、failure feedback、completion 與 out-of-scope。
 - `CICD-02` 可依本文件撰寫 lesson 與 workflow fixture，不需要重新決定 job step、required check 或 failure semantics。
 - `CICD-03` 可依本文件建立純 simulator；不需要真實 GitHub Actions、runner、network、secret 或 shell。
 - `CICD-04` 可依本文件設計 Lab 的 trigger selector、step evidence、required check、merge gate、reset、keyboard、mobile 與 reduced-motion interaction。

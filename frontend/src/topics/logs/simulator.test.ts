@@ -8,7 +8,7 @@ import {
   runLogsEvents,
   type LogsLabEvent,
 } from "./simulator";
-import { findLogsScenario } from "./content";
+import { findLogsScenario, logsSensitiveFieldNames } from "./content";
 
 const selectSuccess: LogsLabEvent = { type: "select-scenario", scenarioId: "request-success" };
 const selectValidation: LogsLabEvent = { type: "select-scenario", scenarioId: "validation-rejected" };
@@ -110,6 +110,24 @@ describe("Logs deterministic simulator", () => {
     expect(terminal.accepted).toBe(true);
     expect(terminal.state.terminalOutcome).toBe("success");
     expect(terminal.state.completedScenarioIds).toEqual(["request-success"]);
+  });
+
+  it("rejects every declared sensitive raw value", () => {
+    const inspected = runLogsEvents([selectSuccess, ...inspectAll()]).state;
+    const correlationPassed = runLogsEvent(inspected, verifyCorrelation).state;
+    const scenario = findLogsScenario("request-success");
+
+    for (const field of logsSensitiveFieldNames) {
+      const leaked = runLogsEvent(correlationPassed, {
+        type: "verify-redaction",
+        serializedOutput: `${field}=${scenario.request[field]}`,
+      });
+
+      expect(leaked.accepted).toBe(false);
+      expect(leaked.state.redactionCheck).toBe("failed");
+      expect(leaked.state.lastMessage).toContain(field);
+      expect(leaked.state.lastMessage).not.toContain(scenario.request[field]);
+    }
   });
 
   it("preserves the expected severity and terminal outcome for rejection and timeout", () => {

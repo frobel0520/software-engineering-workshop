@@ -38,8 +38,23 @@ function stageIndex(stageId: RestTraceStageId): number {
   return restTraceStages.findIndex((stage) => stage.id === stageId);
 }
 
-function isKnownStage(stageId: RestTraceStageId): boolean {
-  return stageIndex(stageId) >= 0;
+function highestVisitedStageIndex(state: RestLabState): number {
+  return state.currentVisitedStageIds.reduce(
+    (highestIndex, visitedStageId) => Math.max(highestIndex, stageIndex(visitedStageId)),
+    -1,
+  );
+}
+
+export function isRestStageUnlocked(state: RestLabState, stageId: RestTraceStageId): boolean {
+  const scenario = findRestScenario(state.selectedScenarioId);
+  const targetIndex = stageIndex(stageId);
+  const terminalIndex = stageIndex(scenario.terminalStageId);
+
+  if (!state.requestStarted || targetIndex < 0 || targetIndex > terminalIndex) {
+    return false;
+  }
+
+  return targetIndex <= highestVisitedStageIndex(state) + 1;
 }
 
 function isComplete(state: RestLabState): boolean {
@@ -62,7 +77,7 @@ function withStage(current: RestLabState, stageId: RestTraceStageId): RestLabSta
   const terminalIndex = stageIndex(scenario.terminalStageId);
   const nextIndex = stageIndex(stageId);
 
-  if (!state.requestStarted || !isKnownStage(stageId) || nextIndex > terminalIndex) {
+  if (!isRestStageUnlocked(state, stageId)) {
     return { ...state, lastMessage: "這個 stage 不會在目前 request 執行；請依 lifecycle 前進。" };
   }
 
@@ -150,8 +165,7 @@ export function runRestEvent(current: RestLabState, event: RestLabEvent): RestEv
   }
 
   if (event.type === "inspect-stage") {
-    const scenario = findRestScenario(state.selectedScenarioId);
-    const accepted = isKnownStage(event.stageId) && stageIndex(event.stageId) <= stageIndex(scenario.terminalStageId);
+    const accepted = isRestStageUnlocked(state, event.stageId);
     return { state: withStage(state, event.stageId), accepted };
   }
 

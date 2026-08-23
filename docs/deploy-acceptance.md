@@ -15,7 +15,7 @@
 2. 讀懂部署 workflow 的 `main` trigger、`workflow_dispatch`、`frontend/dist` 與 `gh-pages` publish branch。
 3. 理解 release source、版本識別、Pages base path 與 artifact provenance 的關係。
 4. 在 artifact 缺失或部署驗證失敗時，保留 blocked／failed evidence，不把失敗版本誤標成 live。
-5. 以固定 release scenario 練習成功發布、artifact 缺失與 rollback 到上一個可用版本。
+5. 以固定 release scenario 練習成功發布、artifact 缺失、base path mismatch 與 rollback 到上一個可用版本。
 6. 用部署狀態、live probe、release record 與 rollback evidence 判斷一次交付是否真的完成。
 
 ## 2. 教學邊界
@@ -25,6 +25,8 @@
 fixture 以目前 repository 的 `.github/workflows/deploy-pages.yml` 為輸入快照：`main` push 或手動 dispatch 會在 `frontend` 安裝依賴、執行 test/build，將 `frontend/dist` 發布到 `gh-pages`。教學會顯示 workflow evidence，但不把遠端 Pages 即時狀態當成 Lab 結果。
 
 本主題不重新定義 CI 的 test／lint／build gate；它只接收一個固定的 CI passed／artifact state，專注 release、publish、verify、record 與 rollback。真實 domain、DNS、CDN、帳號權限與維運告警留給後續產品決策。
+
+Pages build 使用 `frontend/.env.pages` 與 `npm run build:pages` 載入 repository-specific `VITE_BASE`；這個公開路徑設定不依賴 shell-specific environment assignment。
 
 ## 3. Lesson／Lab Pageflow
 
@@ -45,7 +47,7 @@ Deploy Lesson
   → verify deployment
   → record release
   → evaluate release／rollback
-  → 完成 success、missing artifact、rollback 三個 scenarios
+  → 完成 success、missing artifact、base path mismatch、rollback 四個 scenarios
   → reset 後重跑 green release regression
   → 標記 Deploy topic complete
 ```
@@ -67,6 +69,7 @@ Deploy Lesson
 | --- | --- | --- | --- |
 | `main-pages-success` | source `main`、CI passed、`dist` verified、Pages base path verified | `gh-pages` updated to `release-2026.08.23`；live probe 200；release `verified` | artifact、publish 與 live verification 必須全部完成，才是成功部署。 |
 | `missing-artifact-blocked` | source `main`、CI passed、`dist` missing | publish blocked；`gh-pages` 保持上一個 verified version；release `blocked` | build／artifact 缺失時不可更新 Pages，也不可假裝 live。 |
+| `base-path-mismatch-blocked` | source `main`、CI passed、`dist` verified、Pages base path mismatch | publish blocked；`gh-pages` 保持上一個 verified version；release `blocked` | artifact 存在不代表資產可用；repository path 與 Vite base path 不一致時必須阻擋發布。 |
 | `rollback-after-probe-failure` | source `main`、new artifact verified、publish succeeded、live probe failed | release `release-2026.08.23` failed；rollback 到 `release-2026.08.16`；live probe 200 | rollback 指向上一個可用版本，保留失敗版本與原因。 |
 
 每個 scenario 都必須讓學習者看見：release source、version、CI result、artifact、base path、Pages branch pointer、publish result、deployment status、live URL／probe、release record 與 rollback evidence；失敗時要看見未更新或已回復的邊界。
@@ -108,10 +111,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
         working-directory: frontend
-      - run: npm test && npm run build
+      - run: npm test && npm run build:pages
         working-directory: frontend
-        env:
-          VITE_BASE: /${{ github.event.repository.name }}/
       - uses: peaceiris/actions-gh-pages@v4
         with:
           publish_dir: ./frontend/dist
@@ -140,7 +141,7 @@ inspect-workflow
 | inspect workflow | `cat .github/workflows/deploy-pages.yml` | main trigger、workflow_dispatch、dist、gh-pages 可見 | 未 inspect 時不可選擇 release source |
 | select release | `main → release-2026.08.23` | source、candidate version 與 previous verified version 可見 | 非 main source 應被阻擋 |
 | verify CI artifact | `artifact: frontend/dist` | CI passed、dist exists、artifact provenance 可見 | artifact missing 時 publish 不可更新 gh-pages |
-| verify Pages base | `VITE_BASE=/software-engineering-workshop/` | base path 與 repository path 一致 | base path mismatch 時 deployment blocked |
+| verify Pages base | `cat frontend/.env.pages` | profile 的 base path 與 repository path 一致 | base path mismatch 時 deployment blocked |
 | publish Pages | `publish → gh-pages` | gh-pages pointer 指向 candidate version | artifact／base path 不完整時 branch 保持 previous version |
 | verify deployment | `probe /software-engineering-workshop/` | live status 200、candidate version 可觀測 | probe failure 要保留 failed version，不宣稱 live |
 | record release | `record release` | version、source、artifact、URL、status 完整 | 沒有 deployment evidence 時不可寫 verified record |
@@ -206,9 +207,10 @@ DeployLabState {
 
 只有下列條件全部成立時，Deploy Lab 才算完成：
 
-- 三個 required scenarios 都完成各自的 terminal outcome。
+- 四個 required scenarios 都完成各自的 terminal outcome。
 - `main-pages-success` 顯示 candidate artifact、gh-pages publish、live status 200 與 verified release record。
 - `missing-artifact-blocked` 顯示 artifact missing、publish blocked、Pages pointer 保持 previous verified version 與 blocked record。
+- `base-path-mismatch-blocked` 顯示 artifact verified、base path mismatch、publish blocked、Pages pointer 保持 previous verified version 與 blocked record。
 - `rollback-after-probe-failure` 顯示 candidate probe failed、failed release record、rollback version、Pages pointer 回到 previous verified version 與 rolled-back record。
 - reset 後重跑 green release，source、version、artifact、Pages pointer、probe、record 與 feedback 與第一次一致。
 - 完成後使用 `se-workshop-deploy-complete` 保存進度。
@@ -226,7 +228,7 @@ DeployLabState {
 
 ## 11. DEPLOY-01 驗收
 
-- 文件明確描述 release／artifact／Pages／live probe／rollback boundary、workflow fixture、八個 observable stages、三個 scenarios、failure feedback、completion 與 out-of-scope。
+- 文件明確描述 release／artifact／Pages／live probe／rollback boundary、workflow fixture、八個 observable stages、四個 scenarios、failure feedback、completion 與 out-of-scope。
 - `DEPLOY-02` 可依本文件撰寫 lesson 與 workflow／artifact fixture，不需要重新決定 release source、version 或 Pages semantics。
 - `DEPLOY-03` 可依本文件建立純 simulator；不需要真實 GitHub Pages、network、secret、shell 或 runner。
 - `DEPLOY-04` 可依本文件設計 Lab 的 release selector、stage evidence、live probe、rollback、reset、keyboard、mobile 與 reduced-motion interaction。

@@ -33,6 +33,14 @@
 - `styles.css` 已確認含 `max-width: 720px` responsive rules 與 `prefers-reduced-motion` rules。
 - 手動驗收已通過：使用實體鍵盤確認 `Tab`／`Enter`／`Space` 可操作 Lesson／Lab controls，terminal submit、reset、錯誤回饋與返回課程地圖流程可完成；reduced-motion 偏好下內容與操作仍完整。`GIT-REVIEW` 已通過。
 
+### 2026-08-23：M6 delivery topic browser smoke
+
+- CI/CD Lesson → Lab route 與 Deploy Lesson → Lab route 可達；兩個 Lab 的 native buttons、command input、`aria-live` feedback、progressbar 與 reset 都存在。
+- CI/CD 已驗證 green pipeline 與 test failure；failure state 保留 `lint`／`build: not-run`、required check failed 與 merge gate blocked。
+- Deploy 已驗證 green release、artifact blocked、probe failure → rollback、release record、Pages pointer 與 reset/replay completion。
+- CI/CD、Deploy 在 390×844 viewport 下 document width 為 375，mobile menu 可開關，command input 可取得 focus；兩個 topic styles 都含 `prefers-reduced-motion` rule。
+- M6 full regression：83 test files / 265 tests、TypeScript lint、GitHub Pages base-path build 與 `git diff --check` 通過。完整 release 結論見 [`release-audit.md`](./release-audit.md)。
+
 ## 1. Keyboard 與焦點
 
 - [ ] 所有互動控制項都能以 `Tab`、`Shift+Tab`、`Enter` 或 `Space` 操作。

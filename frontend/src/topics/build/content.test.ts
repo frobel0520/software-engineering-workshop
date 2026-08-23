@@ -17,7 +17,7 @@ describe("build lesson content", () => {
     expect(buildLessonSteps.map((step) => step.command)).toEqual([
       "cat package.json",
       "npm run lint",
-      "VITE_BASE=/software-engineering-workshop/ npm run build",
+      "npm run build:pages",
       "ls dist",
       "npm run preview",
     ]);

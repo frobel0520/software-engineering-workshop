@@ -5,6 +5,7 @@ export type PostgreSqlStepId =
   | "define-contract"
   | "insert-returning"
   | "read-jsonb"
+  | "create-jsonb-index"
   | "explain-query"
   | "commit-transaction";
 
@@ -61,6 +62,7 @@ export interface PostgreSqlLabState {
   returnedId: number | null;
   jsonbMatchCount: number;
   plan: PostgreSqlQueryPlan | null;
+  indexCreated: boolean;
   transactionStatus: PostgreSqlTransactionStatus;
   result: PostgreSqlLabResult | null;
   lastCode: string | null;
@@ -80,7 +82,7 @@ export const postgresqlLesson: LessonDefinition = {
     "用 psql 指令確認目前 database、user 與可用資料表。",
     "選擇 timestamptz、jsonb、identity 與 constraint 表達資料契約。",
     "用 INSERT ... RETURNING 取得資料庫剛建立的 row。",
-    "讀懂 JSONB 條件與 PostgreSQL EXPLAIN，再用 transaction 提交完整寫入。",
+    "用 JSONB 條件、GIN index 與 PostgreSQL EXPLAIN 驗證查詢，再用 transaction 提交完整寫入。",
   ],
   sections: [
     {
@@ -100,8 +102,8 @@ export const postgresqlLesson: LessonDefinition = {
     },
     {
       id: "explain-and-commit",
-      title: "用 EXPLAIN 和交易驗證行為",
-      body: "EXPLAIN 顯示 PostgreSQL 選擇的 plan，transaction 則把多個寫入包成可提交的單位；兩者都要以可觀察結果驗證。",
+      title: "用 index、EXPLAIN 和交易驗證行為",
+      body: "先建立與分析 JSONB GIN index，再用 EXPLAIN 觀察 plan；transaction 則把多個寫入包成可提交的單位。",
     },
   ],
 };
@@ -136,11 +138,18 @@ export const postgresqlLessonSteps: readonly PostgreSqlLessonStep[] = [
     takeaway: "JSONB 仍然需要明確的查詢語意與可驗證的 fixture。",
   },
   {
+    id: "create-jsonb-index",
+    title: "建立 JSONB GIN index",
+    code: "CREATE INDEX idx_events_payload_gin\nON events USING GIN (payload);\n\nANALYZE events;",
+    explanation: "為 payload 建立 GIN index 並更新 planner statistics，讓後續 EXPLAIN 有一個真實存在的 index candidate；真實 planner 仍會依資料量與成本選擇 plan。",
+    takeaway: "Index 必須先存在且被分析，EXPLAIN 才有資格討論它是否被採用。",
+  },
+  {
     id: "explain-query",
     title: "讀懂 PostgreSQL EXPLAIN",
     code: "EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM events WHERE payload @> '{\"kind\":\"signup\"}';",
-    explanation: "EXPLAIN 顯示 PostgreSQL 實際採用的 plan 與 buffer 線索，讓效能討論不只停在猜測。",
-    takeaway: "先看 plan 和 rows，再決定是否需要調整索引或查詢。",
+    explanation: "在 GIN index 已建立並完成 ANALYZE 後，EXPLAIN 顯示 plan 與 buffer 線索；本 Lab 用 deterministic fixture 示範 Bitmap Index Scan，真實 PostgreSQL 仍可能依 table size 選擇 Seq Scan。",
+    takeaway: "先看實際 plan 和 rows，再判斷 index 是否真的改善查詢。",
   },
   {
     id: "commit-transaction",
@@ -205,6 +214,12 @@ export const postgresqlResults: Readonly<Record<PostgreSqlStepId, PostgreSqlLabR
     rows: [["signup", "web"], ["signup", "mobile"]],
     caption: "JSONB containment · 2 matches",
   },
+  "create-jsonb-index": {
+    id: "create-jsonb-index",
+    columns: ["index", "method", "status"],
+    rows: [["idx_events_payload_gin", "GIN", "created · analyzed"]],
+    caption: "JSONB GIN index · ready",
+  },
   "explain-query": {
     id: "explain-query",
     columns: ["node", "detail", "rows"],
@@ -228,6 +243,7 @@ export const postgresqlLabInitialState: PostgreSqlLabState = {
   returnedId: null,
   jsonbMatchCount: 0,
   plan: null,
+  indexCreated: false,
   transactionStatus: "idle",
   result: null,
   lastCode: null,
@@ -245,5 +261,6 @@ export interface PostgreSqlFailureFixture {
 export const postgresqlFailureFixtures: readonly PostgreSqlFailureFixture[] = [
   { event: "define-contract", message: "請先確認 psql session，再建立資料契約。" },
   { event: "insert-returning", message: "請先建立 events schema，RETURNING 才有明確的資料邊界。" },
+  { event: "explain-query", message: "請先建立 JSONB GIN index，再閱讀 PostgreSQL plan。" },
   { event: "commit-transaction", message: "請先讀完 EXPLAIN plan，再提交完整 transaction。" },
 ] as const;

@@ -184,7 +184,7 @@ export const cicdWorkflowFixture: CicdWorkflowFixture = {
 export type CicdStepOutcome = "passed" | "failed" | "not-run";
 export type CicdTriggerEvent = "pull_request" | "push" | "workflow_dispatch";
 export type CicdTargetRef = "dev" | "main";
-export type CicdScenarioId = "pull-request-green" | "pull-request-test-failure" | "pull-request-build-failure";
+export type CicdScenarioId = "pull-request-green" | "pull-request-install-failure" | "pull-request-test-failure" | "pull-request-build-failure";
 
 export interface CicdScenarioFixture {
   id: CicdScenarioId;
@@ -217,6 +217,21 @@ export const cicdScenarioFixtures: readonly CicdScenarioFixture[] = [
     mergeGate: "mergeable",
     failureStage: null,
     learningPoint: "所有必要 gate 通過後，frontend required check 才能讓 PR mergeable。",
+  },
+  {
+    id: "pull-request-install-failure",
+    title: "Install failure 停住 pipeline",
+    triggerEvent: "pull_request",
+    targetRef: "dev",
+    installOutcome: "failed",
+    testOutcome: "not-run",
+    lintOutcome: "not-run",
+    buildOutcome: "not-run",
+    artifactState: "missing",
+    requiredCheck: "failed",
+    mergeGate: "blocked",
+    failureStage: "install-dependencies",
+    learningPoint: "npm ci 失敗時保留 lockfile／runtime evidence，test、lint、build 都必須維持 not-run。",
   },
   {
     id: "pull-request-test-failure",
@@ -276,6 +291,7 @@ export interface CicdFailureFixture {
 }
 
 export const cicdFailureFixtures: readonly CicdFailureFixture[] = [
+  { command: "npm ci  # frontend", message: "install failed；test、lint 與 build 維持 not-run，先修正 lockfile／runtime boundary。", expectedBoundary: "lockfile / runtime" },
   { command: "npm test", message: "test failed；lint 與 build 維持 not-run，先修正行為 gate。", expectedBoundary: "behavior gate" },
   { command: "npm run lint", message: "lint 尚未通過；build 不能被標記為成功。", expectedBoundary: "TypeScript gate" },
   { command: "npm run build", message: "build failed；production artifact missing，required check 會 blocked。", expectedBoundary: "production artifact" },
