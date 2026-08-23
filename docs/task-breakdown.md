@@ -246,6 +246,8 @@ M6 的 task 依賴分成兩層：`RELEASE-001`、`RELEASE-002`、`RELEASE-003`�
 
 本輪不直接建立 GitHub Milestones／Issues；先讓 task 顆粒度與 Milestone 邊界被確認，避免把錯誤拆分同步到遠端。
 
-## 15. 目前下一個可開工 task
+## 15. 目前專案狀態
 
-目前 19 / 19 Core topic 已 ready，M1、M2、M3、M4、M5、M6 與 `CORE-008` 已完成；release PR #90 與 final documentation closeout PR #92 已合併至 `main`，GitHub Pages publish workflow #16／#17 與 live site smoke check 均通過。本專案目前沒有 canonical backlog task。
+目前 19 / 19 Core topic 已 ready，M1、M2、M3、M4、M5、M6 與 `CORE-008` 已完成；release PR #90 與 final documentation closeout PR #92 已合併至 `main`，CORE-008 PR #106 已合併至 `dev`，GitHub Pages publish workflow #16／#17 與 live site smoke check 均通過。本專案目前沒有 canonical backlog task。
+
+目前階段是測試／驗收：自動化基線為 84 個測試檔／279 個測試，另已通過 TypeScript lint、production build 與 Pages build。後續只處理測試發現的問題，不新增未排定功能。
