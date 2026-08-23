@@ -27,6 +27,7 @@ describe("PostgreSQL lesson content", () => {
       "define-contract",
       "insert-returning",
       "read-jsonb",
+      "create-jsonb-index",
       "explain-query",
       "commit-transaction",
     ]);
@@ -37,8 +38,9 @@ describe("PostgreSQL lesson content", () => {
     expect(postgresqlPlans["after-index"].operation).toBe("bitmap-index-scan");
     expect(postgresqlLessonSteps[1].code).toContain("occurred_at timestamptz NOT NULL");
     expect(postgresqlLessonSteps[2].code).toContain("RETURNING id, occurred_at, payload");
-    expect(postgresqlLessonSteps[5].code).toContain("UPDATE events");
+    expect(postgresqlLessonSteps[4].code).toContain("USING GIN");
+    expect(postgresqlLessonSteps[6].code).toContain("UPDATE events");
     expect(postgresqlResults["insert-returning"].rows[0][0]).toBe(104);
-    expect(postgresqlLabHappyPath).toHaveLength(6);
+    expect(postgresqlLabHappyPath).toHaveLength(7);
   });
 });
