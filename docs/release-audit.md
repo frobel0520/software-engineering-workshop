@@ -3,11 +3,11 @@
 > 日期：2026-08-23
 > Release source：`origin/dev` → `feature/release-19-19` → `main`
 > Scope：RELEASE-001～RELEASE-007
-> Status：Ready for release PR
+> Status：Released
 
 ## 結論
 
-Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成統計。`dev` 到 `main` 的 merge tree 無 conflict；本 release branch 已完成完整 regression、Pages base build、route／progress audit 與新 delivery topic 的 browser smoke。
+Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成統計。完整 regression、Pages base build、route／progress audit、delivery topic browser smoke、`main` release 與 GitHub Pages live verification 均已完成。
 
 ## RELEASE-001：curriculum、registry、route、progress
 
@@ -43,17 +43,20 @@ Core 19 個 topic 全部為 `ready`，Extension 2 個 topic 維持獨立完成�
 
 ## RELEASE-006：release、遠端狀態與 Pages
 
-- `git merge-tree --write-tree origin/main origin/dev`：clean，未發現 merge conflict。
+- 初始 `origin/main` ↔ `origin/dev` release merge-tree（功能 release PR #90 前）為 clean；#91 後新增的 closeout 文件在 `main` 與 `dev` 間產生預期的 docs-only add/add／content conflict，已在 `feature/m6-closeout-release` 手動解決，未涉及 source code。
 - M5 的 feature PR（Docker、CI/CD、Deploy）均經 `feature/* → dev`、required checks 與 squash merge。
+- Release PR #90 已 squash merge 到 `main`，merge commit：`2838d34`。
+- Publish workflow #16：`32611711879`，Success。
+- GitHub Pages build/deploy #16：`32611742414`，Success；`origin/gh-pages`：`4204778`。
+- Live site：[GitHub Pages](https://frobel0520.github.io/software-engineering-workshop/) 與 `#/deploy-lab` route smoke check 通過，頁面顯示 `19 / 19`。
 - GitHub audit：0 open pull requests、0 open issues。
-- Release PR 合併到 `main` 後，需確認 `main` CI 與 GitHub Pages publish workflow 均成功，並確認 `origin/gh-pages` 更新到 release commit。
 
 ## RELEASE-007：文件交接
 
-- README、project plan、project SA、task breakdown、acceptance contracts 與本 audit 對齊 19/19。
-- M5 Delivery 標記 done；M6 release audit 在 release PR 完成後標記 done。
+- README、project plan、project SA、project SD、task breakdown、accessibility checklist、acceptance contracts 與本 audit 對齊 19/19。
+- M5 Delivery 與 M6 Hardening／Release 均標記 done。
 - `CORE-008` 維持非阻塞 architecture follow-up，不阻擋本 release。
 
-## Remaining release check
+## Known follow-up
 
-本文件建立時尚未執行 `main` merge 與 Pages publish；那兩項是 release PR 合併後的最後外部狀態驗證，不可用本機 build 取代。
+- GitHub Actions 顯示 Node.js 20 runtime deprecation warning（checkout、setup-node、upload-artifact）；本次不影響 workflow success，後續可獨立升級 action major version。
