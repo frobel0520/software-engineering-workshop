@@ -104,7 +104,7 @@ export const logsLesson: LessonDefinition = {
     what: "結構化日誌把執行中的事件、嚴重性與安全上下文留下來，讓人可以沿著同一個 request 找到發生了什麼。",
     why: "只有錯誤文字時，很難把正常事件、輸入問題與依賴逾時放進同一條時間線，也容易把秘密寫進輸出。",
     when: "需要理解 request timeline、failure evidence 或服務邊界發生什麼時，使用 logs；趨勢數值與跨服務路徑則交給 metrics 或 traces。",
-    how: "先定義穩定 event schema，再選正確 level、保留 correlationId、限制 safe context，最後用 deterministic fixture 重跑。",
+    how: "先定義穩定 event schema，再選正確 level、保留 correlationId、限制 safe context，最後用可重跑的測試資料驗證。",
   },
   objectives: [
     "分辨 logs、metrics 與 traces 的責任邊界，不把一種訊號當成全部觀測工具。",
@@ -375,11 +375,11 @@ export const logsResults: Readonly<Record<LogsStepId, LogsLessonResult>> = {
   },
   "event-schema": {
     id: "event-schema",
-    columns: ["field", "purpose", "fixture rule"],
+    columns: ["field", "purpose", "scenario rule"],
     rows: [
       ["level", "severity", "debug · info · warn · error"],
       ["event", "machine-readable name", "stable event naming"],
-      ["correlationId", "request association", "fixed per scenario"],
+      ["correlationId", "request association", "same per scenario"],
       ["outcome", "terminal meaning", "started → success/rejected/failed"],
     ],
     caption: "structured event · stable fields",
@@ -432,14 +432,14 @@ export const logsResults: Readonly<Record<LogsStepId, LogsLessonResult>> = {
       scenario.expected.correlationId,
       "passed",
     ]),
-    caption: "regression fixture · 3 scenarios stable",
+    caption: "regression · 3 scenarios stable",
   },
 };
 
 export const logsFailureFixtures: readonly LogsFailureFixture[] = [
   {
     event: "inspect-without-scenario",
-    message: "尚未選擇 scenario；請先載入固定 Logs fixture，再開始 inspect。",
+    message: "尚未選擇 scenario；請先載入 Logs 測試資料，再開始 inspect。",
     evidence: "selectedScenarioId 仍然是 null，沒有可供檢查的 event sequence。",
   },
   {
@@ -454,7 +454,7 @@ export const logsFailureFixtures: readonly LogsFailureFixture[] = [
   },
   {
     event: "wrong-severity",
-    message: "level 與 scenario outcome 不符；請依 fixture evidence 選擇 info、warn 或 error。",
+    message: "level 與 scenario outcome 不符；請依案例 evidence 選擇 info、warn 或 error。",
     evidence: "validation-rejected 是 warn，dependency-timeout 是 error，request-success 是 info。",
   },
   {

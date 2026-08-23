@@ -19,9 +19,7 @@ interface PackageHistoryEntry {
 type PackageFile = "package.json" | "package-lock.json" | "node_modules";
 
 const PACKAGE_FILES: readonly PackageFile[] = ["package.json", "package-lock.json", "node_modules"];
-const INITIAL_HISTORY: readonly PackageHistoryEntry[] = [
-  { lines: ["Package Management sandbox v1", "固定 fixture registry 已準備好。選擇一個 package action 開始。"] },
-];
+const INITIAL_HISTORY: readonly PackageHistoryEntry[] = [];
 
 function eventForStep(stepId: PackageStepId): PackageLabEvent {
   return packageLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -116,12 +114,13 @@ export function PackageLab({ onComplete }: { onComplete?: () => void }) {
     setState(createInitialPackageState());
     setCommand("");
     setSelectedFile("package.json");
-    setHistory([{ lines: ["Package Lab 已重設。從 cat package.json 重新開始。"] }]);
+    setHistory([{ lines: ["已重設。從 cat package.json 重新開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / PACKAGE"
+      className="foundation-lab-shell"
+      showMeta={false}
       title={<>讓依賴變得可重現<br /><em>而不是碰運氣</em></>}
       progressLabel={`${completedCount} / ${packageLessonSteps.length} STEPS`}
       progress={packageLabProgress(state)}
@@ -137,13 +136,12 @@ export function PackageLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="package-lab-grid">
-          <section className="package-workspace-panel" aria-label="Package workspace fixture">
+          <section className="package-workspace-panel" aria-label="套件工作區">
             <div className="package-workspace-top">
               <span className="package-window-dots" aria-hidden="true"><i /><i /><i /></span>
-              <b>workshop-package-lab</b>
               <span className="package-phase">{state.phase}</span>
             </div>
-            <div className="package-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="Package fixture files">
+            <div className="package-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="套件檔案">
               {PACKAGE_FILES.map((file, index) => (
                 <button
                   className={selectedFile === file ? "active" : ""}
@@ -175,7 +173,7 @@ export function PackageLab({ onComplete }: { onComplete?: () => void }) {
                 key={file}
                 role="tabpanel"
                 aria-labelledby={packageTabId(file)}
-                aria-label={`${file} fixture`}
+                aria-label={file}
                 tabIndex={0}
                 hidden={selectedFile !== file}
               >
@@ -212,8 +210,7 @@ export function PackageLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="package-control-panel" aria-label="Package management controls">
             <div className="package-panel-heading">
-              <div><p className="kicker">PACKAGE CONTROL</p><h2>依序同步三層狀態</h2></div>
-              <span className="package-lab-meta">npm@10.8.2<br />fixture registry</span>
+              <div><h2>依序同步三層狀態</h2></div>
             </div>
             <div className="package-action-list">
               {packageLessonSteps.map((step, index) => {
@@ -234,13 +231,13 @@ export function PackageLab({ onComplete }: { onComplete?: () => void }) {
                 );
               })}
             </div>
-            <p className="package-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察 simulator 如何保留狀態並提示原因。</p>
+            <p className="package-current-hint">目前任務：{currentStep.title}。</p>
           </aside>
         </div>
       )}
 
       <section className="package-state-section" aria-labelledby="package-state-title">
-        <div className="section-heading"><div><p className="kicker">LIVE PACKAGE STATE</p><h2 id="package-state-title">目前的依賴線索</h2></div><p>只顯示 simulator 狀態，不連線真實 registry。</p></div>
+        <div className="section-heading"><div><h2 id="package-state-title">目前的依賴線索</h2></div></div>
         <div className="package-state-grid">
           <div><small>MANIFEST</small><b>{state.manifestState}</b></div>
           <div><small>LOCKFILE</small><b>{state.lockfileState}</b></div>

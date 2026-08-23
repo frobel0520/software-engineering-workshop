@@ -112,7 +112,7 @@ function runKnownCommand(state: CliLabState, command: string): CliCommandResult 
     return appendSuccess(
       state,
       output,
-      state.cwd === "/workspace/project/src" ? "已確認來源目錄內有 app.ts。" : "已列出 project root 的固定檔案。",
+      state.cwd === "/workspace/project/src" ? "已確認來源目錄內有 app.ts。" : "已列出 project root 的檔案。",
       state.cwd === "/workspace/project/src" ? "inspect" : undefined,
     );
   }
@@ -152,9 +152,9 @@ function runKnownCommand(state: CliLabState, command: string): CliCommandResult 
 
   if (command === "npm test") {
     if (state.cwd !== "/workspace/project/src") {
-      return appendOutput(state, "stderr", "npm test: blocked until the source directory is selected", 1, "先完成 pwd 與 cd src，再執行固定檢查。");
+      return appendOutput(state, "stderr", "npm test: blocked until the source directory is selected", 1, "先完成 pwd 與 cd src，再執行檢查。");
     }
-    return appendSuccess(state, "Tests: 3 passed", "固定檢查通過，CLI Lab 已完成。", "verify");
+    return appendSuccess(state, "Tests: 3 passed", "檢查通過，CLI Lab 已完成。", "verify");
   }
 
   return null;
@@ -175,7 +175,7 @@ export function runCliCommand(current: CliLabState, rawCommand: string): CliComm
   const knownResult = runKnownCommand(state, command);
   if (knownResult) return knownResult;
 
-  return appendOutput(state, "stderr", `${command}: command not found`, 127, "命令不存在；請確認拼字或回到教材中的固定指令。");
+  return appendOutput(state, "stderr", `${command}: command not found`, 127, "命令不存在；請確認拼字或回到教材中的指令。");
 }
 
 export const cliSimulator: SimulatorDefinition<CliLabState, CliLabEvent> = {

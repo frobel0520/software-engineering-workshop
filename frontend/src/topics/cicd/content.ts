@@ -14,7 +14,7 @@ export const cicdLesson: LessonDefinition = {
     "理解 npm ci、test、lint、build 的 fail-fast 順序。",
     "以 required check 判斷 pull request 是否 mergeable。",
     "區分 test failure、build failure 與下游 not-run evidence。",
-    "用固定 scenario 重跑 success、failure 與 reset/replay flow。",
+    "依序重跑 scenario、failure 與 reset/replay flow。",
   ],
   sections: [
     {
@@ -50,7 +50,7 @@ export const cicdLesson: LessonDefinition = {
     {
       id: "repeatable-pipeline",
       title: "Reset 後重跑同一條線",
-      body: "相同 fixture 加上相同 event sequence 應得到相同 step status、required check 與 merge gate。可重複的 pipeline evidence 比一次性的綠色畫面更可靠。",
+      body: "相同測試資料加上相同 event sequence 應得到相同 step status、required check 與 merge gate。可重複的 pipeline evidence 比一次性的綠色畫面更可靠。",
     },
   ],
 };
@@ -97,7 +97,7 @@ export const cicdLessonSteps: readonly CicdLessonStep[] = [
     sectionId: "checkout-and-cache",
     title: "Checkout source",
     command: "actions/checkout@v4",
-    explanation: "runner 先取得 fixture source ref；尚未 checkout 時，install 與任何 gate 都沒有可信輸入。",
+    explanation: "runner 先取得 source ref；尚未 checkout 時，install 與任何 gate 都沒有可信輸入。",
     takeaway: "先固定 source，再談依賴與檢查結果。",
   },
   {
@@ -105,7 +105,7 @@ export const cicdLessonSteps: readonly CicdLessonStep[] = [
     sectionId: "checkout-and-cache",
     title: "安裝 lockfile 依賴",
     command: "npm ci  # frontend",
-    explanation: "Node 22、npm cache 與 frontend/package-lock.json 形成 deterministic install context。",
+    explanation: "Node 22、npm cache 與 frontend/package-lock.json 形成可重現的 install context。",
     takeaway: "npm ci 是可重現 pipeline input，不是可省略的暖身。",
   },
   {
@@ -159,7 +159,7 @@ export const cicdFixture = {
   cacheDependencyPath: "frontend/package-lock.json",
   workingDirectory: "frontend",
   targetRefs: ["dev", "main"],
-  sourceRef: "fixture/feature",
+  sourceRef: "feature/order",
 } as const;
 
 export interface CicdWorkflowFixture {
@@ -274,8 +274,8 @@ export interface CicdStageFixture {
 
 export const cicdStageFixtures: readonly CicdStageFixture[] = [
   { id: "inspect-workflow", boundary: "workflow / job", successEvidence: "CI · frontend · required check frontend", failureEvidence: "workflow 尚未 inspect" },
-  { id: "select-trigger", boundary: "event / ref", successEvidence: "pull_request · base dev", failureEvidence: "event 或 target ref 不在 fixture" },
-  { id: "checkout-source", boundary: "source ref", successEvidence: "fixture/feature checked out", failureEvidence: "source 尚未取得，後續 stages not-run" },
+  { id: "select-trigger", boundary: "event / ref", successEvidence: "pull_request · base dev", failureEvidence: "event 或 target ref 不符合條件" },
+  { id: "checkout-source", boundary: "source ref", successEvidence: "feature/order checked out", failureEvidence: "source 尚未取得，後續 stages not-run" },
   { id: "install-dependencies", boundary: "lockfile / runtime", successEvidence: "Node 22 · npm cache · npm ci passed", failureEvidence: "install failed，test／lint／build not-run" },
   { id: "run-test", boundary: "behavior gate", successEvidence: "npm test passed", failureEvidence: "npm test failed，lint／build not-run" },
   { id: "run-lint", boundary: "TypeScript gate", successEvidence: "npm run lint passed", failureEvidence: "lint failed，build not-run" },

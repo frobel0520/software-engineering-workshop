@@ -44,7 +44,8 @@ export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / GUARDRAILS"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓每一次呼叫<br /><em>先通過一道防線</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${guardrailRequiredScenarioIds.length} SCENARIOS`}
       progress={guardrailLabProgress(state)}
@@ -53,7 +54,7 @@ export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
       {completed ? (
         <TopicCompletionCard
           title="三個關鍵情境都完成了。"
-          description="你已看過安全放行、可修正的輸入風險，以及工具副作用攔截；每個結果都有固定規則與 latency。"
+          description="你已看過安全放行、可修正的輸入風險，以及工具副作用攔截；每個結果都有對應規則與 latency。"
           onReset={() => apply({ type: "reset" })}
         />
       ) : (
@@ -103,7 +104,7 @@ export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
             </div>
 
             <div className="guardrail-section-heading scenario-heading">
-              <p className="kicker">FIXED SCENARIOS</p>
+              <p className="kicker">SCENARIOS</p>
               <span>不呼叫真實模型</span>
             </div>
             <div className="guardrail-scenario-list">
@@ -130,7 +131,7 @@ export function GuardrailLab({ onComplete }: { onComplete?: () => void }) {
                   <div><b>{result.validatorId}</b><small>{result.message}</small></div>
                   <i>{result.latencyMs}ms</i>
                 </div>
-              )) : <p className="guardrail-empty">送出一個固定情境後，這裡會顯示 validator 結果與成本。</p>}
+              )) : <p className="guardrail-empty">選擇一個情境後，這裡會顯示 validator 結果與成本。</p>}
             </div>
             <p className="guardrail-result-note">目前 outcome：<b>{state.outcome}</b> · session phase：<b>{state.phase}</b></p>
           </aside>
