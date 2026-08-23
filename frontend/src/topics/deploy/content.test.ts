@@ -46,11 +46,13 @@ describe("Deploy lesson contract", () => {
     expect(deployScenarioFixtures.map((scenario) => scenario.id)).toEqual([
       "main-pages-success",
       "missing-artifact-blocked",
+      "base-path-mismatch-blocked",
       "rollback-after-probe-failure",
     ]);
     expect(deployScenarioFixtures[0]).toMatchObject({ artifactOutcome: "verified", publishOutcome: "published", finalRecord: "verified" });
     expect(deployScenarioFixtures[1]).toMatchObject({ artifactOutcome: "missing", publishOutcome: "blocked", finalRecord: "blocked" });
-    expect(deployScenarioFixtures[2]).toMatchObject({ deploymentOutcome: "rolled-back", previousVerifiedVersion: "release-2026.08.16", finalRecord: "rolled-back" });
+    expect(deployScenarioFixtures[2]).toMatchObject({ artifactOutcome: "verified", basePathOutcome: "mismatch", publishOutcome: "blocked", finalRecord: "blocked" });
+    expect(deployScenarioFixtures[3]).toMatchObject({ deploymentOutcome: "rolled-back", previousVerifiedVersion: "release-2026.08.16", finalRecord: "rolled-back" });
     expect(deployFailureFixtures.map((fixture) => fixture.expectedBoundary)).toEqual(["CI / artifact", "base path", "live probe", "verify / rollback"]);
   });
 });
