@@ -53,7 +53,7 @@ describe("CLI Lab simulator", () => {
     const result = runCliCommand(createCliLabState(), "cat README.md");
 
     expect(result.accepted).toBe(true);
-    expect(result.output).toEqual(["# CLI fixture"]);
+    expect(result.output).toEqual(["# CLI project"]);
     expect(result.state.completedStepIds).toEqual([]);
     expect(result.state.exitCode).toBe(0);
   });

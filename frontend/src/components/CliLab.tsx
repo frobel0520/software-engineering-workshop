@@ -20,9 +20,7 @@ interface TerminalEntry {
   exitCode?: number | null;
 }
 
-const initialHistory: readonly TerminalEntry[] = [
-  { lines: ["CLI Workshop sandbox v1", "固定 project fixture 已準備好。輸入第一個指令開始。"] },
-];
+const initialHistory: readonly TerminalEntry[] = [];
 
 function statusTone(state: CliLabState): TopicStatusTone {
   if (state.phase === "completed") return "success";
@@ -71,13 +69,14 @@ export function CliLab({ onComplete }: { onComplete: () => void }) {
   function reset() {
     setCli(createCliLabState());
     setCommand("");
-    setHistory([{ lines: ["Sandbox 已重設。從 pwd 重新開始。"] }]);
+    setHistory([{ lines: ["已重設。從 pwd 重新開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / CLI"
-      title={<>在固定工作目錄中<br /><em>讀懂命令列</em></>}
+      className="foundation-lab-shell"
+      showMeta={false}
+      title={<>在工作目錄中<br /><em>讀懂命令列</em></>}
       progressLabel={cliLabIsComplete(cli) ? "完成" : `${completedCount} / ${cliLessonSteps.length}`}
       progress={progress}
       onReset={reset}
@@ -85,10 +84,10 @@ export function CliLab({ onComplete }: { onComplete: () => void }) {
       <TopicStatusFeedback tone={statusTone(cli)} message={statusMessage(cli)} />
 
       <div className="lab-layout cli-lab-layout">
-        <section className="terminal-panel" aria-label="CLI 命令列模擬器">
+          <section className="terminal-panel" aria-label="CLI 命令列">
           <div className="terminal-top">
             <span className="terminal-dots" aria-hidden="true"><i /><i /><i /></span>
-            <b>cli-workshop — {cli.cwd}</b>
+            <b>{cli.cwd}</b>
             <span aria-label={`目前 exit code ${cli.exitCode ?? "尚未執行"}`}>exit {cli.exitCode ?? "—"}</span>
           </div>
           <div className="terminal-output" role="log" aria-live="polite" aria-label="命令列輸出">
@@ -117,15 +116,14 @@ export function CliLab({ onComplete }: { onComplete: () => void }) {
             />
             <button type="submit" disabled={!command.trim() || cliLabIsComplete(cli)}>執行</button>
           </form>
-          <p id="cli-command-help" className="sr-only">輸入固定 fixture 支援的命令，按 Enter 或執行送出。</p>
+          <p id="cli-command-help" className="sr-only">輸入教材中的命令，按 Enter 或執行送出。</p>
         </section>
 
         <aside className="mission-panel">
-          <p className="kicker">CURRENT MISSION</p>
           {cliLabIsComplete(cli) ? (
             <TopicCompletionCard
               title="命令列流程完成"
-              description="你已能確認 cwd、讀取 fixture、解讀輸出，並用固定檢查完成一次可重複流程。"
+              description="你已能確認 cwd、讀取檔案、解讀輸出，並完成一次可重複流程。"
               onReset={reset}
             />
           ) : (

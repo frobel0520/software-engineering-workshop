@@ -21,7 +21,7 @@ interface ProblemSolvingHistoryEntry {
 }
 
 const INITIAL_HISTORY: readonly ProblemSolvingHistoryEntry[] = [
-  { lines: ["PROBLEM SOLVING workbench v0", "固定 orders + payment fixture 已載入。"] },
+  { lines: ["Problem Solving Lab 已載入。", "從問題陳述開始。"] },
 ];
 
 function statusTone(state: ProblemSolvingLabState): TopicStatusTone {
@@ -73,7 +73,8 @@ export function ProblemSolvingLab({ onComplete }: { onComplete?: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / PROBLEM SOLVING"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>從症狀走到<br /><em>可驗證的修復</em></>}
       progressLabel={`${completedCount} / ${problemSolvingLessonSteps.length} CHECKS`}
       progress={problemSolvingLabProgress(state)}
@@ -123,7 +124,7 @@ export function ProblemSolvingLab({ onComplete }: { onComplete?: () => void }) {
           <aside className="problem-solving-control-panel" aria-labelledby="problem-solving-actions-title">
             <div className="problem-solving-panel-heading">
               <div><p className="kicker">METHOD CONTROL</p><h2 id="problem-solving-actions-title">沿著證據縮小範圍</h2></div>
-              <span className="problem-solving-lab-meta">fixture only<br />no external service</span>
+              <span className="problem-solving-lab-meta">本地案例<br />不連線外部服務</span>
             </div>
             <div className="problem-solving-action-list">
               {problemSolvingLessonSteps.map((step, stepIndex) => {
@@ -150,7 +151,7 @@ export function ProblemSolvingLab({ onComplete }: { onComplete?: () => void }) {
       )}
 
       <section className="problem-solving-result-section" aria-labelledby="problem-solving-result-title">
-        <div className="section-heading"><div><p className="kicker">OBSERVABLE RESULT</p><h2 id="problem-solving-result-title">目前的問題線索</h2></div><p>只顯示 deterministic fixture 結果，不連線真實服務。</p></div>
+        <div className="section-heading"><div><p className="kicker">OBSERVABLE RESULT</p><h2 id="problem-solving-result-title">目前的問題線索</h2></div><p>只顯示本地案例結果，不連線真實服務。</p></div>
         <div className="problem-solving-result-panel">
           {state.lastResult ? (
             <>
