@@ -62,6 +62,19 @@ describe("REST simulator", () => {
     expect(result.state.databaseItems).toEqual(restDatabaseFixture);
   });
 
+  it("rejects future stages until the previous lifecycle stages are visited", () => {
+    const started = runRestEvents([{ type: "start-request" }]);
+    const skipped = runRestEvent(started, { type: "inspect-stage", stageId: "routing" });
+
+    expect(skipped.accepted).toBe(false);
+    expect(skipped.state.activeStageId).toBe("browser");
+    expect(skipped.state.currentVisitedStageIds).toEqual(["browser"]);
+
+    const next = runRestEvent(started, { type: "inspect-stage", stageId: "cors" });
+    expect(next.accepted).toBe(true);
+    expect(next.state.activeStageId).toBe("cors");
+  });
+
   it("completes only after all requests and lifecycle stages", () => {
     const events = restScenarios.flatMap((scenario) => completeScenarioEvents(scenario.id));
     const state = runRestEvents(events);
