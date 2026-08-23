@@ -5,6 +5,8 @@ import {
   unitLesson,
   unitLessonSteps,
   unitResults,
+  unitTestCases,
+  unitBeforeFixTotal,
 } from "./content";
 
 describe("Unit testing lesson content", () => {
@@ -30,5 +32,14 @@ describe("Unit testing lesson content", () => {
       "run-red",
       "fix-green",
     ]);
+  });
+
+  it("keeps every before-fix result consistent with the discount-ignoring implementation", () => {
+    expect(unitTestCases.map((testCase) => testCase.actualBeforeFix)).toEqual([
+      unitBeforeFixTotal(150, 10),
+      unitBeforeFixTotal(0, 0),
+      unitBeforeFixTotal(50, 80),
+    ]);
+    expect(unitTestCases.find((testCase) => testCase.id === "discount-floor")?.actualBeforeFix).toBe(50);
   });
 });

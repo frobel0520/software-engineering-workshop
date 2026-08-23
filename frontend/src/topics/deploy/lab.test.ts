@@ -5,6 +5,6 @@ import { deployLabProgress } from "./lab";
 describe("Deploy Lab progress", () => {
   it("starts empty and records the first release without claiming full completion", () => {
     expect(deployLabProgress(createInitialDeployState())).toBe(0);
-    expect(deployLabProgress(runDeployEvents(deployGreenHappyPath).state)).toBe(27);
+    expect(deployLabProgress(runDeployEvents(deployGreenHappyPath).state)).toBe(20);
   });
 });

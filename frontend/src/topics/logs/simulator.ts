@@ -133,9 +133,14 @@ function selectedScenarioOrBlock(current: LogsLabState):
 }
 
 function sensitiveValueFor(scenario: NonNullable<ReturnType<typeof scenarioFor>>, field: LogsSensitiveField): string | undefined {
-  if (field === "authorization") return scenario.request.authorization;
-  if (field === "email") return scenario.request.email;
-  return undefined;
+  const sensitiveValues: Readonly<Record<LogsSensitiveField, string>> = {
+    authorization: scenario.request.authorization,
+    password: scenario.request.password,
+    accessToken: scenario.request.accessToken,
+    cookie: scenario.request.cookie,
+    email: scenario.request.email,
+  };
+  return sensitiveValues[field];
 }
 
 function rawSensitiveFieldIn(
@@ -389,7 +394,7 @@ function verifyRedaction(current: LogsLabState, serializedOutput?: string): Logs
   return accepted(
     current,
     { redactionCheck: "passed" },
-    "redaction check 通過：authorization 與 email 沒有出現在 serialized event output；下一步驗證 terminal outcome。",
+    `redaction check 通過：${logsFixtureRedactedFields.join("、")} 沒有出現在 serialized event output；下一步驗證 terminal outcome。`,
   );
 }
 

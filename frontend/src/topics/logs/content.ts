@@ -40,6 +40,9 @@ export interface LogsRequestFixture {
   method: "POST";
   route: "/orders";
   authorization: string;
+  password: string;
+  accessToken: string;
+  cookie: string;
   email: string;
   payload: {
     sku: "book";
@@ -108,7 +111,7 @@ export const logsLesson: LessonDefinition = {
     "讀懂包含 level、event、source、correlationId 與 outcome 的結構化 log event。",
     "把正常完成、輸入被拒絕與依賴逾時分別記成 info、warn 與 error。",
     "用固定 correlationId 把同一個 request 的 events 串成可重現的時間線。",
-    "在格式化前使用 safe context allowlist，移除 authorization 與 email 等敏感欄位。",
+    "在格式化前使用 safe context allowlist，移除 authorization、password、accessToken、cookie 與 email。",
     "從固定 log 證據判斷 terminal outcome，並在 reset 後重跑相同 regression flow。",
   ],
   sections: [
@@ -183,7 +186,7 @@ export const logsLessonSteps: readonly LogsLessonStep[] = [
     id: "redaction",
     title: "套用 safe context allowlist",
     code: "context = pick(input, [route, statusCode, dependency, timeoutMs])",
-    explanation: "只把 route、statusCode、field、dependency 與 timeout 等安全欄位放入 context；authorization 與 email 在格式化前被移除並列入 redactedFields。",
+      explanation: "只把 route、statusCode、field、dependency 與 timeout 等安全欄位放入 context；所有宣告的敏感欄位在格式化前被移除並列入 redactedFields。",
     takeaway: "Redaction 是輸出邊界的責任，不是畫面遮罩的責任。",
   },
   {
@@ -202,7 +205,7 @@ export const logsLessonSteps: readonly LogsLessonStep[] = [
   },
 ] as const;
 
-export const logsSensitiveFieldNames: readonly LogsSensitiveField[] = ["authorization", "email"] as const;
+export const logsSensitiveFieldNames: readonly LogsSensitiveField[] = ["authorization", "password", "accessToken", "cookie", "email"] as const;
 
 export const logsSafeContextKeys = [
   "route",
@@ -219,6 +222,9 @@ export const logsBaseRequest: LogsRequestFixture = {
   method: "POST",
   route: "/orders",
   authorization: "Bearer test-secret-001",
+  password: "workshop-password-001",
+  accessToken: "access-token-001",
+  cookie: "session=workshop-session-001",
   email: "learner@example.test",
   payload: { sku: "book", quantity: 1, amount: 90 },
 };
@@ -399,6 +405,9 @@ export const logsResults: Readonly<Record<LogsStepId, LogsLessonResult>> = {
     columns: ["input field", "event output", "evidence"],
     rows: [
       ["authorization", "absent", "redactedFields includes authorization"],
+      ["password", "absent", "redactedFields includes password"],
+      ["accessToken", "absent", "redactedFields includes accessToken"],
+      ["cookie", "absent", "redactedFields includes cookie"],
       ["email", "absent", "redactedFields includes email"],
       ["route", "safe context", "allowlisted for diagnosis"],
     ],
@@ -451,6 +460,6 @@ export const logsFailureFixtures: readonly LogsFailureFixture[] = [
   {
     event: "raw-sensitive-value",
     message: "輸出包含敏感欄位；先套用 safe context allowlist，再重新格式化 event。",
-    evidence: "authorization 與 email 的 raw value 不得出現在 message、context 或 serialized output。",
+    evidence: "authorization、password、accessToken、cookie 與 email 的 raw value 不得出現在 message、context 或 serialized output。",
   },
 ] as const;

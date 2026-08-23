@@ -318,6 +318,24 @@ export function runDeployEvent(current: DeployLabState, event: DeployLabEvent): 
       );
     case "verify-pages-base":
       if (!hasCompletedStage(state, "verify-ci-artifact") || state.artifactState !== "verified") return blocked(state, commandFor(event.type), "artifact 尚未 verified；先確認 frontend/dist，再檢查 Pages base path。 ");
+      if (scenario.basePathOutcome === "mismatch") {
+        return accepted(
+          state,
+          {
+            phase: "blocked",
+            activeStageId: "record-release",
+            completedStageIds: withStage(state, event.type),
+            basePathState: "mismatch",
+            publishState: "blocked",
+            pagesBranchVersion: scenario.previousVerifiedVersion,
+            deploymentState: "failed",
+            lastCommand: commandFor(event.type),
+          },
+          "VITE_BASE 與 repository path 不一致；publish blocked，Pages pointer 保持上一個 verified version。",
+          [`VITE_BASE: mismatch`, `expected: ${deployFixture.repositoryBasePath}`, "publish: blocked", `gh-pages: ${scenario.previousVerifiedVersion}`, "next: record blocked release"],
+          true,
+        );
+      }
       return accepted(
         state,
         { phase: "releasing", activeStageId: "publish-pages", completedStageIds: withStage(state, event.type), basePathState: scenario.basePathOutcome, lastCommand: commandFor(event.type) },
@@ -351,6 +369,15 @@ export function runDeployEvent(current: DeployLabState, event: DeployLabEvent): 
       );
     case "record-release":
       if (!hasCompletedStage(state, "verify-ci-artifact")) return blocked(state, commandFor(event.type), "至少要先驗證 CI artifact，再建立 release record。 ");
+      if (state.basePathState === "mismatch") {
+        return accepted(
+          state,
+          { phase: "blocked", activeStageId: "evaluate-release", completedStageIds: withStage(state, event.type), releaseRecord: "blocked", liveStatus: null, liveUrl: null, pagesBranchVersion: state.previousVerifiedVersion, lastCommand: commandFor(event.type) },
+          "blocked release record 已保留 base path mismatch；candidate 不可發布，下一步是評估 release outcome。",
+          [`source: ${state.releaseSource}`, `candidate: ${state.candidateVersion}`, "base path: mismatch", "record: blocked", "next: evaluate release"],
+          true,
+        );
+      }
       if (state.artifactState === "missing") {
         return accepted(
           state,
