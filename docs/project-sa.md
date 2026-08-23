@@ -170,7 +170,7 @@ Curriculum
 - **GitHub／GitLab 真實整合**：Phase 1 維持 simulator-first；若要產生真實外部副作用，必須先另立整合契約與授權邊界。
 - **Extension ready 規則**：Guardrails 與問題處理方法目前已是 ready 的 Extension，不計入 Core denominator；未來新增 Extension 仍須先通過 feature-level review，再決定是否開放。
 
-這些問題由後續 project-level SD 或 Phase 2 計畫處理；不阻塞第一階段的靜態教材、simulator 與目前 17 / 19 Core topic 的交付。
+這些問題由後續 project-level SD 或 Phase 2 計畫處理；不阻塞第一階段的靜態教材、simulator 與目前 18 / 19 Core topic 的交付。
 
 ## 12. 與 SD 的交界
 

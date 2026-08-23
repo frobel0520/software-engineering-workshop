@@ -15,7 +15,6 @@ describe("topic view registry", () => {
   });
 
   it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("cicd")).toBeUndefined();
     expect(getTopicViewModule("deploy")).toBeUndefined();
   });
 
