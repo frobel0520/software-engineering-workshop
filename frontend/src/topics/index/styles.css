@@ -2,7 +2,7 @@
 .index-workspace-panel, .index-control-panel { min-width: 0; border: 1px solid var(--ink); }
 .index-workspace-panel { color: #dce9e6; background: #172729; }
 .index-workspace-top { min-height: 47px; padding: 0 17px; display: flex; align-items: center; gap: 13px; color: #9ab0ad; background: #203638; border-bottom: 1px solid #496063; font: 10px "DM Mono"; }
-.index-workspace-top b { overflow: hidden; color: #d1dfdc; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.index-workspace-top b { min-width: 0; overflow-wrap: anywhere; color: #d1dfdc; font-weight: 500; white-space: normal; }
 .index-window-dots { display: flex; gap: 5px; }
 .index-window-dots i { width: 7px; height: 7px; border-radius: 50%; background: #a6725b; }
 .index-window-dots i:nth-child(2) { background: #b8a873; }

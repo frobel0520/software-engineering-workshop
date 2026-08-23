@@ -73,7 +73,7 @@ export default function App() {
       <aside className={`sidebar ${menuOpen ? "open" : ""}`}>
         <button className="brand" type="button" onClick={() => goPath("/map")}>
           <span className="brand-mark">SE</span>
-          <span><b>Software Engineering</b><small>FIELD MANUAL · 2026</small></span>
+          <span><b>Software Engineering</b></span>
         </button>
         <div className="nav-label">目錄 / CONTENTS</div>
         <nav>
@@ -118,7 +118,6 @@ export default function App() {
         <header className="topbar">
           <button className="menu-button" type="button" aria-label="開啟選單" onClick={() => setMenuOpen((value) => !value)}>☰</button>
           <div className="breadcrumb"><span>WORKSHOP</span><i>/</i><b>{routeLabel(route)}</b></div>
-          <div className="top-status">已開放 <b>{progress.coreProgress.ready} / {progress.coreProgress.total}</b></div>
         </header>
         {route.kind === "map" ? <CurriculumMap curriculum={curriculum} onOpenTrack={(trackId) => goPath(trackPath(trackId))} /> : null}
         {route.kind === "track" && activeTrack ? <TrackPage track={activeTrack} completedTopicIds={completedTopicIds} onBackToMap={() => goPath("/map")} onOpenTopic={(topicId) => goTopic(topicId, "lesson")} /> : null}
