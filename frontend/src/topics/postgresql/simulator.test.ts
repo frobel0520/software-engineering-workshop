@@ -26,11 +26,12 @@ describe("PostgreSQL deterministic simulator", () => {
 
     expect(result.accepted).toBe(true);
     expect(result.state.phase).toBe("completed");
-    expect(result.state.completedStepIds).toHaveLength(6);
+    expect(result.state.completedStepIds).toHaveLength(7);
     expect(result.state.session?.database).toBe("workshop");
     expect(result.state.schemaReady).toBe(true);
     expect(result.state.returnedId).toBe(104);
     expect(result.state.jsonbMatchCount).toBe(2);
+    expect(result.state.indexCreated).toBe(true);
     expect(result.state.plan?.operation).toBe("bitmap-index-scan");
     expect(result.state.transactionStatus).toBe("committed");
     expect(result.state.result?.id).toBe("commit-transaction");
@@ -48,10 +49,20 @@ describe("PostgreSQL deterministic simulator", () => {
     expect(commit.state.lastMessage).toContain("EXPLAIN");
   });
 
+  it("requires the GIN index before reading the indexed query plan", () => {
+    const beforeIndex = runPostgreSqlEvents(postgresqlLabHappyPath.slice(0, 4)).state;
+    const explain = runPostgreSqlEvent(beforeIndex, { type: "explain-query" });
+
+    expect(explain.accepted).toBe(false);
+    expect(explain.state.indexCreated).toBe(false);
+    expect(explain.state.lastMessage).toContain("GIN index");
+  });
+
   it("documents the main out-of-order failure fixtures", () => {
     expect(postgresqlFailureFixtures.map((fixture) => fixture.event)).toEqual([
       "define-contract",
       "insert-returning",
+      "explain-query",
       "commit-transaction",
     ]);
   });
