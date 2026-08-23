@@ -371,7 +371,7 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
           {
             phase: "blocked",
             activeStepId: "verify-probe",
-            completedStepIds: withStep(state, "verify-probe"),
+            completedStepIds: [...state.completedStepIds],
             probeState: "unreachable",
             probeStatus: null,
             lastCommand: commandFor(event.type),

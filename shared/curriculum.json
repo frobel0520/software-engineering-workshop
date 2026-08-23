@@ -55,7 +55,7 @@
       "description": "從 commit 到上線",
       "kind": "core",
       "topics": [
-        { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "planned" },
+        { "id": "docker", "title": "Docker 基礎", "summary": "一致的執行環境", "status": "ready" },
         { "id": "cicd", "title": "CI/CD", "summary": "自動檢查與交付", "status": "planned" },
         { "id": "deploy", "title": "部署", "summary": "版本、回滾與觀測", "status": "planned" }
       ]

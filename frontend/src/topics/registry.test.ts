@@ -15,7 +15,8 @@ describe("topic view registry", () => {
   });
 
   it("does not expose a module for planned topics", () => {
-    expect(getTopicViewModule("docker")).toBeUndefined();
+    expect(getTopicViewModule("cicd")).toBeUndefined();
+    expect(getTopicViewModule("deploy")).toBeUndefined();
   });
 
   it("requires every ready topic to answer the four orientation questions", () => {
