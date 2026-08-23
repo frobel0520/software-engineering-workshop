@@ -25,11 +25,11 @@ describe("Docker topic integration contract", () => {
     });
   });
 
-  it("uses the fixed completion key and preserves the ready denominator at 18", () => {
+  it("uses the fixed completion key and preserves the ready denominator at 19", () => {
     const progress = aggregateProgress(curriculum, createMemoryProgressRepository(["docker"]));
 
     expect(completionKeyFor("docker")).toBe("se-workshop-docker-complete");
-    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 18, completed: 1 });
+    expect(progress.coreProgress).toMatchObject({ total: 19, ready: 19, completed: 1 });
     expect(progress.extensionProgress.completed).toBe(0);
   });
 
