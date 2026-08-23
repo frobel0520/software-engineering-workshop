@@ -18,9 +18,7 @@ interface SchemaHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly SchemaHistoryEntry[] = [
-  { lines: ["SCHEMA workbench v1", "固定 projects + tasks fixture 已載入。"] },
-];
+const INITIAL_HISTORY: readonly SchemaHistoryEntry[] = [];
 
 function eventForStep(stepId: SchemaStepId): SchemaLabEvent {
   return schemaLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -71,12 +69,13 @@ export function SchemaLab({ onComplete }: { onComplete?: () => void }) {
 
   function reset() {
     setState(createInitialSchemaState());
-    setHistory([{ lines: ["SCHEMA Lab 已重設。從實體邊界開始。"] }]);
+    setHistory([{ lines: ["已重設。從實體邊界開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / SCHEMA"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>先畫出關係<br /><em>再決定資料形狀</em></>}
       progressLabel={`${completedCount} / ${schemaLessonSteps.length} DECISIONS`}
       progress={schemaLabProgress(state)}
@@ -92,13 +91,13 @@ export function SchemaLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="schema-lab-grid">
-          <section className="schema-canvas-panel" aria-label="Schema design canvas fixture">
+          <section className="schema-canvas-panel" aria-label="Schema design canvas">
             <div className="schema-workspace-top">
               <span className="schema-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-schema-design</b>
               <span className="schema-phase">{state.phase}</span>
             </div>
-            <div className="schema-canvas-toolbar"><span>schema.canvas</span><small>fixture only · no migration</small></div>
+            <div className="schema-canvas-toolbar"><span>schema.canvas</span></div>
             <div className="schema-table-stack">
               {schemaTables.map((table) => (
                 <article className={`schema-table-card schema-table-${table.id}`} key={table.id}>
@@ -130,8 +129,8 @@ export function SchemaLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="schema-control-panel" aria-label="Schema design controls">
             <div className="schema-panel-heading">
-              <div><p className="kicker">DESIGN CONTROL</p><h2>從需求走到 constraint</h2></div>
-              <span className="schema-lab-meta">relational<br />fixture only</span>
+              <div><h2>從需求走到 constraint</h2></div>
+              <span className="schema-lab-meta">relational</span>
             </div>
             <div className="schema-action-list">
               {schemaLessonSteps.map((step, index) => {
@@ -158,7 +157,7 @@ export function SchemaLab({ onComplete }: { onComplete?: () => void }) {
       )}
 
       <section className="schema-result-section" aria-labelledby="schema-result-title">
-        <div className="section-heading"><div><p className="kicker">MODEL CHECK RESULT</p><h2 id="schema-result-title">目前的模型線索</h2></div><p>只顯示 simulator 結果，不建立真實資料表。</p></div>
+        <div className="section-heading"><div><h2 id="schema-result-title">目前的模型線索</h2></div></div>
         <div className="schema-result-panel">
           {state.result ? (
             <>

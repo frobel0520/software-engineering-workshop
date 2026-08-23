@@ -658,7 +658,7 @@ h1 em {
 .auth-node { min-width: 0; padding: 28px 0; }
 .auth-node small { display: block; color: var(--muted); font: 9px "DM Mono"; letter-spacing: .12em; }
 .auth-node strong { display: block; margin: 10px 0 14px; font: 600 24px "Newsreader", "Noto Serif TC", serif; }
-.auth-node code { display: block; overflow: hidden; color: var(--teal-dark); font: 10px "DM Mono"; text-overflow: ellipsis; }
+.auth-node code { display: block; min-width: 0; overflow-wrap: anywhere; color: var(--teal-dark); font: 10px "DM Mono"; white-space: normal; }
 .auth-node.active { padding-inline: 26px; color: var(--paper); background: var(--teal-dark); }
 .auth-node.active small, .auth-node.active code { color: #bfd2d1; }
 .auth-field-list { margin-top: 70px; border-top: 2px solid var(--ink); }
@@ -866,7 +866,7 @@ h1 em {
   .remote-lab-meta { display: block; margin-top: 14px; }
 }
 .guardrail-lab-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr); gap: 16px; }
-.guardrail-control-panel, .guardrail-result-panel { border: 1px solid var(--line); background: var(--surface); }
+.guardrail-control-panel, .guardrail-result-panel { min-width: 0; border: 1px solid var(--line); background: var(--surface); }
 .guardrail-control-panel { padding: 30px; }
 .guardrail-result-panel { align-self: start; padding: 30px; }
 .guardrail-panel-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
@@ -892,10 +892,11 @@ h1 em {
 .guardrail-scenario-list { display: grid; gap: 7px; margin-top: 12px; }
 .guardrail-scenario { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; padding: 14px; border: 1px solid var(--line); background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
 .guardrail-scenario:hover, .guardrail-scenario:focus-visible { border-color: var(--teal-dark); background: #edf5f2; outline: none; }
+.guardrail-scenario > span { min-width: 0; }
 .guardrail-scenario b, .guardrail-scenario small { display: block; }
 .guardrail-scenario b { font-size: 12px; }
 .guardrail-scenario small { max-width: 390px; overflow: hidden; margin-top: 5px; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
-.guardrail-scenario i { color: var(--teal-dark); font: 10px "DM Mono"; font-style: normal; }
+.guardrail-scenario i { flex: 0 0 auto; color: var(--teal-dark); font: 10px "DM Mono"; font-style: normal; }
 .guardrail-result-list { display: grid; gap: 8px; margin-top: 28px; }
 .guardrail-result { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
 .guardrail-result > span { display: grid; place-items: center; width: 23px; height: 23px; border: 1px solid var(--teal-dark); color: var(--teal-dark); font: 12px "DM Mono"; }
@@ -909,19 +910,22 @@ h1 em {
 .guardrail-result-note b { color: var(--teal-dark); font-weight: 400; }
 
 @media (max-width: 720px) {
-  .guardrail-lab-grid { grid-template-columns: 1fr; }
+  .guardrail-lab-grid { grid-template-columns: minmax(0, 1fr); }
   .guardrail-control-panel, .guardrail-result-panel { padding: 22px; }
   .guardrail-panel-heading { display: block; }
   .guardrail-stage-label { display: block; margin-top: 14px; }
   .guardrail-stage-picker { grid-template-columns: 1fr; }
   .guardrail-validator { grid-template-columns: 18px minmax(0, 1fr); }
   .guardrail-validator i { grid-column: 2; }
+  .guardrail-scenario small { overflow-wrap: anywhere; white-space: normal; }
   .topic-lab-actions { justify-content: stretch; }
   .topic-lab-actions .button { width: 100%; }
   .topic-completion { margin: 34px auto; padding: 32px 22px; }
 }
 
 @media (max-width: 950px) {
+  .workflow-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workflow-step { min-width: 0; }
   .auth-model { grid-template-columns: 1fr; }
   .auth-model > i { height: 36px; transform: rotate(90deg); }
   .auth-node, .auth-node.active { padding: 24px; }
@@ -1142,3 +1146,209 @@ h1 em {
 @media (prefers-reduced-motion: reduce) {
   .integration-stage, .integration-scenario { transition: none; }
 }
+
+@media (max-width: 640px) {
+  .rest-request-target code { min-width: 0; overflow-wrap: anywhere; text-overflow: clip; white-space: normal; }
+}
+
+/* Git typography accessibility floor: readable support text without flattening the hero hierarchy. */
+.nav-label { font-size: 12px; }
+.sidebar nav button span { font-size: 12px; }
+.sidebar-progress > div:first-child { font-size: 12px; }
+.sidebar-progress b { font-size: 12px; }
+.sidebar-progress p { font-size: 12px; }
+.breadcrumb { font-size: 12px; }
+
+.git-lesson-page .section-heading h2 { font-size: 24px; }
+.git-lesson-page .section-heading > p { font-size: 12px; }
+.git-lesson-page .workflow-step > span { font-size: 12px; }
+.git-lesson-page .workflow-step p { font-size: 12px; }
+.git-lesson-page .lesson-index span { font-size: 24px; }
+.git-lesson-page .lesson-copy code { font-size: 12px; }
+.git-lesson-page .lesson-copy code span { font-size: inherit; }
+.git-lesson-page .lesson-card aside p { font-size: 12px; }
+.git-lesson-page .orientation-card > div strong { font-size: 24px; }
+.git-lesson-page .module-status > span { font-size: 12px; }
+.git-lesson-page .lab-cta h2 { font-size: 24px; }
+
+.git-lab-shell .lab-progress span { font-size: 12px; }
+.git-lab-shell .terminal-top { font-size: 12px; }
+.git-lab-shell .terminal-top button { font-size: 12px; }
+.git-lab-shell .terminal-entry p { font-size: 12px; }
+.git-lab-shell .terminal-entry small { font-size: 12px; }
+.git-lab-shell .terminal-form input { font-size: 12px; }
+.git-lab-shell .terminal-form button { font-size: 12px; }
+.git-lab-shell .mission-number { font-size: 24px; }
+.git-lab-shell .git-provider-picker { font-size: 12px; }
+.git-lab-shell .git-provider-picker select { font-size: 12px; }
+.git-lab-shell .command-chip code { font-size: 12px; }
+.git-lab-shell .command-chip span { font-size: 12px; }
+.git-lab-shell .mission-note { font-size: 12px; }
+.git-lab-shell .repo-state small { font-size: 12px; }
+.git-lab-shell .repo-state b { font-size: 12px; }
+.git-lab-shell .remote-panel-heading h2,
+.git-lab-shell .remote-context-panel h2 { font-size: 24px; }
+.git-lab-shell .remote-lab-meta { font-size: 12px; }
+.git-lab-shell .remote-action-index { font-size: 12px; }
+.git-lab-shell .remote-action-copy code {
+  overflow: visible;
+  font-size: 12px;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.git-lab-shell .git-job-grid b { font-size: 12px; }
+.git-lab-shell .topic-completion h2 { font-size: 24px; }
+
+/* Foundations typography floor: readable support text while preserving the hero hierarchy. */
+.foundation-lesson-page .section-heading h2 { font-size: 24px; }
+.foundation-lesson-page .section-heading > p { font-size: 12px; }
+.foundation-lesson-page .lesson-index span { font-size: 24px; }
+.foundation-lesson-page .lesson-copy code { font-size: 12px; }
+.foundation-lesson-page .lesson-copy code span { font-size: inherit; }
+.foundation-lesson-page .lesson-card aside p { font-size: 12px; }
+.foundation-lesson-page .orientation-card > div strong { font-size: 24px; }
+.foundation-lesson-page .module-status > span { font-size: 12px; }
+.foundation-lesson-page .lab-cta h2 { font-size: 24px; }
+
+.foundation-lab-shell .kicker,
+.foundation-lab-shell small,
+.foundation-lab-shell code { font-size: 12px; }
+.foundation-lab-shell .section-heading h2 { font-size: 24px; }
+.foundation-lab-shell .lab-progress span,
+.foundation-lab-shell .terminal-top,
+.foundation-lab-shell .terminal-top button,
+.foundation-lab-shell .terminal-entry p,
+.foundation-lab-shell .terminal-entry small,
+.foundation-lab-shell .terminal-form input,
+.foundation-lab-shell .terminal-form button,
+.foundation-lab-shell .git-provider-picker,
+.foundation-lab-shell .git-provider-picker select,
+.foundation-lab-shell .command-chip code,
+.foundation-lab-shell .command-chip span,
+.foundation-lab-shell .mission-note,
+.foundation-lab-shell .repo-state small,
+.foundation-lab-shell .repo-state b,
+.foundation-lab-shell .remote-lab-meta,
+.foundation-lab-shell .remote-action-index,
+.foundation-lab-shell .remote-context-list dt,
+.foundation-lab-shell .remote-context-list dd,
+.foundation-lab-shell .ide-editor-top,
+.foundation-lab-shell .ide-file-tab,
+.foundation-lab-shell .ide-file-tab span,
+.foundation-lab-shell .ide-editor,
+.foundation-lab-shell .ide-code-line,
+.foundation-lab-shell .ide-lab-meta,
+.foundation-lab-shell .ide-action-index,
+.foundation-lab-shell .ide-current-hint,
+.foundation-lab-shell .package-workspace-top,
+.foundation-lab-shell .package-file-tabs button,
+.foundation-lab-shell .package-editor,
+.foundation-lab-shell .package-action-index,
+.foundation-lab-shell .package-current-hint,
+.foundation-lab-shell .package-lab-meta,
+.foundation-lab-shell .ide-breakpoint { font-size: 12px; }
+.foundation-lab-shell .mission-number { font-size: 24px; }
+.foundation-lab-shell .ide-state-grid small,
+.foundation-lab-shell .ide-state-grid b,
+.foundation-lab-shell .package-state-grid small,
+.foundation-lab-shell .package-state-grid b { font-size: 12px; }
+.foundation-lab-shell .remote-action-copy code,
+.foundation-lab-shell .ide-action-copy code,
+.foundation-lab-shell .package-action-copy code { font-size: 12px; }
+.foundation-lab-shell .remote-action-copy code {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.foundation-lab-shell .remote-panel-heading h2,
+.foundation-lab-shell .remote-context-panel h2,
+.foundation-lab-shell .ide-panel-heading h2,
+.foundation-lab-shell .package-panel-heading h2,
+.foundation-lab-shell .topic-completion h2 { font-size: 24px; }
+
+/* Remaining course typography floor: keep instructional text between 12px and 24px. */
+.course-lesson-page :is(p, span, b, strong, small, code, pre, button, input, textarea, select, option, label, dt, dd, th, td, li, em, i) {
+  font-size: max(12px, 1em) !important;
+}
+.course-lesson-page :is(h2, h3, h4) {
+  font-size: min(24px, max(12px, 1em)) !important;
+}
+.course-lesson-page .lesson-index span,
+.course-lesson-page .orientation-card > div strong,
+.course-lesson-page .lab-cta h2 { font-size: 24px !important; }
+.course-lesson-page .lesson-card,
+.course-lesson-page .lesson-copy,
+.course-lesson-page .lesson-card aside { min-width: 0; }
+.course-lesson-page .lesson-copy code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.course-lab-shell :is(p, span, b, strong, small, code, pre, button, input, textarea, select, option, label, dt, dd, th, td, li, em, i) {
+  font-size: max(12px, 1em) !important;
+}
+.course-lab-shell :is(h2, h3, h4) {
+  font-size: min(24px, max(12px, 1em)) !important;
+}
+.course-lab-shell .topic-completion h2 { font-size: 24px !important; }
+
+@media (max-width: 900px) {
+  .course-lab-shell .rest-code-toolbar,
+  .course-lab-shell .rest-code-meta {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 12px;
+  }
+  .course-lab-shell .rest-file-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-lab-shell .rest-code-lines > button {
+    grid-template-columns: 32px minmax(0, 1fr);
+    padding-right: 10px;
+  }
+  .course-lab-shell .rest-code-lines > button small { grid-column: 2; }
+  .course-lab-shell .rest-code-lines > button code { overflow-wrap: anywhere; white-space: pre-wrap; }
+}
+
+/* Full-site typography floor: content text stays between 12px and 24px. */
+.main-area :is(p, span, b, strong, small, code, pre, button, input, textarea, select, option, label, dt, dd, th, td, li, em, i) {
+  font-size: max(12px, 1em) !important;
+}
+.main-area :is(h2, h3, h4) {
+  font-size: min(24px, max(12px, 1em)) !important;
+}
+
+/* Map and track metadata is supporting content, so keep it readable without competing with titles. */
+.page-map .visual-title,
+.page-map .map-intro h2 { font-size: 24px !important; }
+.page-map .visual-label,
+.page-map .visual-footer span,
+.page-map .visual-footer b,
+.page-map .map-intro > p,
+.page-map .track-card header > span,
+.page-map .track-card header p,
+.page-map .track-card-link,
+.page-map .topic-state,
+.page-map .topic-item b,
+.page-map .topic-item small,
+.page-map .topic-item em { font-size: 12px !important; }
+
+.track-page .track-back,
+.track-page .kicker,
+.track-page .track-progress-block small,
+.track-page .track-topic-status,
+.track-page .track-topic-button,
+.track-page .track-topic-disabled,
+.track-page .track-topic-copy > p:last-child { font-size: 12px !important; }
+.track-page .track-progress-block > span,
+.track-page .track-topic-number,
+.track-page .track-topic-copy h3,
+.track-page .track-topic-heading h2 { font-size: 24px !important; }
+
+.course-lesson-page .orientation-card > div strong,
+.course-lesson-page .lab-cta h2,
+.course-lab-shell .problem-solving-case-card h2,
+.course-lab-shell .topic-completion h2 { font-size: 24px !important; }

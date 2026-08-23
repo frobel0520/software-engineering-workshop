@@ -11,7 +11,7 @@ export const packageLesson: LessonDefinition = {
   objectives: [
     "分辨 package.json、package-lock.json 與 installed modules 各自負責的狀態。",
     "用版本範圍新增依賴，理解 manifest spec 與 lockfile exact version 的差異。",
-    "用 npm install 解析 fixture registry，再用 npm ci 從 lockfile 重建相同結果。",
+    "用 npm install 解析套件來源，再用 npm ci 從 lockfile 重建相同結果。",
     "在依賴狀態不一致時，知道應該更新、檢查或停止，而不是留下半套安裝。",
   ],
   sections: [
@@ -28,7 +28,7 @@ export const packageLesson: LessonDefinition = {
     {
       id: "install-and-lock",
       title: "npm install 會更新解析結果",
-      body: "新增依賴後，npm install 會依照 fixture registry 解析 direct dependency 與 transitive dependency，並同步更新 lockfile。這一步應留下可 review 的 manifest 與 lockfile 變更。",
+      body: "新增依賴後，npm install 會解析 direct dependency 與 transitive dependency，並同步更新 lockfile。這一步應留下可 review 的 manifest 與 lockfile 變更。",
     },
     {
       id: "clean-rebuild",
@@ -65,21 +65,21 @@ export const packageLessonSteps: readonly PackageLessonStep[] = [
     id: "add-dependency",
     title: "新增版本範圍",
     command: "npm install @workshop/format@^1.2.0",
-    explanation: "用版本範圍新增 direct dependency；fixture 會讓 manifest 更新，並標記 lockfile 尚未同步。",
+    explanation: "用版本範圍新增 direct dependency；manifest 會更新，lockfile 則尚未同步。",
     takeaway: "改 manifest 後，先承認 lockfile 是 stale。",
   },
   {
     id: "install",
     title: "解析並安裝依賴",
     command: "npm install",
-    explanation: "從固定 registry fixture 解析 @workshop/format@1.3.0 與它的 transitive dependency。",
+    explanation: "解析 @workshop/format@1.3.0 與它的 transitive dependency。",
     takeaway: "安裝結果要能被 lockfile 解釋。",
   },
   {
     id: "inspect-lockfile",
     title: "檢查 exact resolution",
     command: "cat package-lock.json",
-    explanation: "確認 lockfile 記下 direct dependency、transitive dependency、exact version 與 fixture 來源。",
+    explanation: "確認 lockfile 記下 direct dependency、transitive dependency 與 exact version。",
     takeaway: "lockfile 是可重現安裝的證據。",
   },
   {
@@ -189,7 +189,7 @@ export const packageLabInitialState: PackageLabState = {
   installState: "empty",
   completedStepIds: [],
   lastCommand: null,
-  lastMessage: "準備從固定 package.json fixture 開始。",
+  lastMessage: "先檢查 package.json。",
   canReset: true,
 };
 

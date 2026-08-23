@@ -62,7 +62,7 @@ export function createInitialGuardrailState(): GuardrailState {
     latencyMs: 0,
     phase: "initial",
     completedScenarioIds: [],
-    lastMessage: "選擇一個固定情境，觀察每層 guardrail 的結果。",
+    lastMessage: "選擇一個情境，觀察每層 guardrail 的結果。",
     canReset: true,
   };
 }
@@ -126,7 +126,7 @@ export function runGuardrailEvent(current: GuardrailState, event: GuardrailEvent
           outcome: "pass",
           latencyMs: 0,
         },
-        `已切換到 ${event.stage} stage；請選擇固定情境。`,
+        `已切換到 ${event.stage} stage；請選擇情境。`,
       );
     case "setInput":
       return accepted(current, { lastInput: event.text, results: [], outcome: "pass", latencyMs: 0 }, "已更新待檢查內容。", [
@@ -144,12 +144,12 @@ export function runGuardrailEvent(current: GuardrailState, event: GuardrailEvent
     }
     case "submitScenario": {
       const scenario = guardrailScenarios.find((item) => item.id === event.id);
-      if (!scenario) return blocked(current, `找不到 ${event.id} scenario fixture。`);
+      if (!scenario) return blocked(current, `找不到 ${event.id} 對應情境。`);
       if (scenario.stage !== current.stage) {
         return blocked(current, `${scenario.id} 需要在 ${scenario.stage} stage 執行。`);
       }
       if (current.lastInput !== scenario.input) {
-        return blocked(current, "請先把 scenario 的固定輸入載入，再送出檢查。");
+        return blocked(current, "請先載入 scenario 輸入，再送出檢查。");
       }
       if (scenario.expectedValidator && !current.enabledValidators.includes(scenario.expectedValidator)) {
         return blocked(current, `請先啟用 ${scenario.expectedValidator} validator，才能觀察這個風險。`);
@@ -172,7 +172,7 @@ export function runGuardrailEvent(current: GuardrailState, event: GuardrailEvent
         : current.completedScenarioIds;
       const completed = guardrailRequiredScenarioIds.every((id) => completedScenarioIds.includes(id));
       const message = `${scenario.title}：${scenario.expectedAction}，結果為 ${scenario.expectedOutcome}。`;
-      const output = [message, ...results.map((result) => result.message), `固定 latency：${scenario.latencyMs}ms`];
+      const output = [message, ...results.map((result) => result.message), `latency：${scenario.latencyMs}ms`];
       return {
         state: {
           ...current,

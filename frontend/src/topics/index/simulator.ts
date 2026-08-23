@@ -146,7 +146,7 @@ export function runIndexEvent(current: IndexLabState, event: IndexLabEvent): Ind
   }
 
   if (event.type === "inspect-plan") {
-    return accepted(current, event.type, "目前是 table scan：查詢需要檢查整張 orders fixture。");
+    return accepted(current, event.type, "目前是 table scan：查詢需要檢查整張 orders table。");
   }
 
   if (event.type === "create-index") {

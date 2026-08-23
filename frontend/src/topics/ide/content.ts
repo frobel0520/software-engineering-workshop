@@ -9,7 +9,7 @@ export const ideLesson: LessonDefinition = {
     how: "先開啟正確檔案，設定 breakpoint，執行到暫停點，檢查變數與呼叫堆疊，再用 step over 或 continue 觀察下一步。",
   },
   objectives: [
-    "在固定 editor fixture 中開啟檔案並設定 breakpoint。",
+    "開啟檔案並設定 breakpoint。",
     "從 paused state 閱讀 current line、call stack 與 variables。",
     "用 step over 與 continue 控制執行，區分暫停、完成與非法操作。",
   ],
@@ -139,7 +139,7 @@ export const ideInitialState: IdeLabState = {
   lastStream: null,
   exitCode: null,
   completedStepIds: [],
-  lastMessage: "準備從固定的 order.ts fixture 開始。",
+  lastMessage: "先開啟 src/order.ts。",
   canReset: true,
 };
 

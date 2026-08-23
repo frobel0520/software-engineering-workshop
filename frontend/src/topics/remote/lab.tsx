@@ -64,7 +64,8 @@ export function RemoteLab({ onComplete }: { onComplete?: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / REMOTE"
+      className="foundation-lab-shell"
+      showMeta={false}
       title={<>把變更送上<br /><em>遠端協作流程</em></>}
       progressLabel={`${Math.round(remoteLabProgress(state) / 100 * REQUIRED_STEPS.length)} / ${REQUIRED_STEPS.length} STEPS`}
       progress={remoteLabProgress(state)}
@@ -81,7 +82,6 @@ export function RemoteLab({ onComplete }: { onComplete?: () => void }) {
           <section className="remote-action-panel" aria-labelledby="remote-actions-title">
             <div className="remote-panel-heading">
               <div>
-                <p className="kicker">MISSION CONTROL</p>
                 <h2 id="remote-actions-title">依序完成協作檢查</h2>
               </div>
               <span className="remote-lab-meta">{state.localBranch} · {state.remoteName}</span>
@@ -107,7 +107,6 @@ export function RemoteLab({ onComplete }: { onComplete?: () => void }) {
           </section>
 
           <aside className="remote-context-panel" aria-labelledby="remote-context-title">
-            <p className="kicker">REMOTE CONTEXT</p>
             <h2 id="remote-context-title">目前的協作狀態</h2>
             <dl className="remote-context-list">
               <div><dt>BASE</dt><dd>{state.baseBranch}</dd></div>
@@ -117,7 +116,7 @@ export function RemoteLab({ onComplete }: { onComplete?: () => void }) {
               <div><dt>CHECKS</dt><dd>{state.checks}</dd></div>
             </dl>
             <TopicStatusFeedback tone={feedback.accepted ? "neutral" : "error"} message={feedback.message} />
-            <p className="remote-context-hint">可以故意點錯順序，觀察 simulator 如何保留狀態並提示下一步。</p>
+            <p className="remote-context-hint">可以故意點錯順序，觀察狀態如何保留並提示下一步。</p>
           </aside>
         </div>
       )}
