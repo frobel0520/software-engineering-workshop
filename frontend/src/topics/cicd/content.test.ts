@@ -58,9 +58,10 @@ describe("CI/CD topic content contract", () => {
     expect(cicdStageFixtures.every((fixture) => fixture.successEvidence.length > 0 && fixture.failureEvidence.length > 0)).toBe(true);
   });
 
-  it("keeps green, test failure, and build failure scenarios distinct", () => {
+  it("keeps green, install failure, test failure, and build failure scenarios distinct", () => {
     expect(cicdScenarioFixtures.map((scenario) => scenario.id)).toEqual([
       "pull-request-green",
+      "pull-request-install-failure",
       "pull-request-test-failure",
       "pull-request-build-failure",
     ]);
@@ -74,6 +75,16 @@ describe("CI/CD topic content contract", () => {
       mergeGate: "mergeable",
     });
     expect(cicdScenarioFixtures[1]).toMatchObject({
+      installOutcome: "failed",
+      testOutcome: "not-run",
+      lintOutcome: "not-run",
+      buildOutcome: "not-run",
+      artifactState: "missing",
+      requiredCheck: "failed",
+      mergeGate: "blocked",
+      failureStage: "install-dependencies",
+    });
+    expect(cicdScenarioFixtures[2]).toMatchObject({
       testOutcome: "failed",
       lintOutcome: "not-run",
       buildOutcome: "not-run",
@@ -82,7 +93,7 @@ describe("CI/CD topic content contract", () => {
       mergeGate: "blocked",
       failureStage: "run-test",
     });
-    expect(cicdScenarioFixtures[2]).toMatchObject({
+    expect(cicdScenarioFixtures[3]).toMatchObject({
       testOutcome: "passed",
       lintOutcome: "passed",
       buildOutcome: "failed",
@@ -95,6 +106,7 @@ describe("CI/CD topic content contract", () => {
 
   it("documents failure boundaries without running Actions or shell", () => {
     expect(cicdFailureFixtures.map((fixture) => fixture.expectedBoundary)).toEqual([
+      "lockfile / runtime",
       "behavior gate",
       "TypeScript gate",
       "production artifact",
