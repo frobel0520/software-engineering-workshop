@@ -214,6 +214,10 @@ textarea:focus-visible {
   color: var(--ink);
   background: rgba(241, 236, 222, .96);
   border-right: 1px solid var(--line);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .brand {
