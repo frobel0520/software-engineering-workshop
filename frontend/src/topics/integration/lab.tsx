@@ -20,7 +20,7 @@ import {
 } from "./simulator";
 
 const STAGE_LABELS: Record<IntegrationStageId, string> = {
-  input: "FIXTURE",
+  input: "INPUT",
   client: "CLIENT",
   service: "SERVICE",
   repository: "REPOSITORY",
@@ -28,7 +28,7 @@ const STAGE_LABELS: Record<IntegrationStageId, string> = {
 };
 
 const STAGE_HINTS: Record<IntegrationStageId, string> = {
-  input: "固定 order input",
+  input: "order input",
   client: "checkoutClient mapping",
   service: "orderService rule",
   repository: "orderRepository edge",
@@ -36,7 +36,7 @@ const STAGE_HINTS: Record<IntegrationStageId, string> = {
 };
 
 const STAGE_MODULES: Record<IntegrationStageId, string> = {
-  input: "checkout fixture",
+  input: "checkout input",
   client: "checkoutClient",
   service: "orderService",
   repository: "orderRepository",
@@ -93,7 +93,7 @@ interface EvidenceView {
 function evidenceFor(scenario: IntegrationScenarioFixture, state: IntegrationLabState): EvidenceView {
   if (state.activeStageId === "input") {
     return {
-      title: "固定 checkout input 已準備",
+      title: "checkout input 已準備",
       input: inputSummary(scenario),
       output: "CreateOrderRequest",
       evidence: "subtotal 100 - discount 10；三個 scenario 共用同一份 input。",
@@ -107,11 +107,11 @@ function evidenceFor(scenario: IntegrationScenarioFixture, state: IntegrationLab
 
   return {
     title: `${STAGE_MODULES[state.activeStageId]} 的 observable evidence`,
-    input: observation?.input ?? "固定 fixture input",
-    output: observation?.output ?? "尚無固定 output",
+    input: observation?.input ?? "尚無 input",
+    output: observation?.output ?? "尚無 output",
     evidence: state.response && state.response !== "success" && failure
-      ? `${observation?.evidence ?? "固定 failure outcome"} ${failure.evidence}`
-      : observation?.evidence ?? "尚無固定 evidence",
+      ? `${observation?.evidence ?? "尚無 failure outcome"} ${failure.evidence}`
+      : observation?.evidence ?? "尚無 evidence",
     next: nextStage ? `${nextStage} boundary` : "terminal outcome",
   };
 }
@@ -141,7 +141,8 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / INTEGRATION TESTING"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓模組契約一起工作<br /><em>沿著 boundary 找到證據</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${integrationRequiredScenarioIds.length} SCENARIOS`}
       progress={integrationLabProgress(state)}
@@ -152,7 +153,7 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
       {completed ? (
         <TopicCompletionCard
           title="三個 integration scenarios 都完成了。"
-          description="你已重跑 success、response contract failure 與 dependency failure；每個 boundary、failure location 與 side effect 都留下固定證據。"
+          description="你已重跑 success、response contract failure 與 dependency failure；每個 boundary、failure location 與 side effect 都留下可追蹤證據。"
           onReset={() => dispatch({ type: "reset" })}
         />
       ) : null}
@@ -162,7 +163,6 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
           <section className="integration-scenario-panel" aria-labelledby="integration-scenario-title">
             <div className="integration-panel-heading">
               <div>
-                <p className="kicker">FIXED SCENARIOS</p>
                 <h2 id="integration-scenario-title">先選一條可重跑的協作路徑</h2>
               </div>
               <span>{integrationRequiredScenarioIds.length} required outcomes</span>
@@ -191,7 +191,6 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
           <section className="integration-trace-panel" aria-labelledby="integration-trace-title">
             <div className="integration-panel-heading integration-trace-heading">
               <div>
-                <p className="kicker">BOUNDARY TRACE</p>
                 <h2 id="integration-trace-title">每一步只前進一個可觀察邊界</h2>
               </div>
               <button className="button primary" type="button" onClick={() => dispatch({ type: "trace-next" })}>
@@ -240,7 +239,7 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
               </section>
 
               <aside className="integration-state-panel" aria-label="Integration Lab state">
-                <div className="integration-state-heading"><p className="kicker">SESSION STATE</p><span>{scenario ? scenario.id : "no fixture"}</span></div>
+                <div className="integration-state-heading"><span>{scenario ? scenario.id : "未選擇"}</span></div>
                 <div className="integration-state-grid">
                   <div><small>PHASE</small><b>{state.phase}</b></div>
                   <div><small>RESPONSE</small><b>{state.response ?? "—"}</b></div>
@@ -248,7 +247,6 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
                   <div><small>VISITED</small><b>{state.visitedBoundaryIds.length} / 4</b></div>
                 </div>
                 <div className="integration-boundary-list">
-                  <p className="kicker">PASSED BOUNDARIES</p>
                   {state.visitedBoundaryIds.length ? state.visitedBoundaryIds.map((boundary) => (
                     <span key={boundary}>✓ {STAGE_MODULES[boundary]}</span>
                   )) : <small>尚未通過 boundary。</small>}
@@ -263,14 +261,14 @@ export function IntegrationLab({ onComplete }: { onComplete?: () => void }) {
             </div>
           </section>
 
-          <section className="integration-fixture-grid" aria-label="Integration fixture contract">
+          <section className="integration-fixture-grid" aria-label="Integration contract">
             <article>
-              <header><span>CHECKOUT INPUT</span><b>{scenario ? "deterministic" : "waiting"}</b></header>
+              <header><span>CHECKOUT INPUT</span><b>{scenario ? "ready" : "waiting"}</b></header>
               <pre>{scenario ? JSON.stringify(scenario.input, null, 2) : "先選 scenario"}</pre>
             </article>
             <article>
               <header><span>EXPECTED OUTCOME</span><b>{scenario ? scenario.expected.kind : "—"}</b></header>
-              <p>{scenario ? expectedDetail(scenario) : "每個 scenario 都有固定 response、error 與 side effect。"}</p>
+              <p>{scenario ? expectedDetail(scenario) : "每個 scenario 都有對應的 response、error 與 side effect。"}</p>
             </article>
             <article>
               <header><span>MODULE CONTRACTS</span><b>{integrationBoundaryFixtures.length} boundaries</b></header>

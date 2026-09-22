@@ -129,7 +129,7 @@ export function runPackageEvent(current: PackageLabState, event: PackageLabEvent
       return accepted(
         state,
         { completedStepIds: withStep(state, "inspect-manifest"), lastCommand: "cat package.json" },
-        "已確認 package.json 與 npm@10.8.2 fixture。",
+        "已確認 package.json 與 npm@10.8.2。",
         ["workshop-package-lab", "dependencies: (empty)", "packageManager: npm@10.8.2"],
       );
     case "add-dependency":
@@ -137,7 +137,7 @@ export function runPackageEvent(current: PackageLabState, event: PackageLabEvent
         return blocked(state, "npm install @workshop/format@^1.2.0", "請先檢查 package.json，再新增依賴。");
       }
       if (event.packageSpec !== "@workshop/format@^1.2.0") {
-        return failed(state, "npm install", "package not found in fixture registry.");
+        return failed(state, "npm install", "package not found.");
       }
       if (state.manifest.dependencies["@workshop/format"]) {
         return blocked(state, "npm install @workshop/format@^1.2.0", "@workshop/format 已存在；請繼續檢查目前 lockfile 狀態。");
@@ -168,7 +168,7 @@ export function runPackageEvent(current: PackageLabState, event: PackageLabEvent
           lastCommand: "npm install",
           completedStepIds: withStep(state, "install"),
         },
-        "已從 fixture registry 解析 direct 與 transitive dependencies。",
+        "已解析 direct 與 transitive dependencies。",
         ["@workshop/format@1.3.0", "@workshop/shared@1.0.0", "lockfile: synced"],
       );
     case "inspect-lockfile":
@@ -178,8 +178,8 @@ export function runPackageEvent(current: PackageLabState, event: PackageLabEvent
       return accepted(
         state,
         { lastCommand: "cat package-lock.json", completedStepIds: withStep(state, "inspect-lockfile") },
-        "已確認 exact versions、transitive dependency 與 fixture registry 來源。",
-        ["@workshop/format: 1.3.0", "@workshop/shared: 1.0.0", "resolvedFrom: fixture-registry"],
+        "已確認 exact versions 與 transitive dependency。",
+        ["@workshop/format: 1.3.0", "@workshop/shared: 1.0.0", "resolution: package-lock"],
       );
     case "clean-install":
       if (!hasCompleted(state, "inspect-lockfile")) {

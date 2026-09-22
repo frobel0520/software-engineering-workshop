@@ -18,9 +18,7 @@ interface UnitHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly UnitHistoryEntry[] = [
-  { lines: ["UNIT TEST RUNNER v1", "固定 order-total fixture 已載入。"] },
-];
+const INITIAL_HISTORY: readonly UnitHistoryEntry[] = [];
 
 function eventForStep(stepId: UnitStepId): UnitLabEvent {
   return unitLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -77,12 +75,13 @@ export function UnitLab({ onComplete }: { onComplete?: () => void }) {
 
   function reset() {
     setState(createInitialUnitState());
-    setHistory([{ lines: ["Unit Testing Lab 已重設。從 unit boundary 開始。"] }]);
+    setHistory([{ lines: ["已重設。從 unit boundary 開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / UNIT TESTING"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓錯誤在最小範圍內被看見<br /><em>再用測試鎖住行為</em></>}
       progressLabel={completedCount + " / " + unitLessonSteps.length + " CHECKS"}
       progress={unitLabProgress(state)}
@@ -98,13 +97,13 @@ export function UnitLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="unit-lab-grid">
-          <section className="unit-test-panel" aria-label="Unit testing workbench fixture">
+          <section className="unit-test-panel" aria-label="Unit testing workbench">
             <div className="unit-workspace-top">
               <span className="unit-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-unit-tests</b>
               <span className="unit-phase">{state.phase}</span>
             </div>
-            <div className="unit-test-toolbar"><span>test-runner</span><small>fixture only · no source mutation</small></div>
+            <div className="unit-test-toolbar"><span>test-runner</span></div>
             <div className="unit-test-case-card">
               <small>ACTIVE CHECK</small>
               <code>{currentStep?.code ?? "-- choose a check"}</code>
@@ -129,8 +128,8 @@ export function UnitLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="unit-control-panel" aria-label="Unit testing controls">
             <div className="unit-panel-heading">
-              <div><p className="kicker">CHECK CONTROL</p><h2>從 boundary 走到 regression</h2></div>
-              <span className="unit-lab-meta">pure function<br />fixture only</span>
+              <div><h2>從 boundary 走到 regression</h2></div>
+              <span className="unit-lab-meta">pure function</span>
             </div>
             <div className="unit-action-list">
               {unitLessonSteps.map((step, stepIndex) => {
@@ -157,7 +156,7 @@ export function UnitLab({ onComplete }: { onComplete?: () => void }) {
       )}
 
       <section className="unit-result-section" aria-labelledby="unit-result-title">
-        <div className="section-heading"><div><p className="kicker">OBSERVABLE RESULT</p><h2 id="unit-result-title">目前的測試線索</h2></div><p>只顯示 deterministic fixture 結果，不執行真實程式碼。</p></div>
+        <div className="section-heading"><div><h2 id="unit-result-title">目前的測試線索</h2></div></div>
         <div className="unit-result-panel">
           {state.result ? (
             <>

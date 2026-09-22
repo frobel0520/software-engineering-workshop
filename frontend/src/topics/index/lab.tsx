@@ -18,9 +18,7 @@ interface IndexHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly IndexHistoryEntry[] = [
-  { lines: ["INDEX + TRANSACTION workbench v1", "固定 orders + accounts fixture 已載入。"] },
-];
+const INITIAL_HISTORY: readonly IndexHistoryEntry[] = [];
 
 function eventForStep(stepId: IndexStepId): IndexLabEvent {
   return indexLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -76,12 +74,13 @@ export function IndexLab({ onComplete }: { onComplete?: () => void }) {
 
   function reset() {
     setState(createInitialIndexState());
-    setHistory([{ lines: ["Index + Transaction Lab 已重設。從查詢計畫開始。"] }]);
+    setHistory([{ lines: ["已重設。從查詢計畫開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / INDEX + TRANSACTION"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓查詢走更短的路<br /><em>也讓寫入保持一致</em></>}
       progressLabel={completedCount + " / " + indexLessonSteps.length + " CHECKS"}
       progress={indexLabProgress(state)}
@@ -97,13 +96,13 @@ export function IndexLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="index-lab-grid">
-          <section className="index-workspace-panel" aria-label="Index and transaction workbench fixture">
+          <section className="index-workspace-panel" aria-label="Index and transaction workbench">
             <div className="index-workspace-top">
               <span className="index-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-index-transactions</b>
               <span className="index-phase">{state.phase}</span>
             </div>
-            <div className="index-query-toolbar"><span>query.plan</span><small>fixture only · no database</small></div>
+            <div className="index-query-toolbar"><span>query.plan</span></div>
             <div className="index-query-card">
               <small>CURRENT CHECK</small>
               <code>{currentStep?.code ?? "-- choose a check"}</code>
@@ -128,8 +127,8 @@ export function IndexLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="index-control-panel" aria-label="Index and transaction controls">
             <div className="index-panel-heading">
-              <div><p className="kicker">CHECK CONTROL</p><h2>從 plan 走到 transaction</h2></div>
-              <span className="index-lab-meta">relational<br />fixture only</span>
+              <div><h2>從 plan 走到 transaction</h2></div>
+              <span className="index-lab-meta">relational</span>
             </div>
             <div className="index-action-list">
               {indexLessonSteps.map((step, stepIndex) => {
@@ -156,7 +155,7 @@ export function IndexLab({ onComplete }: { onComplete?: () => void }) {
       )}
 
       <section className="index-result-section" aria-labelledby="index-result-title">
-        <div className="section-heading"><div><p className="kicker">OBSERVABLE RESULT</p><h2 id="index-result-title">目前的資料線索</h2></div><p>只顯示 simulator 結果，不連線真實資料庫。</p></div>
+        <div className="section-heading"><div><h2 id="index-result-title">目前的資料線索</h2></div></div>
         <div className="index-result-panel">
           {state.result ? (
             <>

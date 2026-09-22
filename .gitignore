@@ -4,6 +4,8 @@ work/
 node_modules/
 frontend/dist/
 frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
 *.tsbuildinfo
 Thumbs.db
 .env

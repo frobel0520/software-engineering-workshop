@@ -14,7 +14,7 @@ export const deployLesson: LessonDefinition = {
     "理解 release version、artifact provenance 與 Pages base path 的關係。",
     "辨識 artifact missing、base path mismatch 與 live probe failure 的 boundary。",
     "以 release record 保存 source、version、URL、status 與 rollback evidence。",
-    "用固定 scenario 重跑 success、blocked、rollback 與 reset/replay flow。",
+    "依序重跑 scenario、blocked、rollback 與 reset/replay flow。",
   ],
   sections: [
     {
@@ -25,7 +25,7 @@ export const deployLesson: LessonDefinition = {
     {
       id: "workflow-input",
       title: "Release source 要指向 main",
-      body: "部署 fixture 只接受 main push 或手動 dispatch。source、candidate version 與 previous verified version 必須在 release 開始前清楚可見。",
+      body: "部署流程只接受 main push 或手動 dispatch。source、candidate version 與 previous verified version 必須在 release 開始前清楚可見。",
     },
     {
       id: "artifact-provenance",
