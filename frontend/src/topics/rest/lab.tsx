@@ -128,7 +128,8 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / FASTAPI REQUEST"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>追蹤一次 request<br /><em>讀懂整個 full stack</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${restScenarios.length} REQUESTS`}
       progress={restLabProgress(state)}
@@ -271,7 +272,7 @@ export function RestLab({ onComplete }: { onComplete?: () => void }) {
 
       <section className="rest-io-grid" aria-label="Request database and response state">
         <article><header><span>REQUEST BODY</span><b>{scenario.method === "POST" ? "application/json" : "none"}</b></header><pre>{scenario.requestBody}</pre></article>
-        <article><header><span>SQL 示意（非實際 log）</span><b>{state.databaseItems.length} rows · SQLite fixture</b></header><pre>{state.requestStarted && (currentIndex >= stageIndex("database") || scenario.terminalStageId === "validation") ? scenario.sql : "— waiting for database stage —"}</pre></article>
+        <article><header><span>SQL 示意（非實際 log）</span><b>{state.databaseItems.length} rows · SQLite</b></header><pre>{state.requestStarted && (currentIndex >= stageIndex("database") || scenario.terminalStageId === "validation") ? scenario.sql : "— waiting for database stage —"}</pre></article>
         <article className={state.responseReady ? "ready" : ""}><header><span>HTTP RESPONSE</span><b>{state.responseReady ? scenario.status : "Pending"}</b></header><pre>{state.responseReady ? scenario.responseBody : "— follow the request to see the response —"}</pre></article>
       </section>
     </TopicLabShell>

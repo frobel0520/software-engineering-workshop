@@ -4,23 +4,23 @@ export const dockerLesson: LessonDefinition = {
   title: "把靜態 artifact 放進可重複的執行環境",
   orientation: {
     what: "Docker 用 image 描述可重複建立的檔案與設定，用 container 表示從 image 啟動的執行個體；Dockerfile 與 build context 連起這兩個邊界。",
-    why: "把 runtime 輸入固定下來，能讓本機、CI 與部署使用相同的執行環境，也讓缺檔、錯誤 port 與殘留 container 變成可觀察的狀態。",
+    why: "把 runtime 輸入整理好，能讓本機、CI 與部署使用相同的執行環境，也讓缺檔、錯誤 port 與殘留 container 變成可觀察的狀態。",
     when: "需要包裝 static site、重現服務環境、檢查 container 內外的 port 邊界，或在交付前驗證 image 與 runtime 行為時使用。",
-    how: "先檢查 Dockerfile 與 build context，再 build 固定 image，run container，從 host probe 驗證 port mapping，最後 stop／remove 清理 fixture。",
+    how: "先檢查 Dockerfile 與 build context，再 build image，run container，從 host probe 驗證 port mapping，最後 stop／remove 清理環境。",
   },
   objectives: [
     "分辨 image、container、Dockerfile 與 build context 的責任。",
     "讀懂 FROM、COPY、EXPOSE 與 runtime command 如何影響 static-site container。",
-    "理解固定 tag、digest 與 source artifact 如何支援可重現的 build。",
+    "理解 tag、digest 與 source artifact 如何支援可重現的 build。",
     "分辨 container 內的 port metadata 與 host 端的 published port。",
-    "用固定 HTTP probe 驗證 container running 不等於 host 可連線。",
-    "完成 stop／remove cleanup，讓相同 Docker fixture 可以安全重跑。",
+    "用 HTTP probe 驗證 container running 不等於 host 可連線。",
+    "完成 stop／remove cleanup，讓相同 Docker 輸入可以安全重跑。",
   ],
   sections: [
     {
       id: "image-and-container",
       title: "Image 是輸入，container 是執行個體",
-      body: "image 是可被標記與建立的固定輸入；container 是從 image 產生、具有 running／stopped state 的執行個體。看到 image build 成功，還不能推論服務已啟動。",
+      body: "image 是可被標記與建立的可重現輸入；container 是從 image 產生、具有 running／stopped state 的執行個體。看到 image build 成功，還不能推論服務已啟動。",
     },
     {
       id: "dockerfile-boundaries",
@@ -30,12 +30,12 @@ export const dockerLesson: LessonDefinition = {
     {
       id: "build-context",
       title: "Context 決定 build 能看見什麼",
-      body: "docker build 最後的 . 是固定 build context；Dockerfile 不能讀取 context 之外的檔案。這裡的 fixture 只提供 dist/index.html 與 Dockerfile，不讀取使用者真實 repository。",
+      body: "docker build 最後的 . 是 build context；Dockerfile 不能讀取 context 之外的檔案。這裡只提供 dist/index.html 與 Dockerfile，不讀取使用者真實 repository。",
     },
     {
       id: "reproducible-image",
-      title: "用固定輸入留下 image 證據",
-      body: "固定 image tag、fixture digest 與 source artifact，才能比較兩次 build 是否使用相同輸入。這個 Lab 不下載 base image，也不把目前時間或 random id 當成驗收結果。",
+      title: "用可重現輸入留下 image 證據",
+      body: "image tag、checksum 與 source artifact 能讓兩次 build 比較相同輸入。這個 Lab 不下載 base image，也不把目前時間或 random id 當成驗收結果。",
     },
     {
       id: "published-port",
@@ -45,12 +45,12 @@ export const dockerLesson: LessonDefinition = {
     {
       id: "runtime-probe",
       title: "Running 還要經過 host probe",
-      body: "container running 只能證明執行個體啟動；固定的 curl probe 還要看到正確 mapping 與 HTTP 200。沒有 mapping 時要保留 unreachable，不可把成功結果寫死。",
+      body: "container running 只能證明執行個體啟動；curl probe 還要看到正確 mapping 與 HTTP 200。沒有 mapping 時要保留 unreachable，不可把成功結果寫死。",
     },
     {
       id: "cleanup-and-repeat",
       title: "清理是可重複流程的一部分",
-      body: "先 stop 再 remove container，才能清除 runtime 與 port state，讓下一次相同 fixture 不會被殘留狀態污染。完成 cleanup 後再 reset 重跑，結果應保持一致。",
+      body: "先 stop 再 remove container，才能清除 runtime 與 port state，讓下一次流程不會被殘留狀態污染。完成 cleanup 後再 reset 重跑，結果應保持一致。",
     },
   ],
 };
@@ -72,15 +72,15 @@ export const dockerLessonSteps: readonly DockerLessonStep[] = [
     sectionId: "build-context",
     title: "檢查 build context",
     command: "cat Dockerfile && ls dist",
-    explanation: "先確認 Dockerfile 與 dist/index.html 都位於固定 context，避免把 context 之外的檔案當成 build input。",
+    explanation: "先確認 Dockerfile 與 dist/index.html 都位於同一個 context，避免把 context 之外的檔案當成 build input。",
     takeaway: "Build 能看見什麼，先由 context 決定。",
   },
   {
     id: "build-image",
     sectionId: "reproducible-image",
-    title: "建立固定 image",
+    title: "建立 image",
     command: "docker build -t workshop-web:1 .",
-    explanation: "用固定 tag 與固定 source artifact 建立 image；COPY 找不到 artifact 時，build 要在 boundary 停止。",
+    explanation: "用指定 tag 與 source artifact 建立 image；COPY 找不到 artifact 時，build 要在 boundary 停止。",
     takeaway: "Build success 的證據包含 tag、digest 與 source input。",
   },
   {
@@ -96,7 +96,7 @@ export const dockerLessonSteps: readonly DockerLessonStep[] = [
     sectionId: "runtime-probe",
     title: "驗證 host runtime",
     command: "curl http://localhost:8080/",
-    explanation: "用固定 host probe 觀察 HTTP 200；container running 但沒有 published mapping 時，結果必須是 unreachable。",
+    explanation: "用 host probe 觀察 HTTP 200；container running 但沒有 published mapping 時，結果必須是 unreachable。",
     takeaway: "Running、mapping 與 probe success 要一起成立。",
   },
   {
@@ -104,7 +104,7 @@ export const dockerLessonSteps: readonly DockerLessonStep[] = [
     sectionId: "cleanup-and-repeat",
     title: "停止並移除 container",
     command: "docker stop workshop-web && docker rm workshop-web",
-    explanation: "先停止 runtime，再移除 fixture container，清掉可能影響下一次練習的 local state。",
+    explanation: "先停止 runtime，再移除 container，清掉可能影響下一次練習的 local state。",
     takeaway: "清理完成，流程才真正可重跑。",
   },
 ] as const;
@@ -114,7 +114,7 @@ export const dockerFixture = {
   dockerfilePath: "Dockerfile",
   sourceArtifact: "dist/index.html",
   imageTag: "workshop-web:1",
-  imageDigest: "sha256:docker-fixture-001",
+  imageDigest: "sha256:docker-image-001",
   containerName: "workshop-web",
   containerPort: 80,
   hostPort: 8080,
@@ -200,14 +200,14 @@ export const dockerCommandFixtures: readonly DockerCommandFixture[] = [
     stepId: "inspect-context",
     command: "cat Dockerfile && ls dist",
     boundary: "build context / Dockerfile",
-    successEvidence: "Dockerfile 與 dist/index.html 都在固定 context",
+    successEvidence: "Dockerfile 與 dist/index.html 都在同一個 context",
     failureEvidence: "尚未確認 source artifact，不能開始 build",
   },
   {
     stepId: "build-image",
     command: "docker build -t workshop-web:1 .",
     boundary: "COPY / image",
-    successEvidence: "workshop-web:1 · sha256:docker-fixture-001",
+    successEvidence: "workshop-web:1 · sha256:docker-image-001",
     failureEvidence: "COPY dist/ 找不到 dist/index.html，image 保持 absent",
   },
   {

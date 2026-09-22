@@ -26,7 +26,6 @@ interface DeployHistoryEntry {
 }
 
 const INITIAL_HISTORY: readonly DeployHistoryEntry[] = [
-  { lines: ["Deploy sandbox v1", "固定 Pages workflow、release record 與四個 deployment scenario 已準備好。"] },
 ];
 
 function scenarioFor(scenarioId: DeployScenarioId | null): DeployScenarioFixture | undefined {
@@ -109,12 +108,13 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
   function reset() {
     dispatch({ type: "reset" });
     setCommand("");
-    setHistory([{ lines: ["Deploy Lab 已重設；保留 scenario audit，從固定 Pages workflow 重新開始。"] }]);
+    setHistory([]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / DEPLOY"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓 publish、probe 與 rollback<br /><em>都留下證據</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${deployScenarioFixtures.length} SCENARIOS · ${state.regressionVerified ? "REPLAY OK" : "REPLAY PENDING"}`}
       progress={deployLabProgress(state)}
@@ -132,8 +132,7 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
 
       <section className="deploy-scenario-panel" aria-labelledby="deploy-scenario-title">
         <div className="deploy-panel-heading">
-          <div><p className="kicker">FIXED RELEASES</p><h2 id="deploy-scenario-title">先選擇一條可重跑的 deployment flow</h2></div>
-          <span>{deployScenarioFixtures.length} required outcomes</span>
+          <div><h2 id="deploy-scenario-title">先選擇一條可重跑的 deployment flow</h2></div>
         </div>
         <div className="deploy-scenario-list" role="group" aria-label="Required deployment scenarios">
           {deployScenarioFixtures.map((item, index) => {
@@ -158,17 +157,17 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
 
       <section className="deploy-workbench-panel" aria-labelledby="deploy-workbench-title">
         <div className="deploy-panel-heading deploy-workbench-heading">
-          <div><p className="kicker">RELEASE WORKBENCH</p><h2 id="deploy-workbench-title">每個 stage 都留下 delivery evidence</h2></div>
-          <span>{scenario ? `${state.completedStageIds.length} / ${deployLessonSteps.length} stages` : "waiting for fixture"}</span>
+          <div><h2 id="deploy-workbench-title">每個 stage 都留下 delivery evidence</h2></div>
+          <span>{scenario ? `${state.completedStageIds.length} / ${deployLessonSteps.length} stages` : "未選擇"}</span>
         </div>
         <div className="deploy-workbench-grid">
           <section className="deploy-context-panel" aria-labelledby="deploy-context-title">
             <div className="deploy-file-header">
-              <div><p className="kicker">PAGES WORKFLOW FIXTURE</p><h3 id="deploy-context-title">固定 deployment workflow</h3></div>
+              <div><h3 id="deploy-context-title">Pages deployment workflow</h3></div>
               <span>{deployFixture.pagesBranch}</span>
             </div>
-            <div className="deploy-file-card" aria-label="Deploy workflow fixture">
-              <header><span>{deployWorkflowFixture.path}</span><b>fixture only</b></header>
+            <div className="deploy-file-card" aria-label="Deploy workflow">
+              <header><span>{deployWorkflowFixture.path}</span></header>
               {deployWorkflowFixture.lines.map((line, index) => (
                 <div className="deploy-code-line" key={`${line}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><code>{line}</code></div>
               ))}
@@ -199,8 +198,8 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="deploy-control-panel" aria-label="Deploy Lab controls">
             <div className="deploy-panel-heading">
-              <div><p className="kicker">STAGE CONTROL</p><h3>從 main release 走到 rollback</h3></div>
-              <span className="deploy-lab-meta">fixture only<br />no Pages API</span>
+              <div><h3>從 main release 走到 rollback</h3></div>
+              <span className="deploy-lab-meta">no Pages API</span>
             </div>
             <div className="deploy-action-list">
               {deployLessonSteps.map((step, index) => {
@@ -227,7 +226,7 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
       </section>
 
       <section className="deploy-state-section" aria-labelledby="deploy-state-title">
-        <div className="deploy-panel-heading"><div><p className="kicker">LIVE RELEASE STATE</p><h2 id="deploy-state-title">目前的 artifact／Pages 線索</h2></div><span>只顯示 simulator，不連線 Pages</span></div>
+        <div className="deploy-panel-heading"><div><h2 id="deploy-state-title">目前的 artifact／Pages 線索</h2></div></div>
         <div className="deploy-state-grid">
           <div><small>PHASE</small><b>{state.phase}</b></div>
           <div><small>SCENARIO</small><b>{state.selectedScenarioId ?? "—"}</b></div>
@@ -251,7 +250,7 @@ export function DeployLab({ onComplete }: { onComplete?: () => void }) {
       </section>
 
       <section className="deploy-evidence-section" aria-labelledby="deploy-evidence-title">
-        <div className="deploy-panel-heading"><div><p className="kicker">OBSERVABLE CONTRACT</p><h2 id="deploy-evidence-title">每個 stage 都有 success／failure evidence</h2></div><span>不以顏色代替結果</span></div>
+        <div className="deploy-panel-heading"><div><h2 id="deploy-evidence-title">每個 stage 都有 success／failure evidence</h2></div></div>
         <div className="deploy-evidence-table" role="table" aria-label="Deployment stage evidence">
           {deployStageFixtures.map((fixture) => (
             <div className="deploy-evidence-row" key={fixture.id} role="row">

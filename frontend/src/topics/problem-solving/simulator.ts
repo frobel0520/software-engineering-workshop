@@ -126,7 +126,7 @@ export function runProblemSolvingEvent(
         current,
         event.type,
         { reproduction: "stable" },
-        "同一個 orders fixture 連續 3 次得到 500；失敗可以被驗證。",
+        "同一組 orders 測試資料連續 3 次得到 500；失敗可以被驗證。",
       );
     case "collect-evidence":
       return accepted(

@@ -68,11 +68,11 @@ export const unitLesson: LessonDefinition = {
     what: "單元測試以隔離的最小行為為對象，檢查一個函式在明確輸入下是否產生預期結果。",
     why: "小而快的測試能在錯誤剛出現時提供線索，降低依賴整條 API 或畫面流程才發現問題的成本。",
     when: "商業規則、資料轉換或邊界條件可以被獨立呼叫時，先用單元測試固定它的可觀察行為。",
-    how: "先選定 unit boundary，再 Arrange fixture、Act 一次、Assert 結果，沿著 red → green → edge → regression 收斂。",
+    how: "先選定 unit boundary，再 Arrange 測試資料、Act 一次、Assert 結果，沿著 red → green → edge → regression 收斂。",
   },
   objectives: [
     "分辨純函式的 unit boundary 與不應混入的 HTTP、資料庫副作用。",
-    "用 Arrange、Act、Assert 建立可重複的測試 fixture。",
+    "用 Arrange、Act、Assert 建立可重複的測試資料。",
     "讀懂 red／green feedback，讓測試先揭露錯誤再驗證最小修復。",
     "為空集合與折扣超過小計等邊界條件補上回歸保護。",
   ],
@@ -84,7 +84,7 @@ export const unitLesson: LessonDefinition = {
     },
     {
       id: "arrange",
-      title: "Arrange 一個看得懂的 fixture",
+      title: "Arrange 一組看得懂的測試資料",
       body: "輸入資料要小到能直接讀懂，expected value 也要由業務規則推導，而不是從實作細節複製答案。",
     },
     {
@@ -122,8 +122,8 @@ export const unitLessonSteps: readonly UnitLessonStep[] = [
     id: "arrange-fixture",
     title: "Arrange 標準案例",
     code: "const order = { items: [100, 50], discount: 10 };",
-    explanation: "fixture 的 subtotal 是 150，discount 是 10，因此測試預期 total 應為 140。",
-    takeaway: "小 fixture 讓失敗訊息能直接指出哪個規則出了問題。",
+    explanation: "測試資料的 subtotal 是 150，discount 是 10，因此測試預期 total 應為 140。",
+    takeaway: "小型測試資料讓失敗訊息能直接指出哪個規則出了問題。",
   },
   {
     id: "run-red",
@@ -193,7 +193,7 @@ export const unitResults: Readonly<Record<UnitStepId, UnitLabResult>> = {
     id: "arrange-fixture",
     columns: ["case", "input", "expected"],
     rows: [[unitTestCases[0].title, unitTestCases[0].input, unitTestCases[0].expected]],
-    caption: "Arrange · 1 fixture",
+    caption: "Arrange · standard case",
   },
   "run-red": {
     id: "run-red",

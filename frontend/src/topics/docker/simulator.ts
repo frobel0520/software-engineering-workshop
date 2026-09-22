@@ -201,7 +201,7 @@ export function createInitialDockerState(): DockerLabState {
     resetSinceBaseline: false,
     resetCount: 0,
     lastCommand: null,
-    lastMessage: "請先選擇一個 Docker deterministic scenario。",
+    lastMessage: "請先選擇一個 Docker scenario。",
     canReset: true,
   };
 }
@@ -217,7 +217,7 @@ export function resetDockerLab(previous?: DockerLabState): DockerLabState {
     regressionVerified: previous.regressionVerified,
     resetSinceBaseline: previous.resetSinceBaseline || previous.happyPathBaselineSignature !== null,
     resetCount: previous.resetCount + 1,
-    lastMessage: "Docker Lab 已重設；可以選擇下一個固定 scenario。",
+    lastMessage: "Docker Lab 已重設；可以選擇下一個 scenario。",
   };
 }
 
@@ -229,7 +229,7 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
   if (event.type === "reset") {
     return {
       state: resetDockerLab(current),
-      output: ["Docker Lab 已重設；固定 image、container、port 與 probe state 已清除。"],
+      output: ["Docker Lab 已重設；image、container、port 與 probe state 已清除。"],
       accepted: true,
       observedFailure: false,
     };
@@ -241,7 +241,7 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
 
   if (event.type === "select-scenario") {
     const scenario = dockerScenarioFixtures.find((candidate) => candidate.id === event.scenarioId);
-    if (!scenario) return failed(current, "select-scenario", "請選擇一個有效的 Docker deterministic scenario。 ");
+    if (!scenario) return failed(current, "select-scenario", "請選擇一個有效的 Docker scenario。 ");
     if (current.selectedScenarioId && current.completedStepIds.length > 0) {
       return blocked(current, "select-scenario", "目前 scenario 尚未 reset；先完成或重設目前的 Docker flow。 ");
     }
@@ -288,7 +288,7 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
         },
         scenario.id === "missing-build-artifact"
           ? "Dockerfile 已找到，但 dist/index.html 缺少；下一步 build 會在 COPY boundary 停止。"
-          : "Dockerfile 與 dist/index.html 都在固定 build context；可以開始 build。",
+          : "Dockerfile 與 dist/index.html 都在同一個 build context；可以開始 build。",
         scenario.id === "missing-build-artifact"
           ? ["Dockerfile: found", "dist/index.html: missing", "context: .", "next: docker build → COPY failure"]
           : ["Dockerfile: found", "dist/index.html: found", "context: .", "next: docker build"],
@@ -391,7 +391,7 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
           probeStatus: dockerFixture.probeStatus,
           lastCommand: commandFor(event.type),
         },
-        "host probe 回傳固定 HTTP 200；runtime verification 通過，可以 cleanup。",
+        "host probe 回傳 HTTP 200；runtime verification 通過，可以 cleanup。",
         ["HTTP status: 200", `body marker: ${dockerFixture.bodyMarker}`, "probe: success", "next: stop and remove"],
       );
     case "repair-port":
@@ -409,10 +409,10 @@ export function runDockerEvent(current: DockerLabState, event: DockerLabEvent): 
           portMapping: "published",
           probeState: "pending",
           probeStatus: null,
-          lastMessage: "已補上 8080→80 mapping；重新執行固定 host probe。",
+          lastMessage: "已補上 8080→80 mapping；重新執行 host probe。",
           lastCommand: "docker run --name workshop-web -p 8080:80 workshop-web:1",
         },
-        "已補上 8080→80 mapping；重新執行固定 host probe。",
+        "已補上 8080→80 mapping；重新執行 host probe。",
         ["EXPOSE 80: unchanged", "host mapping: 8080→80", "next: curl probe"],
       );
     case "cleanup-container":

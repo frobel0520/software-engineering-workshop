@@ -18,9 +18,7 @@ interface BuildHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly BuildHistoryEntry[] = [
-  { lines: ["Build sandbox v1", "固定 package、Vite config 與 dist fixture 已準備好。"] },
-];
+const INITIAL_HISTORY: readonly BuildHistoryEntry[] = [];
 
 function eventForStep(stepId: BuildStepId): BuildLabEvent {
   return buildLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -114,12 +112,13 @@ export function BuildLab({ onComplete }: { onComplete?: () => void }) {
     setState(createInitialBuildState());
     setCommand("");
     setSelectedFile("package-json");
-    setHistory([{ lines: ["BUILD Lab 已重設。從 cat package.json 重新開始。"] }]);
+    setHistory([{ lines: ["已重設。從 cat package.json 重新開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / BUILD"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>把 source 變成<br /><em>可以交付的產品</em></>}
       progressLabel={`${completedCount} / ${buildLessonSteps.length} STEPS`}
       progress={buildLabProgress(state)}
@@ -135,13 +134,13 @@ export function BuildLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="build-lab-grid">
-          <section className="build-workspace-panel" aria-label="Build workspace fixture">
+          <section className="build-workspace-panel" aria-label="Build workspace">
             <div className="build-workspace-top">
               <span className="build-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-build-lab</b>
               <span className="build-phase">{state.phase}</span>
             </div>
-            <div className="build-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="Build fixture files">
+            <div className="build-file-tabs" role="tablist" aria-orientation="horizontal" aria-label="Build files">
               {buildFileFixtures.map((file, index) => (
                 <button
                   className={selectedFile === file.id ? "active" : ""}
@@ -173,7 +172,7 @@ export function BuildLab({ onComplete }: { onComplete?: () => void }) {
                 key={file.id}
                 role="tabpanel"
                 aria-labelledby={buildTabId(file.id)}
-                aria-label={`${file.id} fixture`}
+                aria-label={file.id}
                 tabIndex={0}
                 hidden={selectedFile !== file.id}
               >
@@ -210,8 +209,8 @@ export function BuildLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="build-control-panel" aria-label="Build controls">
             <div className="build-panel-heading">
-              <div><p className="kicker">BUILD CONTROL</p><h2>從 source 走到 artifact</h2></div>
-              <span className="build-lab-meta">Vite + TypeScript<br />fixture only</span>
+              <div><h2>從 source 走到 artifact</h2></div>
+              <span className="build-lab-meta">Vite + TypeScript</span>
             </div>
             <div className="build-action-list">
               {buildLessonSteps.map((step, index) => {
@@ -232,13 +231,13 @@ export function BuildLab({ onComplete }: { onComplete?: () => void }) {
                 );
               })}
             </div>
-            <p className="build-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察 simulator 如何保留狀態並提示原因。</p>
+            <p className="build-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察狀態如何保留並提示原因。</p>
           </aside>
         </div>
       )}
 
       <section className="build-state-section" aria-labelledby="build-state-title">
-        <div className="section-heading"><div><p className="kicker">LIVE BUILD STATE</p><h2 id="build-state-title">目前的交付線索</h2></div><p>只顯示 simulator 狀態，不執行真實 build。</p></div>
+        <div className="section-heading"><div><h2 id="build-state-title">目前的交付線索</h2></div></div>
         <div className="build-state-grid">
           <div><small>TYPECHECK</small><b>{state.typecheckState}</b></div>
           <div><small>BUNDLE</small><b>{state.bundleState}</b></div>

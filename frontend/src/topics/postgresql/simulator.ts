@@ -150,7 +150,7 @@ export function runPostgreSqlEvent(
   }
 
   if (event.type === "inspect-session") {
-    return accepted(current, event.type, "已連線到 workshop：student 使用 PostgreSQL 16.4 操作 events fixture。");
+    return accepted(current, event.type, "已連線到 workshop：student 使用 PostgreSQL 16.4 操作 events table。");
   }
 
   if (event.type === "define-contract") {
@@ -170,7 +170,7 @@ export function runPostgreSqlEvent(
   }
 
   if (event.type === "explain-query") {
-    return accepted(current, event.type, "EXPLAIN fixture 顯示 Bitmap Index Scan；真實 planner 仍要依資料量與成本驗證。");
+    return accepted(current, event.type, "EXPLAIN 顯示 Bitmap Index Scan；真實 planner 仍要依資料量與成本驗證。");
   }
 
   return accepted(current, event.type, "events 的新增與更新都完成，COMMIT 讓 transaction 正式可見。", "completed");

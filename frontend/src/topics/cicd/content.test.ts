@@ -34,7 +34,7 @@ describe("CI/CD topic content contract", () => {
       cacheDependencyPath: "frontend/package-lock.json",
       workingDirectory: "frontend",
       targetRefs: ["dev", "main"],
-      sourceRef: "fixture/feature",
+      sourceRef: "feature/order",
     });
     expect(cicdWorkflowFixture.path).toBe(".github/workflows/ci.yml");
     expect(cicdWorkflowFixture.lines).toContain("npm test · cwd frontend");

@@ -26,7 +26,6 @@ interface DockerHistoryEntry {
 }
 
 const INITIAL_HISTORY: readonly DockerHistoryEntry[] = [
-  { lines: ["Docker sandbox v1", "固定 Dockerfile、dist artifact 與三個 scenario 已準備好。"] },
 ];
 
 function scenarioFor(scenarioId: DockerScenarioId | null): DockerScenarioFixture | undefined {
@@ -112,12 +111,13 @@ export function DockerLab({ onComplete }: { onComplete?: () => void }) {
   function reset() {
     dispatch({ type: "reset" });
     setCommand("");
-    setHistory([{ lines: ["Docker Lab 已重設；保留 scenario audit，從固定 fixture 重新開始。"] }]);
+    setHistory([]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / DOCKER BASICS"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>把 image、container 與 port<br /><em>都留下可觀察證據</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${dockerScenarioFixtures.length} SCENARIOS · ${state.regressionVerified ? "REPLAY OK" : "REPLAY PENDING"}`}
       progress={dockerLabProgress(state)}
@@ -128,15 +128,14 @@ export function DockerLab({ onComplete }: { onComplete?: () => void }) {
       {completed ? (
         <TopicCompletionCard
           title="三個 Docker scenarios 與 replay 都完成了。"
-          description="你已驗證固定 image、COPY failure、container state、host port mapping、HTTP probe 與 cleanup；Docker Lab 完成。"
+          description="你已驗證 image、COPY failure、container state、host port mapping、HTTP probe 與 cleanup；Docker Lab 完成。"
           onReset={reset}
         />
       ) : null}
 
       <section className="docker-scenario-panel" aria-labelledby="docker-scenario-title">
         <div className="docker-panel-heading">
-          <div><p className="kicker">FIXED SCENARIOS</p><h2 id="docker-scenario-title">先選擇一條可重跑的 Docker flow</h2></div>
-          <span>{dockerScenarioFixtures.length} required outcomes</span>
+          <div><h2 id="docker-scenario-title">先選擇一條可重跑的 Docker flow</h2></div>
         </div>
         <div className="docker-scenario-list" role="group" aria-label="Required Docker scenarios">
           {dockerScenarioFixtures.map((item, index) => {
@@ -161,17 +160,17 @@ export function DockerLab({ onComplete }: { onComplete?: () => void }) {
 
       <section className="docker-workbench-panel" aria-labelledby="docker-workbench-title">
         <div className="docker-panel-heading docker-workbench-heading">
-          <div><p className="kicker">DOCKER WORKBENCH</p><h2 id="docker-workbench-title">每一步都對應一個 runtime boundary</h2></div>
-          <span>{scenario ? `${state.completedStepIds.length} / ${dockerLessonSteps.length} stages` : "waiting for fixture"}</span>
+          <div><h2 id="docker-workbench-title">每一步都對應一個 runtime boundary</h2></div>
+          <span>{scenario ? `${state.completedStepIds.length} / ${dockerLessonSteps.length} stages` : "未選擇"}</span>
         </div>
         <div className="docker-workbench-grid">
           <section className="docker-context-panel" aria-labelledby="docker-context-title">
             <div className="docker-file-header">
-              <div><p className="kicker">BUILD CONTEXT</p><h3 id="docker-context-title">固定 static-site fixture</h3></div>
+              <div><h3 id="docker-context-title">static-site build context</h3></div>
               <span>{dockerFixture.contextPath}</span>
             </div>
-            <div className="docker-file-card" aria-label="Dockerfile fixture">
-              <header><span>{dockerFileFixture.path}</span><b>fixture only</b></header>
+            <div className="docker-file-card" aria-label="Dockerfile">
+              <header><span>{dockerFileFixture.path}</span></header>
               {dockerFileFixture.lines.map((line, index) => (
                 <div className="docker-code-line" key={`${line}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><code>{line}</code></div>
               ))}
@@ -203,8 +202,8 @@ export function DockerLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="docker-control-panel" aria-label="Docker Lab controls">
             <div className="docker-panel-heading">
-              <div><p className="kicker">COMMAND CONTROL</p><h3>從 context 走到 cleanup</h3></div>
-              <span className="docker-lab-meta">fixture only<br />no daemon</span>
+              <div><h3>從 context 走到 cleanup</h3></div>
+              <span className="docker-lab-meta">no daemon</span>
             </div>
             <div className="docker-action-list">
               {dockerLessonSteps.map((step, index) => {
@@ -238,7 +237,7 @@ export function DockerLab({ onComplete }: { onComplete?: () => void }) {
       </section>
 
       <section className="docker-state-section" aria-labelledby="docker-state-title">
-        <div className="docker-panel-heading"><div><p className="kicker">LIVE RUNTIME STATE</p><h2 id="docker-state-title">目前的 image／container 線索</h2></div><span>只顯示 simulator，不執行 Docker</span></div>
+        <div className="docker-panel-heading"><div><h2 id="docker-state-title">目前的 image／container 線索</h2></div></div>
         <div className="docker-state-grid">
           <div><small>PHASE</small><b>{state.phase}</b></div>
           <div><small>SCENARIO</small><b>{state.selectedScenarioId ?? "—"}</b></div>
@@ -254,7 +253,7 @@ export function DockerLab({ onComplete }: { onComplete?: () => void }) {
       </section>
 
       <section className="docker-evidence-section" aria-labelledby="docker-evidence-title">
-        <div className="docker-panel-heading"><div><p className="kicker">OBSERVABLE CONTRACT</p><h2 id="docker-evidence-title">每個 command 都留下 boundary evidence</h2></div><span>不以顏色代替結果</span></div>
+        <div className="docker-panel-heading"><div><h2 id="docker-evidence-title">每個 command 都留下 boundary evidence</h2></div></div>
         <div className="docker-evidence-table" role="table" aria-label="Docker command evidence">
           {dockerCommandFixtures.map((fixture) => (
             <div className="docker-evidence-row" key={fixture.stepId} role="row">

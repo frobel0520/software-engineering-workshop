@@ -16,9 +16,7 @@ interface SqlHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly SqlHistoryEntry[] = [
-  { lines: ["SQL sandbox v1", "固定 orders schema 與 6 筆 fixture 已準備好。"] },
-];
+const INITIAL_HISTORY: readonly SqlHistoryEntry[] = [];
 
 function eventForStep(stepId: SqlStepId): SqlLabEvent {
   return sqlLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -90,12 +88,13 @@ export function SqlLab({ onComplete }: { onComplete?: () => void }) {
   function reset() {
     setState(createInitialSqlState());
     setCommand("");
-    setHistory([{ lines: ["SQL Lab 已重設。從 PRAGMA table_info(orders) 開始。"] }]);
+    setHistory([{ lines: ["已重設。從 PRAGMA table_info(orders) 開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / SQL"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓資料庫回答一個<br /><em>精準問題</em></>}
       progressLabel={`${completedCount} / ${sqlLessonSteps.length} STEPS`}
       progress={sqlLabProgress(state)}
@@ -111,7 +110,7 @@ export function SqlLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="sql-lab-grid">
-          <section className="sql-workspace-panel" aria-label="SQL query workspace fixture">
+          <section className="sql-workspace-panel" aria-label="SQL query workspace">
             <div className="sql-workspace-top">
               <span className="sql-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-sql-lab</b>
@@ -119,7 +118,7 @@ export function SqlLab({ onComplete }: { onComplete?: () => void }) {
             </div>
             <div className="sql-query-toolbar">
               <span>orders.sql</span>
-              <small>SQLite fixture · read only</small>
+              <small>SQLite · read only</small>
             </div>
             <div className="sql-editor" role="region" aria-label="Current SQL query">
               <div className="sql-code-line"><span>01</span><code>{sqlLessonSteps.find((step) => step.id === state.selectedStepId)?.query ?? "-- choose a query"}</code></div>
@@ -151,8 +150,8 @@ export function SqlLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="sql-control-panel" aria-label="SQL query controls">
             <div className="sql-panel-heading">
-              <div><p className="kicker">QUERY CONTROL</p><h2>從 rows 走到答案</h2></div>
-              <span className="sql-lab-meta">SQLite<br />fixture only</span>
+              <div><h2>從 rows 走到答案</h2></div>
+              <span className="sql-lab-meta">SQLite</span>
             </div>
             <div className="sql-action-list">
               {sqlLessonSteps.map((step, index) => {
@@ -173,13 +172,13 @@ export function SqlLab({ onComplete }: { onComplete?: () => void }) {
                 );
               })}
             </div>
-            <p className="sql-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察 simulator 為什麼要先確認資料形狀。</p>
+            <p className="sql-current-hint">目前任務：{currentStep.title}。可以故意點錯順序，觀察為什麼要先確認資料形狀。</p>
           </aside>
         </div>
       )}
 
       <section className="sql-result-section" aria-labelledby="sql-result-title">
-        <div className="section-heading"><div><p className="kicker">LIVE QUERY RESULT</p><h2 id="sql-result-title">目前的資料線索</h2></div><p>只顯示 simulator 結果，不連線真實資料庫。</p></div>
+        <div className="section-heading"><div><h2 id="sql-result-title">目前的資料線索</h2></div></div>
         <div className="sql-result-panel">
           {state.result ? (
             <>

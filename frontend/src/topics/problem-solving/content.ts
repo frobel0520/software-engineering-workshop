@@ -172,7 +172,7 @@ export const problemSolvingLessonSteps: readonly ProblemSolvingLessonStep[] = [
     title: "驗證一個可推翻假設",
     method: "假設驅動除錯 · 實驗",
     code: "hypothesis: payment provider timeout causes 500",
-    explanation: "用 fixture 將付款依賴延遲固定在 3000ms，確認 500 只在 timeout path 出現。",
+    explanation: "用測試資料將付款依賴延遲固定在 3000ms，確認 500 只在 timeout path 出現。",
     takeaway: "一次只驗證一個假設，才能知道哪個改變帶來結果。",
   },
   {
@@ -195,7 +195,7 @@ export const problemSolvingLessonSteps: readonly ProblemSolvingLessonStep[] = [
     id: "verify-fix",
     title: "重現並跑回歸",
     method: "驗證 · unit／integration／regression",
-    code: "incident fixture → 503 · healthy provider → 201 · tests pass",
+    code: "incident case → 503 · healthy provider → 201 · tests pass",
     explanation: "重新執行原始事故案例，再確認正常付款仍可建立訂單，並保留測試防止回歸。",
     takeaway: "錯誤消失只是起點；正常路徑與失敗路徑都要驗證。",
   },
@@ -245,7 +245,7 @@ export const problemSolvingResults: Readonly<Record<ProblemSolvingStepId, Proble
     title: "失敗已穩定重現",
     observations: [
       { label: "RUNS", value: "3 / 3" },
-      { label: "INPUT", value: "same order fixture" },
+      { label: "INPUT", value: "same order case" },
       { label: "OUTPUT", value: "HTTP 500" },
     ],
     takeaway: "固定重現路徑後，任何修復都能被同一個案例驗證。",
@@ -275,7 +275,7 @@ export const problemSolvingResults: Readonly<Record<ProblemSolvingStepId, Proble
     title: "假設通過最小實驗",
     observations: [
       { label: "HYPOTHESIS", value: "payment provider timeout" },
-      { label: "FIXTURE DELAY", value: "3000ms" },
+      { label: "TEST DELAY", value: "3000ms" },
       { label: "RESULT", value: "timeout path reproduced" },
     ],
     takeaway: "假設不是結論；它要靠可重複的實驗支持或被推翻。",

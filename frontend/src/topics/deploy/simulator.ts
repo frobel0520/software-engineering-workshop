@@ -203,7 +203,7 @@ export function createInitialDeployState(): DeployLabState {
     regressionVerified: false,
     resetSinceBaseline: false,
     resetCount: 0,
-    lastFeedback: "請先選擇一個 deployment deterministic scenario。",
+    lastFeedback: "請先選擇一個 deployment scenario。",
     lastCommand: null,
     canReset: true,
   };
@@ -220,7 +220,7 @@ export function resetDeployLab(previous?: DeployLabState): DeployLabState {
     regressionVerified: previous.regressionVerified,
     resetSinceBaseline: previous.resetSinceBaseline || previous.regressionBaselineSignature !== null,
     resetCount: previous.resetCount + 1,
-    lastFeedback: "Deploy Lab 已重設；可以選擇下一個固定 release scenario。",
+    lastFeedback: "Deploy Lab 已重設；可以選擇下一個 release scenario。",
   };
 }
 
@@ -244,7 +244,7 @@ export function runDeployEvent(current: DeployLabState, event: DeployLabEvent): 
 
   if (event.type === "select-scenario") {
     const scenario = deployScenarioFixtures.find((candidate) => candidate.id === event.scenarioId);
-    if (!scenario) return failed(current, "select-scenario", "請選擇一個有效的 deployment deterministic scenario。 ");
+    if (!scenario) return failed(current, "select-scenario", "請選擇一個有效的 deployment scenario。 ");
     if (current.selectedScenarioId && current.completedStageIds.length > 0) {
       return blocked(current, "select-scenario", "目前 scenario 尚未 reset；先完成或重設目前的 release flow。 ");
     }

@@ -1,8 +1,8 @@
 # Software Engineering Workshop：專案計畫
 
-> 狀態：Active
-> 日期：2026-08-16
-> 基線：`dev`（route guard 與目前 ready topics 已合併）
+> 狀態：開發完成；測試／驗收進行中
+> 日期：2026-08-23
+> 基線：`dev`（Core 19／19、Extension 2 個與 CORE-008 已合併）
 
 ## 1. 專案目標
 
@@ -21,6 +21,8 @@
 - Core 已開放：Git、GitHub／GitLab 遠端協作、命令列、IDE／除錯器、套件管理、環境變數、建置工具、REST API／FastAPI、身分驗證與授權、SQL、資料庫設計、索引與交易、PostgreSQL、單元測試、整合測試、日誌、Docker、CI/CD、部署，共 19 / 19
 - Git v1 release gate：已完成 cowork／pipeline、keyboard、mobile、200% zoom 與 reduced-motion 驗收，`GIT-REVIEW` 已於 2026-08-16 通過。
 - Extension 已開放：Guardrails、問題處理方法，共 2 個；不計入 Core 19 的完成分母
+- 開發進度：M0～M6、CORE-001～CORE-008 與所有 topic task 已完成；目前不新增功能，進入測試／驗收階段
+- 自動化基線：84 個測試檔／279 個測試、TypeScript lint、production build 與 Pages build 均通過
 - 學習者完成數：依瀏覽器 `localStorage` 個別計算，不在專案文件中固定寫死
 - 前端：Vite + React + TypeScript，靜態站點
 - 持久化：瀏覽器 `localStorage`
@@ -105,17 +107,17 @@
 
 ### Phase 3：品質與可觀測性
 
-- 單元測試
-- 整合測試
-- 日誌
+- 單元測試（已完成）
+- 整合測試（已完成）
+- 日誌（已完成）
 
 ### Phase 4：交付與部署
 
-- Docker 基礎
-- CI/CD
-- 部署
+- Docker 基礎（已完成）
+- CI/CD（已完成）
+- 部署（已完成）
 
-CI、GitHub Pages 與 branch protection 已是專案交付基礎；對應的 CI/CD／部署教材仍需另外製作，不因基礎設施已存在而自動標記完成。
+CI、GitHub Pages 與 branch protection 已是專案交付基礎；對應的 CI/CD／部署教材也已完成，目前進入測試／驗收階段。
 
 ## 7. 專案交付物
 

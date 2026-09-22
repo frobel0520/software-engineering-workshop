@@ -20,9 +20,7 @@ interface TerminalEntry {
   accepted?: boolean;
 }
 
-const initialHistory: readonly TerminalEntry[] = [
-  { lines: ["Git cowork sandbox v2", "固定 hosted repository 與 pipeline fixture 已準備好。"] },
-];
+const initialHistory: readonly TerminalEntry[] = [];
 
 function statusTone(state: GitReleaseState, accepted: boolean): TopicStatusTone {
   if (!accepted) return "error";
@@ -74,7 +72,8 @@ export function GitLab({ onComplete }: { onComplete: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / GIT COWORK"
+      eyebrow=""
+      className="git-lab-shell"
       title={<>把一個功能<br /><em>送進 pipeline</em></>}
       progressLabel={completed ? "完成" : `${state.completedStepIds.length} / ${GIT_RELEASE_STEPS.length} STEPS`}
       progress={gitReleaseProgress(state)}
@@ -90,7 +89,7 @@ export function GitLab({ onComplete }: { onComplete: () => void }) {
         <>
           <div className="lab-layout git-release-layout">
             <section className="terminal-panel" aria-label="Git 指令終端機">
-              <div className="terminal-top"><span className="terminal-dots"><i /><i /><i /></span><b>git-cowork — {state.localBranch}</b><button type="button" onClick={reset}>重設</button></div>
+              <div className="terminal-top"><span className="terminal-dots"><i /><i /><i /></span><button type="button" onClick={reset}>重設</button></div>
               <div className="terminal-output" aria-live="polite">
                 {history.map((entry, index) => (
                   <div className={`terminal-entry ${entry.accepted === false ? "error" : ""}`} key={`${index}-${entry.command ?? "system"}`}>
@@ -107,7 +106,6 @@ export function GitLab({ onComplete }: { onComplete: () => void }) {
             </section>
 
             <aside className="mission-panel" aria-label="Git cowork 狀態">
-              <p className="kicker">CURRENT MISSION</p>
               <label className="git-provider-picker" htmlFor="git-provider">練習平台
                 <select
                   id="git-provider"
@@ -140,7 +138,7 @@ export function GitLab({ onComplete }: { onComplete: () => void }) {
           </div>
 
           <div className="git-release-actions remote-action-panel">
-            <div className="remote-panel-heading"><div><p className="kicker">WORKFLOW ACTIONS</p><h2>選擇一個操作，理解它改變哪一層</h2></div><span className="remote-lab-meta">{state.provider === "github" ? "PR" : "MERGE REQUEST"} · {state.targetBranch}</span></div>
+            <div className="remote-panel-heading"><div><h2>選擇一個操作，理解它改變哪一層</h2></div><span className="remote-lab-meta">{state.provider === "github" ? "PR" : "MERGE REQUEST"} · {state.targetBranch}</span></div>
             <div className="remote-action-list">
               {GIT_RELEASE_STEPS.map((step, index) => {
                 const done = state.completedStepIds.includes(step.id);
@@ -156,7 +154,7 @@ export function GitLab({ onComplete }: { onComplete: () => void }) {
           </div>
 
           <div className="git-release-pipeline remote-context-panel">
-            <div className="section-heading"><div><p className="kicker">PIPELINE JOBS</p><h2>push 之後 runner 執行什麼？</h2></div><p>每個 job 都是可讀的 fixture 結果，不連線真實 CI provider。</p></div>
+            <div className="section-heading"><div><h2>push 之後 runner 執行什麼？</h2></div></div>
             <div className="git-job-grid">
               {GIT_RELEASE_PIPELINE_JOBS.map((job) => <div key={job} className={state.pipelineJobs.includes(job) ? "passed" : "pending"}><span>{state.pipelineJobs.includes(job) ? "✓" : "○"}</span><b>{job}</b></div>)}
             </div>

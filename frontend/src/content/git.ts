@@ -10,7 +10,6 @@ export const gitOrientation: LessonOrientation = {
 export const gitLessons = [
   {
     number: "01",
-    eyebrow: "SNAPSHOT",
     title: "Commit 是一個可命名的時間點",
     body: "Git 不只是備份檔案。每次 commit 都保存一組完整狀態，並記錄它從哪個狀態演進而來。好的 commit 小而完整，訊息說明為什麼改。",
     command: 'git commit -m "add profile page"',
@@ -18,7 +17,6 @@ export const gitLessons = [
   },
   {
     number: "02",
-    eyebrow: "STAGING AREA",
     title: "先挑選，再提交",
     body: "工作目錄是你正在修改的現場；staging area 是下一個 commit 的草稿。git add 不是存檔，而是把特定版本的檔案放進草稿。",
     command: "git add app.js",
@@ -26,7 +24,6 @@ export const gitLessons = [
   },
   {
     number: "03",
-    eyebrow: "BRANCH",
     title: "分支是會移動的標籤",
     body: "branch 不是另一份資料夾，而是一個指向 commit 的名稱。切出功能分支後，你可以獨立前進；merge 再把兩條歷史接回來。",
     command: "git switch -c feature/avatar",
@@ -37,7 +34,6 @@ export const gitLessons = [
 export const gitCommandGuide = [
   {
     id: "clone",
-    category: "START",
     title: "先把專案帶到本機",
     command: "git clone <url>",
     body: "第一次參與既有專案時，用 clone 建立本地 repository，同時設定 origin。若你沒有原 repository 的寫入權限，先在 GitHub／GitLab fork，再 clone 自己的 copy。",
@@ -46,7 +42,6 @@ export const gitCommandGuide = [
   },
   {
     id: "checkout",
-    category: "BRANCH",
     title: "切換你要工作的分支",
     command: "git checkout -b feature/profile",
     body: "checkout 的 legacy 用法可以建立並切換分支。現代 Git 通常用 git switch -c feature/profile；checkout 也能從歷史取出檔案，這正是它容易讓人混淆的地方。",
@@ -55,7 +50,6 @@ export const gitCommandGuide = [
   },
   {
     id: "add",
-    category: "LOCAL",
     title: "挑選這次要提交的修改",
     command: "git add src/profile.ts",
     body: "add 把指定檔案的目前版本放進 staging area。它不是存檔，也不會建立 commit；你可以用它把一個大修改拆成幾個可 review 的單位。",
@@ -64,7 +58,6 @@ export const gitCommandGuide = [
   },
   {
     id: "commit",
-    category: "LOCAL",
     title: "留下可追蹤的本地快照",
     command: 'git commit -m "add profile page"',
     body: "commit 將暫存內容寫進本地歷史，形成可比較、可回復、可 review 的變更單位。commit 完成後，遠端與其他 coworker 還看不到它。",
@@ -73,7 +66,6 @@ export const gitCommandGuide = [
   },
   {
     id: "stash",
-    category: "LOCAL",
     title: "暫時收起還沒完成的工作",
     command: "git stash",
     body: "stash 把未完成的工作暫時收起，讓工作目錄回到乾淨狀態。它適合切換任務或處理緊急修正，但不是正式歷史，也不是團隊共享的備份。",
@@ -82,7 +74,6 @@ export const gitCommandGuide = [
   },
   {
     id: "fetch",
-    category: "REMOTE",
     title: "先更新你對遠端的認知",
     command: "git fetch origin",
     body: "fetch 下載遠端最新的 objects 與 branch 參照，更新 origin/dev 等 remote-tracking branch，但不直接修改你目前的工作檔案。",
@@ -91,7 +82,6 @@ export const gitCommandGuide = [
   },
   {
     id: "pull",
-    category: "REMOTE",
     title: "取得並整合遠端變更",
     command: "git pull --rebase origin dev",
     body: "pull 通常等於 fetch 加上 merge 或 rebase，會把遠端變更整合進目前分支，因此可能改變工作目錄。團隊應明確知道專案採 merge 還是 rebase，避免每個人得到不同歷史。",
@@ -100,7 +90,6 @@ export const gitCommandGuide = [
   },
   {
     id: "rebase",
-    category: "HISTORY",
     title: "把自己的分支接到最新基線",
     command: "git rebase origin/dev",
     body: "rebase 將自己的 commit 重新接到最新 origin/dev 後面，讓待審查歷史更直。它可能改寫 commit ID，不應任意對已被多人共用的 branch 使用。",
@@ -109,7 +98,6 @@ export const gitCommandGuide = [
   },
   {
     id: "cherry-pick",
-    category: "HISTORY",
     title: "只移植一個特定修正",
     command: "git cherry-pick a1b2c3d",
     body: "cherry-pick 把指定 commit 的變更套用到目前分支，並建立一個新的 commit。它適合把 hotfix 或單一修正移植到另一條 release branch。",
@@ -118,7 +106,6 @@ export const gitCommandGuide = [
   },
   {
     id: "push",
-    category: "REMOTE",
     title: "把本地歷史發布給團隊",
     command: "git push -u origin feature/profile",
     body: "push 將本地缺少的 objects 與 branch ref 傳到 hosted repository。遠端 branch 更新後，其他人、PR／MR 與 CI 才能看到這組 commit。",
@@ -127,7 +114,6 @@ export const gitCommandGuide = [
   },
   {
     id: "merge",
-    category: "INTEGRATE",
     title: "把兩條歷史整合起來",
     command: "git merge feature/profile",
     body: "merge 將指定分支的歷史整合到目前分支，可能產生 merge commit，也可能需要解決衝突。平台上的 PR／MR merge 是同一個概念加上 review、checks 與權限規則。",
@@ -136,7 +122,6 @@ export const gitCommandGuide = [
   },
   {
     id: "fork",
-    category: "PLATFORM",
     title: "沒有寫入權限時先建立副本",
     command: "Fork repository → git clone <your-url>",
     body: "fork 是 GitHub／GitLab 上的 hosted copy，常用於沒有原 repository 寫入權限的協作者。你 clone 自己的 fork，再透過 upstream 與 PR／MR 把變更送回原專案。",

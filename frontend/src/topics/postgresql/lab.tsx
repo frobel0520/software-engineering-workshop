@@ -18,9 +18,7 @@ interface PostgreSqlHistoryEntry {
   accepted?: boolean;
 }
 
-const INITIAL_HISTORY: readonly PostgreSqlHistoryEntry[] = [
-  { lines: ["POSTGRESQL workbench v1", "固定 events fixture 與 psql session 已準備好。"] },
-];
+const INITIAL_HISTORY: readonly PostgreSqlHistoryEntry[] = [];
 
 function eventForStep(stepId: PostgreSqlStepId): PostgreSqlLabEvent {
   return postgresqlLabHappyPath.find((event) => event.type === stepId) ?? { type: stepId };
@@ -76,12 +74,13 @@ export function PostgreSqlLab({ onComplete }: { onComplete?: () => void }) {
 
   function reset() {
     setState(createInitialPostgreSqlState());
-    setHistory([{ lines: ["PostgreSQL Lab 已重設。從 psql session 開始。"] }]);
+    setHistory([{ lines: ["已重設。從 psql session 開始。"] }]);
   }
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / POSTGRESQL"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>從 psql 連線到<br /><em>可驗證的寫入</em></>}
       progressLabel={completedCount + " / " + postgresqlLessonSteps.length + " CHECKS"}
       progress={postgresqlLabProgress(state)}
@@ -97,13 +96,13 @@ export function PostgreSqlLab({ onComplete }: { onComplete?: () => void }) {
         />
       ) : (
         <div className="postgresql-lab-grid">
-          <section className="postgresql-workspace-panel" aria-label="PostgreSQL workbench fixture">
+          <section className="postgresql-workspace-panel" aria-label="PostgreSQL workbench">
             <div className="postgresql-workspace-top">
               <span className="postgresql-window-dots" aria-hidden="true"><i /><i /><i /></span>
               <b>workshop-postgresql</b>
               <span className="postgresql-phase">{state.phase}</span>
             </div>
-            <div className="postgresql-query-toolbar"><span>psql session</span><small>fixture only · no database</small></div>
+            <div className="postgresql-query-toolbar"><span>psql session</span></div>
             <div className="postgresql-query-card">
               <small>CURRENT CHECK</small>
               <code>{currentStep?.code ?? "-- choose a check"}</code>
@@ -129,8 +128,8 @@ export function PostgreSqlLab({ onComplete }: { onComplete?: () => void }) {
 
           <aside className="postgresql-control-panel" aria-label="PostgreSQL controls">
             <div className="postgresql-panel-heading">
-              <div><p className="kicker">CHECK CONTROL</p><h2>從 session 走到 commit</h2></div>
-              <span className="postgresql-lab-meta">PostgreSQL 16<br />fixture only</span>
+              <div><h2>從 session 走到 commit</h2></div>
+              <span className="postgresql-lab-meta">PostgreSQL 16</span>
             </div>
             <div className="postgresql-action-list">
               {postgresqlLessonSteps.map((step, stepIndex) => {
@@ -157,7 +156,7 @@ export function PostgreSqlLab({ onComplete }: { onComplete?: () => void }) {
       )}
 
       <section className="postgresql-result-section" aria-labelledby="postgresql-result-title">
-        <div className="section-heading"><div><p className="kicker">OBSERVABLE RESULT</p><h2 id="postgresql-result-title">目前的資料線索</h2></div><p>只顯示 simulator 結果，不連線真實 PostgreSQL。</p></div>
+        <div className="section-heading"><div><h2 id="postgresql-result-title">目前的資料線索</h2></div></div>
         <div className="postgresql-result-panel">
           {state.result ? (
             <>
