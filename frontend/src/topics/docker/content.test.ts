@@ -30,7 +30,7 @@ describe("Docker topic content contract", () => {
       dockerfilePath: "Dockerfile",
       sourceArtifact: "dist/index.html",
       imageTag: "workshop-web:1",
-      imageDigest: "sha256:docker-fixture-001",
+      imageDigest: "sha256:docker-image-001",
       containerName: "workshop-web",
       containerPort: 80,
       hostPort: 8080,

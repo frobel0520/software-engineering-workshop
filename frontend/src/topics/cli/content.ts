@@ -1,16 +1,16 @@
 import type { LessonDefinition } from "../../topics/types";
 
 export const cliLesson: LessonDefinition = {
-  title: "在固定工作目錄中讀懂命令列",
+  title: "在工作目錄中讀懂命令列",
   orientation: {
     what: "命令列是用文字指令與作業系統或工具互動的介面；每個指令都會在目前工作目錄中讀取輸入並產生結果。",
     why: "它適合把檢查、建置與部署寫成可重複、可自動化、可被 CI 執行的流程，而不是依賴手動點擊。",
     when: "需要快速處理檔案、搜尋線索、執行專案 script、檢查 exit code，或在本機重現 CI 步驟時使用。",
-    how: "先用 pwd 確認 context，再用 cd、ls、cat、grep 讀取 fixture，觀察 stdout／stderr 與 exit code，最後重複驗證流程。",
+    how: "先用 pwd 確認 context，再用 cd、ls、cat、grep 讀取檔案，觀察 stdout／stderr 與 exit code，最後重複驗證流程。",
   },
   objectives: [
     "用 pwd 與 cd 建立目前工作目錄的 context。",
-    "用 ls、cat 與 grep 讀取 fixture 並找出線索。",
+    "用 ls、cat 與 grep 讀取檔案並找出線索。",
     "區分 stdout、stderr 與 exit code，並用可重複流程完成檢查。",
   ],
   sections: [
@@ -32,7 +32,7 @@ export const cliLesson: LessonDefinition = {
     {
       id: "repeatable-check",
       title: "把檢查做成可重複流程",
-      body: "固定 fixture 與固定命令順序能讓結果可重現。若走錯路徑或流程失敗，先讀懂回饋，再 reset 回到相同起點。",
+      body: "固定檔案與命令順序能讓結果可重現。若走錯路徑或流程失敗，先讀懂回饋，再 reset 回到相同起點。",
     },
   ],
 };
@@ -50,7 +50,7 @@ export const cliLessonSteps: readonly CliLessonStep[] = [
     id: "context",
     title: "確認目前工作目錄",
     command: "pwd",
-    explanation: "先確認命令列目前位於固定的 project fixture，避免用錯相對路徑。",
+    explanation: "先確認命令列目前位於 project 目錄，避免用錯相對路徑。",
     takeaway: "先確認 context，再解讀其他命令的結果。",
   },
   {
@@ -78,7 +78,7 @@ export const cliLessonSteps: readonly CliLessonStep[] = [
     id: "verify",
     title: "執行固定檢查",
     command: "npm test",
-    explanation: "在正確的來源目錄執行 fixture 內的固定檢查，成功時會回報 stdout 與 exit code 0。",
+    explanation: "在正確的來源目錄執行檢查，成功時會回報 stdout 與 exit code 0。",
     takeaway: "可重複的檢查流程比一次性的手動觀察可靠。",
   },
 ] as const;
@@ -200,7 +200,7 @@ export const cliFailureFixtures: readonly CliFailureFixture[] = [
 export const cliLabInitialState: CliLabState = {
   cwd: "/workspace/project",
   files: [
-    { path: "README.md", content: "# CLI fixture" },
+    { path: "README.md", content: "# CLI project" },
     { path: "package.json", content: '{"scripts":{"test":"vitest run"}}' },
     { path: "src/app.ts", content: "export const ready = true; // TODO: add example" },
     { path: ".env.example", content: "API_URL=https://example.invalid" },
@@ -212,7 +212,7 @@ export const cliLabInitialState: CliLabState = {
   exitCode: null,
   phase: "initial",
   completedStepIds: [],
-  lastMessage: "準備從固定的 project fixture 開始。",
+  lastMessage: "先確認目前工作目錄。",
   canReset: true,
 };
 

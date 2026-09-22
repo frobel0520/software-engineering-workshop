@@ -92,7 +92,8 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
 
   return (
     <TopicLabShell
-      eyebrow="INTERACTIVE LAB / STRUCTURED LOGGING"
+      className="course-lab-shell"
+      showMeta={false}
       title={<>讓每一筆 event 都能回到 request<br /><em>沿著 timeline 找到安全證據</em></>}
       progressLabel={`${state.completedScenarioIds.length} / ${logsRequiredScenarioIds.length} SCENARIOS`}
       progress={logsLabProgress(state)}
@@ -113,7 +114,6 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
           <section className="logs-scenario-panel" aria-labelledby="logs-scenario-title">
             <div className="logs-panel-heading">
               <div>
-                <p className="kicker">FIXED SCENARIOS</p>
                 <h2 id="logs-scenario-title">先載入一條可重跑的 request timeline</h2>
               </div>
               <span>{logsRequiredScenarioIds.length} required outcomes</span>
@@ -145,13 +145,13 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
                 <p className="kicker">REQUEST TIMELINE</p>
                 <h2 id="logs-workbench-title">逐筆 inspect，再驗證三層 evidence</h2>
               </div>
-              <span>{scenario ? `${state.activeEventIndex} / ${scenario.events.length} events` : "waiting for fixture"}</span>
+              <span>{scenario ? `${state.activeEventIndex} / ${scenario.events.length} events` : "未選擇"}</span>
             </div>
 
             <div className="logs-workbench-grid">
               <section className="logs-timeline-panel" aria-labelledby="logs-timeline-title">
                 <div className="logs-subheading">
-                  <div><p className="kicker">EVENT STREAM</p><h3 id="logs-timeline-title">固定 schema 的事件流</h3></div>
+                  <div><h3 id="logs-timeline-title">一致 schema 的事件流</h3></div>
                   <span>{scenario ? scenario.expected.correlationId : "no correlation"}</span>
                 </div>
                 <div className="logs-event-list" role="list" aria-label="Logs event timeline">
@@ -186,13 +186,13 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
                       </article>
                     );
                   }) : (
-                    <p className="logs-empty">選擇一個 scenario，才能開始 inspect 固定 event sequence。</p>
+                    <p className="logs-empty">選擇一個 scenario，才能開始 inspect event sequence。</p>
                   )}
                 </div>
               </section>
 
               <aside className="logs-state-panel" aria-label="Logs Lab state">
-                <div className="logs-state-heading"><p className="kicker">SESSION STATE</p><span>{scenario ? scenario.id : "no fixture"}</span></div>
+                <div className="logs-state-heading"><span>{scenario ? scenario.id : "未選擇"}</span></div>
                 <div className="logs-state-grid">
                   <div><small>PHASE</small><b>{state.phase}</b></div>
                   <div><small>EVENTS</small><b>{scenario ? `${state.activeEventIndex} / ${scenario.events.length}` : "—"}</b></div>
@@ -202,7 +202,6 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
                   <div><small>COMPLETED</small><b>{state.completedScenarioIds.length} / {logsRequiredScenarioIds.length}</b></div>
                 </div>
                 <div className="logs-check-list">
-                  <p className="kicker">EVIDENCE CHECKS</p>
                   <button className={`logs-check ${state.correlationCheck}`} type="button" onClick={() => dispatch({ type: "verify-correlation" })}>
                     <span aria-hidden="true">{state.correlationCheck === "passed" ? "✓" : "01"}</span>
                     <b>Correlation ID</b><small>same request · same id</small>
@@ -228,9 +227,9 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
 
           <section className="logs-fixture-grid" aria-label="Logs fixture contract">
             <article>
-              <header><span>SAFE REQUEST FIXTURE</span><b>{scenario ? "loaded" : "waiting"}</b></header>
+              <header><span>SAFE REQUEST</span><b>{scenario ? "loaded" : "waiting"}</b></header>
               <pre>{scenario ? safeRequestSummary(scenario) : "先選 scenario"}</pre>
-          <p>authorization、password、accessToken、cookie 與 email 只作為 redaction fixture，不會渲染 raw value。</p>
+          <p>authorization、password、accessToken、cookie 與 email 只作為遮罩示例，不會渲染 raw value。</p>
             </article>
             <article>
               <header><span>EXPECTED TERMINAL</span><b>{scenario ? scenario.expected.level : "—"}</b></header>
@@ -241,7 +240,7 @@ export function LogsLab({ onComplete }: { onComplete?: () => void }) {
                   <div><dt>STATUS</dt><dd>{scenario.expected.statusCode}</dd></div>
                   <div><dt>OUTCOME</dt><dd>{scenario.expected.outcome}</dd></div>
                 </dl>
-              ) : <p>每條 scenario 都有固定的 terminal evidence contract。</p>}
+              ) : <p>每條 scenario 都有 terminal evidence contract。</p>}
             </article>
             <article>
               <header><span>SAFE CONTEXT ALLOWLIST</span><b>{logsSafeContextKeys.length} keys</b></header>
