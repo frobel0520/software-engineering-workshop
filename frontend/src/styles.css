@@ -327,6 +327,14 @@ textarea:focus-visible {
 .breadcrumb b,
 .top-status b { color: var(--teal-dark); font-weight: 500; }
 
+.atlas-link {
+  color: var(--teal-dark);
+  font: 11px "DM Mono", monospace;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.atlas-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
 .page {
   max-width: 1320px;
   padding: 68px clamp(34px, 6vw, 92px) 120px;
@@ -619,6 +627,8 @@ h1 em {
 }
 
 @media (max-width: 720px) {
+  .atlas-link { font-size: 0; }
+  .atlas-link::after { content: "Atlas ↗"; font-size: 11px; }
   .sidebar { width: 276px; }
   .main-area { margin-left: 0; }
   .topbar { height: 62px; padding: 0 18px; }
