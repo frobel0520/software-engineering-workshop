@@ -2,10 +2,13 @@
 
 一個可以動手操作、也可以逐章擴充的軟體工程教材站。
 
-目前部署來源：`frobel0520/software-engineering-workshop`。
+網站：https://frobel0520.github.io/software-engineering-workshop/ （部署來源：`frobel0520/software-engineering-workshop`）
+
+本站是 [Learning Atlas](https://frobel0520.github.io/learning-atlas/)「軟體工程」路線，導覽有返回 Learning Atlas 的連結（2026-09-25 起）。
 
 > 開發狀態：Core／Extension 功能開發已完成，現在進入測試／驗收階段；除測試發現的問題外，不再新增功能。
 > 自動化基線（2026-08-23）：84 個測試檔／279 個測試、TypeScript lint、production build 與 Pages build 均通過。
+> 2026-08-25 依外部檢視修正桌面側欄無法捲動、行動版抽屜的鍵盤與無障礙問題，並加上 Playwright 導覽回歸測試（`frontend/e2e/`），CI 一併執行。
 
 目前可操作的 Core 主題有 19 / 19 個：**Git**、**GitHub／GitLab 遠端協作**、**命令列**、**IDE／除錯器**、**套件管理**、**環境變數**、**建置工具**、**REST API／FastAPI**、**身分驗證／授權**、**SQL**、**資料庫設計**、**索引與交易**、**PostgreSQL**、**單元測試**、**整合測試**、**日誌**、**Docker 基礎**、**CI/CD**、**部署**；另有 2 個不計入 Core 進度的 Extension：**Guardrails**、**問題處理方法**。Core 19 個主題全部開放。
 
@@ -58,7 +61,19 @@ npm test
 npm run build
 ```
 
-CI 會執行測試、TypeScript 型別檢查與正式建置。GitHub Pages workflow 會發布 `frontend/dist`。
+瀏覽器端導覽回歸測試（Playwright，第一次需要先安裝 Chromium）：
+
+```bash
+cd frontend
+npx playwright install chromium
+npm run test:e2e
+```
+
+CI 會依序執行 vitest、lint、正式建置與 Playwright 測試。GitHub Pages workflow 會發布 `frontend/dist`。
+
+## 分支與發布
+
+功能從 `feature/*` 進 `dev`，再由 `dev` 進 `main` 發布；`main` 受 ruleset 保護，必須經 PR 且通過必要檢查。`frontend/index.html` 載入 Harbor 維護腳本（`data-project="software-engineering-workshop"`，2026-09-15 起），Harbor 開啟維護模式時顯示維護畫面，連不上時頁面照常顯示。
 
 ## 架構
 
@@ -68,5 +83,7 @@ CI 會執行測試、TypeScript 型別檢查與正式建置。GitHub Pages workf
 | `frontend/src/content/` | 已完成教材內容 |
 | `frontend/src/git/` | 可測試的 Git 模擬狀態機 |
 | `frontend/src/components/` | 路線圖、教材與實驗場 UI |
-| `.github/workflows/ci.yml` | 測試與正式建置 |
+| `frontend/e2e/` | Playwright 導覽回歸測試 |
+| `docs/` | 專案計畫、SA、SD、任務拆解、各主題驗收紀錄與 release audit |
+| `.github/workflows/ci.yml` | 測試、lint、正式建置與 Playwright |
 | `.github/workflows/deploy-pages.yml` | GitHub Pages 發布 |
