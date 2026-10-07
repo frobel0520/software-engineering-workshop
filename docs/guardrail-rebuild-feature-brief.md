@@ -2,7 +2,7 @@
 
 > 狀態：Implemented v1
 > 日期：2026-08-16
-> 參考來源：`C:\Users\ytwei\Projects\Guardrail-Workshop`
+> 參考來源：[guardrail-workshop](https://github.com/frobel0520/guardrail-workshop)
 > 依附架構：`docs/project-sa.md`、`docs/project-sd.md`
 
 ## 1. 定位
