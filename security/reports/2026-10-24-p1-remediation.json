@@ -1,0 +1,105 @@
+{
+  "task": "SEC-P1-20261024",
+  "base": "13f9c1c8f223cc6b5cae6cf61142dbde79bc2b95",
+  "goal": "Remove reviewed high/critical dependency exposures and repair authorized security boundaries",
+  "input": "Pinned remote base, lockfile, synthetic fixtures",
+  "output": "Focused source/dependency patch and this evidence",
+  "depends_on": [],
+  "out_of_scope": [
+    "deployment",
+    "real user data",
+    "history rewriting",
+    "unrelated refactors"
+  ],
+  "environment": {
+    "platform": "Windows x64",
+    "cpu": "12th Gen Intel(R) Core(TM) i7-12700KF",
+    "node": "24.22.1",
+    "installation": "npm ci --ignore-scripts --no-audit --no-fund",
+    "execution": "sequential projects; test workers <=2"
+  },
+  "audit": [
+    {
+      "app": "frontend",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    }
+  ],
+  "changes": [
+    {
+      "app": "frontend",
+      "section": "devDependencies",
+      "name": "vite",
+      "before": "^7.0.0",
+      "after": "7.3.7"
+    },
+    {
+      "app": "frontend",
+      "section": "devDependencies",
+      "name": "vitest",
+      "before": "^3.2.0",
+      "after": "4.1.12"
+    }
+  ],
+  "checks": [
+    {
+      "name": "software-engineering-workshop",
+      "app": "frontend",
+      "args": [
+        "test",
+        "--",
+        "--maxWorkers=2"
+      ],
+      "code": 0,
+      "seconds": 10.486
+    },
+    {
+      "name": "software-engineering-workshop",
+      "app": "frontend",
+      "args": [
+        "run",
+        "build:pages"
+      ],
+      "code": 0,
+      "seconds": 5.813
+    }
+  ],
+  "performance": {
+    "name": "software-engineering-workshop",
+    "app": "frontend",
+    "base": "13f9c1c8f223cc6b5cae6cf61142dbde79bc2b95",
+    "metric": "client JS+CSS gzip bytes, level 9",
+    "threshold": "after <= before * 1.05",
+    "before": {
+      "bytes": 768262,
+      "gzipBytes": 191243,
+      "files": 2
+    },
+    "after": {
+      "bytes": 797687,
+      "gzipBytes": 199956,
+      "files": 2
+    },
+    "ratio": 1.0455598374842479,
+    "pass": true,
+    "environment": "Windows x64, Node 24.22.1, same source/mode, sequential; fixture config, not deployed"
+  },
+  "dependency_gate": "passed",
+  "regression_gate": "passed",
+  "ci": "not_run",
+  "release_gate": "pending_review_and_CI",
+  "deployed": false,
+  "model_rating": "not_scored",
+  "monthly_cost": "No new services, billing plans or paid API introduced; synthetic verification uses local tools. Production quota/traffic acceptance not performed.",
+  "limitations": [
+    "Public npm advisories are a point-in-time dependency check, not full SAST, history or binary compromise analysis.",
+    "Build and fixture performance do not establish production latency.",
+    "Default machine Node 24.14.1 remains outside the portable verification runtime."
+  ]
+}
