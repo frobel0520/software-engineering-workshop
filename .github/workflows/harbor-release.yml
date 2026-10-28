@@ -1,0 +1,119 @@
+name: harbor-release
+on:
+  workflow_dispatch:
+    inputs:
+      release_id: {required: true, type: string}
+      source_sha: {required: true, type: string}
+      target: {required: true, type: string}
+      environment: {required: true, type: string}
+permissions: {}
+concurrency:
+  group: publish-pages
+  cancel-in-progress: false
+env:
+  HARBOR_URL: https://harbor-1wk.pages.dev
+  RELEASE_ID: ${{ inputs.release_id }}
+  SOURCE_SHA: ${{ inputs.source_sha }}
+  RELEASE_TARGET: ${{ inputs.target }}
+  RELEASE_ENVIRONMENT: ${{ inputs.environment }}
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions: {contents: read}
+    outputs:
+      digest: ${{ steps.digest.outputs.digest }}
+    steps:
+      - name: Validate fixed pilot inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/main
+          [[ "$RELEASE_ID" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$ ]]
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          test "$RELEASE_TARGET" = harbor-pilot
+          test "$RELEASE_ENVIRONMENT" = production
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - name: Confirm frozen source
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.22.0'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build existing product source
+        working-directory: frontend
+        env:
+          VITE_BASE: /software-engineering-workshop/
+        run: npm ci && npm test && npm run build:pages
+      - name: Version metadata and artifact digest
+        id: digest
+        run: |
+          printf '{"commit":"%s"}\n' "$SOURCE_SHA" > frontend/dist/version.json
+          tar -C frontend/dist -cf site.tar .
+          echo "digest=sha256:$(sha256sum site.tar | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: approved-site
+          path: site.tar
+          retention-days: 1
+          if-no-files-found: error
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: github-pages
+    permissions: {contents: read, pages: write, id-token: write}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with: {name: approved-site}
+      - name: Verify artifact and unpack data only
+        env:
+          EXPECTED: ${{ needs.build.outputs.digest }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "sha256:$(sha256sum site.tar | cut -d' ' -f1)" = "$EXPECTED"
+          python3 - <<'PY'
+          import pathlib,tarfile
+          with tarfile.open('site.tar') as archive:
+            for item in archive.getmembers():
+              path=pathlib.PurePosixPath(item.name)
+              if path.is_absolute() or '..' in path.parts or '.git' in path.parts or not (item.isfile() or item.isdir()):
+                raise RuntimeError('Unsafe publication artifact')
+            archive.extractall('site',filter='data')
+          PY
+      - name: Fetch trusted report code only
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          sparse-checkout: .github/harbor
+          path: trusted
+          persist-credentials: false
+      - name: Report deploying
+        env: {DIGEST: '${{ needs.build.outputs.digest }}'}
+        run: bash trusted/.github/harbor/report.sh deploying "$DIGEST"
+      - name: Use workflow-based Pages publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_type=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type)
+          if [ "$source_type" != workflow ]; then
+            gh api --method PUT "repos/$GITHUB_REPOSITORY/pages" -f build_type=workflow --silent
+          fi
+          test "$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type)" = workflow
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with: {path: site}
+      - name: Publish verified artifact
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - name: Report deployed
+        env: {DIGEST: '${{ needs.build.outputs.digest }}'}
+        run: bash trusted/.github/harbor/report.sh deployed "$DIGEST" "pages-${SOURCE_SHA:0:12}"
+      - if: failure()
+        run: bash trusted/.github/harbor/report.sh failed || true
